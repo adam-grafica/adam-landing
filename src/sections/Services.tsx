@@ -10,7 +10,7 @@ const packages = [
     name: 'GÉNESIS',
     badge: 'Para empezar fuerte',
     badgeType: 'gray',
-    price: 'desde $400.000 CLP',
+    price: '$400.000',
     features: [
       'Identidad visual completa',
       'Logo profesional + variantes',
@@ -24,41 +24,40 @@ const packages = [
   },
   {
     name: 'IMPERIO DIGITAL',
-    badge: 'MÁS POPULAR',
+    badge: 'MÁS VENDIDO',
     badgeType: 'green',
-    price: 'desde $1.500.000 CLP',
+    price: '$600.000',
     features: [
       'Todo lo de Génesis',
       'Website profesional de alto rendimiento',
       'Estrategia de contenido (3 meses de plan)',
       'Templates de contenido para RRSS',
       'Automatizaciones básicas (WhatsApp + formularios)',
-      'Sesión fotográfica profesional (opcional)',
       'Training para usar el sistema',
     ],
     time: '4–6 semanas',
     cta: 'Quiero mi Imperio Digital',
     ctaType: 'primary',
-    highlighted: true,
+    highlighted: false,
   },
   {
     name: 'SISTEMA COMPLETO',
-    badge: 'Para escalar sin límites',
-    badgeType: 'blue',
-    price: 'A cotizar según proyecto',
+    badge: 'ENTERPRISE / PREMIUM',
+    badgeType: 'premium',
+    price: '$1.500.000',
     features: [
       'Todo lo de Imperio Digital',
       'Funnel de ventas completo',
-      'CRM básico configurado',
-      'Automatizaciones avanzadas con n8n',
+      'CRM avanzado configurado',
+      'Automatizaciones avanzadas con n8n/Make',
       'Integración con WhatsApp Business API',
-      'Soporte y optimización mensual',
-      'Reportes de resultados',
+      'Soporte/Optimización prioritaria',
+      'Reportes de resultados detallados',
     ],
-    time: '6–10 semanas',
-    cta: 'Agendar llamada estratégica',
-    ctaType: 'ghost-blue',
-    highlighted: false,
+    time: '8–12 semanas',
+    cta: 'Agendar consultoria estratégica',
+    ctaType: 'primary',
+    highlighted: true,
   },
 ];
 
@@ -102,18 +101,7 @@ export default function Services() {
         ease: 'expo.out',
       });
 
-      // Price counter animation
-      gsap.from('.price-tag', {
-        scrollTrigger: {
-          trigger: '.services-grid',
-          start: 'top 70%',
-        },
-        textContent: 0,
-        duration: 1.5,
-        ease: 'power1.out',
-        snap: { textContent: 1 },
-        stagger: 0.2,
-      });
+
     }, sectionRef);
 
     return () => ctx.revert();
@@ -149,18 +137,22 @@ export default function Services() {
           {packages.map((pkg, index) => (
             <div
               key={index}
-              className={`service-card relative rounded-3xl p-8 transition-colors duration-500 ${
+              className={`service-card relative rounded-3xl p-8 transition-all duration-500 overflow-hidden ${
                 pkg.highlighted
-                  ? 'bg-gradient-to-b from-ag-blue/10 to-ag-blue/5 border-2 border-ag-blue/50 scale-105 shadow-glow-blue z-10'
-                  : 'glass-card'
+                  ? 'bg-gradient-to-br from-ag-blue/15 via-ag-blue/5 to-transparent border-2 border-ag-blue scale-[1.03] shadow-[0_0_50px_rgba(0,102,255,0.3)] z-10'
+                  : 'glass-card border border-white/5 shadow-none'
               }`}
             >
+              {/* Shimmer for premium */}
+              {pkg.highlighted && (
+                <div className="absolute inset-0 shimmer-fast opacity-10 pointer-events-none" />
+              )}
               {/* Recommended Badge for highlighted */}
               {pkg.highlighted && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="badge-green text-xs font-mono flex items-center gap-1">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20">
+                  <span className="bg-ag-blue text-white text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg shadow-ag-blue/50 tracking-widest uppercase">
                     <Sparkles className="w-3 h-3" />
-                    RECOMENDADO
+                    RECOMENDADO ENTERPRISE
                   </span>
                 </div>
               )}
@@ -169,7 +161,13 @@ export default function Services() {
               <div className="mb-6">
                 {pkg.badgeType === 'green' && (
                   <span className="badge-green flex items-center gap-1">
-                    <Sparkles className="w-3 h-3" />
+                    <Check className="w-3 h-3" />
+                    {pkg.badge}
+                  </span>
+                )}
+                {pkg.badgeType === 'premium' && (
+                  <span className="bg-ag-blue/20 text-ag-blue border border-ag-blue/30 text-[10px] font-bold px-3 py-1 rounded-full inline-flex items-center gap-1 uppercase tracking-wider">
+                    <Lock className="w-3 h-3" />
                     {pkg.badge}
                   </span>
                 )}

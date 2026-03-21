@@ -17,14 +17,14 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       // Detect scroll direction for hide/show
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
         setIsVisible(false);
       } else {
         setIsVisible(true);
       }
-      
+
       // Background change on scroll
       setIsScrolled(currentScrollY > 50);
       setLastScrollY(currentScrollY);
@@ -47,23 +47,31 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-expo-out ${
-        isVisible ? 'translate-y-0' : '-translate-y-full'
-      } ${
-        isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-expo-out ${isVisible ? 'translate-y-0' : '-translate-y-full'
+        } ${isScrolled
           ? 'bg-ag-bg-primary/95 backdrop-blur-md border-b border-white/5'
           : 'bg-transparent'
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <a 
             href="#" 
-            className="flex items-center group"
+            className="flex items-center gap-2 group"
             aria-label="AdamGráfica - Inicio"
           >
-            <span className="font-display text-xl lg:text-2xl font-bold text-white tracking-tight transition-all duration-300 group-hover:text-ag-blue">
+            <div className="favicon-shine-container">
+              <img 
+                src="/favicon.svg" 
+                alt="AdamGráfica Logo" 
+                width="32"
+                height="32"
+                fetchPriority="high"
+                className="w-6 h-6 lg:w-8 lg:h-8 object-contain transition-transform duration-300 group-hover:scale-110 animate-favicon-glow"
+              />
+            </div>
+            <span className="font-display text-base lg:text-lg font-bold text-white tracking-tight transition-all duration-300 group-hover:text-ag-blue uppercase">
               ADAMGRÁFICA
             </span>
           </a>
@@ -105,10 +113,9 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu - Sin blur, fondo sólido */}
-        <div 
-          className={`lg:hidden overflow-hidden transition-all duration-300 ease-expo-out ${
-            isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-          }`}
+        <div
+          className={`lg:hidden overflow-hidden transition-all duration-300 ease-expo-out ${isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+            }`}
         >
           <div className="py-4 bg-ag-bg-primary border-t border-white/5">
             <div className="flex flex-col gap-1">

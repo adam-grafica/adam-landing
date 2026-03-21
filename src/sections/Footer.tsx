@@ -57,9 +57,21 @@ export default function Footer() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Column 1 - Logo & Tagline */}
           <div className="lg:col-span-1">
-            <h3 className="font-display text-2xl text-white mb-4 hover:text-ag-blue transition-colors cursor-pointer">
-              ADAMGRÁFICA
-            </h3>
+            <div className="flex items-center gap-2 mb-4 group cursor-pointer">
+              <div className="favicon-shine-container">
+                <img 
+                  src="/favicon.svg" 
+                  alt="" 
+                  width="24"
+                  height="24"
+                  loading="lazy"
+                  className="w-6 h-6 object-contain transition-transform duration-300 group-hover:scale-110 animate-favicon-glow" 
+                />
+              </div>
+              <h3 className="font-display text-lg text-white hover:text-ag-blue transition-colors uppercase">
+                ADAMGRÁFICA
+              </h3>
+            </div>
             <p className="text-ag-text-gray text-sm mb-6">
               Construimos imperios digitales con IA.
             </p>
