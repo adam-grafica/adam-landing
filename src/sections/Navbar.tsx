@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Home, Briefcase, Zap, Folder, Users, MessageSquare } from 'lucide-react';
+import { Menu, X, Briefcase, Zap, Folder, Users, MessageSquare } from 'lucide-react';
 
 const navLinks = [
   { label: 'Servicios', href: '#services', icon: Briefcase },
