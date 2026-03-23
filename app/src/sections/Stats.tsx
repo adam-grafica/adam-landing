@@ -5,18 +5,17 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const mainStats = [
-  { value: 500, suffix: '+', label: 'Proyectos entregados' },
-  { value: 98, suffix: '%', label: 'Clientes satisfechos' },
-  { value: 50, suffix: '+', label: 'Premios ganados' },
-  { value: 10, suffix: '+', label: 'Años de experiencia' },
+  { value: 30, suffix: '+', label: 'Proyectos 100%' },
+  { value: 100, suffix: '%', label: 'Tasa de entrega' },
+  { value: 4, suffix: ' sem', label: 'Tiempo promedio' },
+  { value: 95, suffix: '%', label: 'Operación IA' },
 ];
 
 const secondaryStats = [
-  { value: 300, suffix: '+', label: 'Campañas activas' },
-  { value: 200000, suffix: '+', label: 'Posts creados' },
-  { value: 95000, suffix: '+', label: 'Horas de diseño' },
-  { value: 250, suffix: '+', label: 'Profesionales' },
-  { value: 50, suffix: '+', label: 'Países alcanzados' },
+  { value: 15, suffix: 'M+', label: 'Interacciones/Día' },
+  { value: 500, suffix: '+', label: 'Brands impactadas' },
+  { value: 24, suffix: '/7', label: 'Monitoreo Agentes' },
+  { value: 10, suffix: 'x', label: 'Más rápido que agencias' },
 ];
 
 function AnimatedCounter({

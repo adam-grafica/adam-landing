@@ -57,7 +57,6 @@ export default function PainAgitation() {
         },
         opacity: 0,
         y: 50,
-        rotateY: -15,
         duration: 0.7,
         stagger: 0.15,
         ease: 'expo.out',
@@ -103,7 +102,7 @@ export default function PainAgitation() {
         {/* Header */}
         <div className="text-center mb-16">
           <span className="pain-eyebrow eyebrow mb-4 inline-flex">
-            <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse" />
+            <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse" />
             EL PROBLEMA
           </span>
           <h2 id="pain-title" className="pain-title font-display text-display-3 lg:text-display-2 text-white">
@@ -111,32 +110,35 @@ export default function PainAgitation() {
           </h2>
         </div>
 
-        {/* Cards */}
-        <div className="pain-cards grid md:grid-cols-3 gap-6 lg:gap-8 mb-16">
+        {/* Cards - Forced stretch alignment and hover illumination */}
+        <div className="pain-cards grid md:grid-cols-3 gap-6 lg:gap-8 mb-16 items-stretch">
           {painPoints.map((point, index) => {
             const Icon = point.icon;
             return (
               <div
                 key={index}
-                className="pain-card glass-card p-8 lg:p-10 group"
+                className="pain-card glass-card p-8 lg:p-10 group border border-red-500/20 flex flex-col h-full transition-all duration-500 hover:border-red-500/40 hover:bg-red-500/[0.04] hover:shadow-[0_0_50px_rgba(220,38,38,0.15)] relative overflow-hidden"
               >
+                {/* Subtle red background glow on hover */}
+                <div className="absolute inset-0 bg-red-600/0 group-hover:bg-red-600/[0.02] transition-colors duration-500 pointer-events-none" />
+
                 {/* Icon with animation */}
-                <div className="pain-icon w-14 h-14 rounded-2xl bg-gradient-to-br from-red-500/20 to-red-600/10 border border-red-500/30 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:border-red-500/50 transition-colors duration-300">
-                  <Icon className="w-7 h-7 text-red-400" />
+                <div className="pain-icon w-14 h-14 rounded-2xl bg-gradient-to-br from-red-600/20 to-red-500/10 border border-red-600/30 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:border-red-600/50 transition-all duration-300">
+                  <Icon className="w-7 h-7 text-red-500" />
                 </div>
 
                 {/* Title */}
-                <h3 className="font-display text-xl lg:text-2xl text-white mb-4 group-hover:text-red-400 transition-colors duration-300">
+                <h3 className="font-display text-xl lg:text-2xl text-white mb-4 group-hover:text-red-500 transition-colors duration-300">
                   {point.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-ag-text-gray leading-relaxed">
+                <p className="text-ag-text-gray leading-relaxed text-sm lg:text-base flex-grow">
                   {point.description}
                 </p>
                 
                 {/* Decorative line */}
-                <div className="mt-6 h-0.5 bg-gradient-to-r from-red-500/50 to-transparent w-0 group-hover:w-full transition-all duration-500" />
+                <div className="mt-8 h-0.5 bg-gradient-to-r from-red-600 to-transparent w-0 group-hover:w-full transition-all duration-700" />
               </div>
             );
           })}
@@ -146,8 +148,8 @@ export default function PainAgitation() {
         <div className="pain-closing text-center">
           <p className="font-display text-2xl lg:text-3xl text-white">
             Nosotros lo resolvemos.{' '}
-            <span className="gradient-text">Completamente.</span>{' '}
-            En 4 semanas.
+            <span className="gradient-text font-bold">Completamente.</span>{' '}
+            <span className="text-ag-blue">En 4 semanas.</span>
           </p>
         </div>
       </div>

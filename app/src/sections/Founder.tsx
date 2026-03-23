@@ -94,6 +94,10 @@ export default function Founder() {
               <img 
                 src="/nash-adam.jpg" 
                 alt="Nash Adam - CEO AdamGráfica" 
+                width="448"
+                height="597"
+                loading="lazy"
+                decoding="async"
                 className="absolute inset-0 w-full h-full object-cover grayscale mix-blend-luminosity opacity-80 transition-all duration-700 hover:scale-105 hover:grayscale-0 hover:mix-blend-normal hover:opacity-100"
               />
               

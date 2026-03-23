@@ -1,22 +1,24 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// Import all sections eagerly to ensure GSAP calculates heights correctly
+// Critical sections imported eagerly
 import Navbar from './sections/Navbar';
 import Hero from './sections/Hero';
-import PainAgitation from './sections/PainAgitation';
-import Solution from './sections/Solution';
-import Services from './sections/Services';
-import Process from './sections/Process';
-import Testimonials from './sections/Testimonials';
-import Comparison from './sections/Comparison';
-import Portfolio from './sections/Portfolio';
-import TechStack from './sections/TechStack';
-import Founder from './sections/Founder';
-import FAQ from './sections/FAQ';
-import CTAFinal from './sections/CTAFinal';
-import Footer from './sections/Footer';
+
+// Components below the fold imported lazily for performance
+const PainAgitation = lazy(() => import('./sections/PainAgitation'));
+const Solution = lazy(() => import('./sections/Solution'));
+const Services = lazy(() => import('./sections/Services'));
+const Process = lazy(() => import('./sections/Process'));
+const Testimonials = lazy(() => import('./sections/Testimonials'));
+const Comparison = lazy(() => import('./sections/Comparison'));
+const Portfolio = lazy(() => import('./sections/Portfolio'));
+const TechStack = lazy(() => import('./sections/TechStack'));
+const Founder = lazy(() => import('./sections/Founder'));
+const FAQ = lazy(() => import('./sections/FAQ'));
+const CTAFinal = lazy(() => import('./sections/CTAFinal'));
+const Footer = lazy(() => import('./sections/Footer'));
 
 import './App.css';
 
@@ -90,19 +92,23 @@ function App() {
       <Navbar />
       <main>
         <Hero />
-        <PainAgitation />
-        <Solution />
-        <Services />
-        <Process />
-        <Testimonials />
-        <Comparison />
-        <Portfolio />
-        <TechStack />
-        <Founder />
-        <FAQ />
-        <CTAFinal />
+        <Suspense fallback={<div className="min-h-screen bg-ag-bg-primary" />}>
+          <PainAgitation />
+          <Solution />
+          <Services />
+          <Process />
+          <Testimonials />
+          <Comparison />
+          <Portfolio />
+          <TechStack />
+          <Founder />
+          <FAQ />
+          <CTAFinal />
+        </Suspense>
       </main>
-      <Footer />
+      <Suspense fallback={null}>
+        <Footer />
+      </Suspense>
     </div>
   );
 }
