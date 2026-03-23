@@ -1,32 +1,36 @@
-import { useEffect, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Check, ArrowRight, Lock, Sparkles } from 'lucide-react';
+import { Check, ArrowRight, Zap } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const packages = [
   {
+    id: 'genesis',
     name: 'GÉNESIS',
-    badge: 'Para empezar fuerte',
-    badgeType: 'gray',
-    price: '$400.000',
+    tagline: 'Para empezar fuerte',
+    prices: {
+      CLP: { main: '400.000', installments: '200.000' },
+      USD: { main: '450', installments: '225' },
+    },
     features: [
       'Identidad visual completa',
       'Logo profesional + variantes',
       'Brand system básico (colores, tipografía, guía)',
       'Archivos editables entregados',
     ],
-    time: '1–2 semanas',
-    cta: 'Empezar con Génesis',
-    ctaType: 'ghost-blue',
+    time: '2 semanas',
     highlighted: false,
   },
   {
+    id: 'imperio',
     name: 'IMPERIO DIGITAL',
-    badge: 'MÁS VENDIDO',
-    badgeType: 'green',
-    price: '$600.000',
+    tagline: 'Uno de los más vendidos',
+    prices: {
+      CLP: { main: '600.000', installments: '300.000' },
+      USD: { main: '650', installments: '325' },
+    },
     features: [
       'Todo lo de Génesis',
       'Website profesional de alto rendimiento',
@@ -35,16 +39,18 @@ const packages = [
       'Automatizaciones básicas (WhatsApp + formularios)',
       'Training para usar el sistema',
     ],
-    time: '4–6 semanas',
-    cta: 'Quiero mi Imperio Digital',
-    ctaType: 'primary',
+    time: '4 semanas',
     highlighted: false,
+    specialBorder: 'green',
   },
   {
+    id: 'completo',
     name: 'SISTEMA COMPLETO',
-    badge: 'ENTERPRISE / PREMIUM',
-    badgeType: 'premium',
-    price: '$1.500.000',
+    tagline: 'ENTERPRISE / PREMIUM',
+    prices: {
+      CLP: { main: '1.500.000', installments: '750.000' },
+      USD: { main: '1.600', installments: '800' },
+    },
     features: [
       'Todo lo de Imperio Digital',
       'Funnel de ventas completo',
@@ -54,15 +60,14 @@ const packages = [
       'Soporte/Optimización prioritaria',
       'Reportes de resultados detallados',
     ],
-    time: '8–12 semanas',
-    cta: 'Agendar consultoria estratégica',
-    ctaType: 'primary',
+    time: '6 semanas',
     highlighted: true,
   },
 ];
 
 export default function Services() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [currency, setCurrency] = useState<'CLP' | 'USD'>('CLP');
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -95,13 +100,10 @@ export default function Services() {
         },
         opacity: 0,
         y: 60,
-        rotateX: -10,
         duration: 0.7,
         stagger: 0.15,
         ease: 'expo.out',
       });
-
-
     }, sectionRef);
 
     return () => ctx.revert();
@@ -117,12 +119,12 @@ export default function Services() {
       {/* Decorative elements */}
       <div className="absolute top-20 left-10 w-32 h-32 bg-ag-blue/5 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-10 w-40 h-40 bg-ag-blue-light/5 rounded-full blur-3xl" />
-      
+
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
           <span className="services-eyebrow eyebrow mb-4 inline-flex">
-            <Sparkles className="w-3 h-3 text-ag-blue" />
+            <Zap className="w-3 h-3 text-ag-blue" />
             ELIGE TU NIVEL DE TRANSFORMACIÓN
           </span>
           <h2 id="services-title" className="services-title font-display text-display-3 lg:text-display-2 text-white">
@@ -132,104 +134,108 @@ export default function Services() {
           </h2>
         </div>
 
-        {/* Cards Grid */}
-        <div className="services-grid grid md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+        {/* Pricing Switcher - Premium Pill Design simplified (no icons) */}
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex items-center p-1.5 bg-white/5 backdrop-blur-md border border-white/10 rounded-full">
+            {[
+              { id: 'CLP', label: 'CLP' },
+              { id: 'USD', label: 'USD' }
+            ].map((option) => (
+              <button
+                key={option.id}
+                onClick={() => setCurrency(option.id as any)}
+                className={`px-10 py-2.5 rounded-full text-sm font-bold tracking-widest transition-all duration-500 ${currency === option.id
+                  ? 'bg-ag-blue text-white shadow-glow-blue'
+                  : 'text-ag-text-gray hover:text-white'
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Pricing Grid */}
+        <div className="services-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
           {packages.map((pkg, index) => (
             <div
               key={index}
-              className={`service-card relative rounded-3xl p-8 transition-all duration-500 overflow-hidden ${
-                pkg.highlighted
-                  ? 'bg-gradient-to-br from-ag-blue/15 via-ag-blue/5 to-transparent border-2 border-ag-blue scale-[1.03] shadow-[0_0_50px_rgba(0,102,255,0.3)] z-10'
-                  : 'glass-card border border-white/5 shadow-none'
+              className={`service-card relative rounded-[32px] p-8 lg:p-10 transition-all duration-700 flex flex-col ${pkg.highlighted
+                ? 'bg-white/[0.04] border-2 border-ag-blue shadow-none z-10'
+                : pkg.specialBorder === 'green'
+                  ? 'glass-card border border-green-500/30'
+                  : 'glass-card border border-white/10'
               }`}
             >
-              {/* Shimmer for premium */}
-              {pkg.highlighted && (
-                <div className="absolute inset-0 shimmer-fast opacity-10 pointer-events-none" />
-              )}
-              {/* Recommended Badge for highlighted */}
-              {pkg.highlighted && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20">
-                  <span className="bg-ag-blue text-white text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg shadow-ag-blue/50 tracking-widest uppercase">
-                    <Sparkles className="w-3 h-3" />
-                    RECOMENDADO ENTERPRISE
-                  </span>
-                </div>
-              )}
-
-              {/* Badge */}
-              <div className="mb-6">
-                {pkg.badgeType === 'green' && (
-                  <span className="badge-green flex items-center gap-1">
-                    <Check className="w-3 h-3" />
-                    {pkg.badge}
-                  </span>
-                )}
-                {pkg.badgeType === 'premium' && (
-                  <span className="bg-ag-blue/20 text-ag-blue border border-ag-blue/30 text-[10px] font-bold px-3 py-1 rounded-full inline-flex items-center gap-1 uppercase tracking-wider">
-                    <Lock className="w-3 h-3" />
-                    {pkg.badge}
-                  </span>
-                )}
-                {pkg.badgeType === 'blue' && (
-                  <span className="badge-blue">{pkg.badge}</span>
-                )}
-                {pkg.badgeType === 'gray' && (
-                  <span className="badge-gray">{pkg.badge}</span>
-                )}
+              {/* Tagline Badge */}
+              <div className="mb-4 relative z-10">
+                <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border ${pkg.specialBorder === 'green'
+                  ? 'bg-green-500/10 border-green-500/30 text-green-400'
+                  : 'bg-white/5 border-white/10 text-ag-text-gray'
+                }`}>
+                  {pkg.tagline}
+                </span>
               </div>
 
-              {/* Name */}
-              <h3 className="font-display text-2xl lg:text-3xl text-white mb-2">
+              {/* Title */}
+              <h3 className="font-display text-4xl lg:text-5xl text-white mb-4 tracking-tighter leading-none">
                 {pkg.name}
               </h3>
 
-              {/* Price */}
-              <p className="price-tag text-ag-blue text-lg font-medium mb-6">
-                {pkg.price}
-              </p>
+              {/* Price Section */}
+              <div className="mb-8 relative z-10">
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-ag-blue text-2xl font-light">$</span>
+                  <span className="font-sans text-5xl lg:text-6xl font-normal text-ag-blue tracking-tighter transition-all duration-500">
+                    {pkg.prices[currency].main}
+                  </span>
+                  {currency === 'USD' && <span className="text-ag-blue/60 text-sm font-bold ml-1">USD</span>}
+                </div>
+                {/* Installment Info */}
+                <div className="mt-2 flex flex-col">
+                  <span className="text-ag-text-muted text-sm font-medium">
+                    2 cuotas de ${pkg.prices[currency].installments}
+                  </span>
+                  <span className="text-ag-text-muted/60 text-[10px] uppercase tracking-widest font-extrabold mt-0.5">
+                    (PAGO ÚNICO)
+                  </span>
+                </div>
+              </div>
 
               {/* Features */}
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-3 mb-10 flex-grow relative z-10">
                 {pkg.features.map((feature, fIndex) => (
-                  <li key={fIndex} className="flex items-start gap-3 group">
-                    <Check className="w-5 h-5 text-ag-green flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
-                    <span className="text-ag-text-gray text-sm">{feature}</span>
+                  <li key={fIndex} className="flex items-start gap-4 group/item">
+                    <div className={`mt-1 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors duration-300 ${pkg.highlighted ? 'bg-ag-blue/20 text-ag-blue' : 'bg-white/5 text-ag-text-gray group-hover/item:text-white'
+                    }`}>
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                    </div>
+                    <span className="text-ag-text-gray group-hover/item:text-white transition-colors duration-300 text-[14px] leading-snug">
+                      {feature}
+                    </span>
                   </li>
                 ))}
               </ul>
 
-              {/* Time */}
-              <p className="text-ag-text-muted text-sm mb-6 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-ag-blue rounded-full" />
-                Tiempo: <span className="text-white">{pkg.time}</span>
-              </p>
+              {/* Delivery Time - Mono font, normal weight */}
+              <div className="flex items-center gap-3 mb-8 text-sm border-t border-white/10 pt-6 relative z-10">
+                <span className="text-ag-text-secondary font-medium italic">Tiempo de entrega:</span>
+                <span className="text-white font-mono text-xs uppercase tracking-tighter bg-white/5 px-2 py-0.5 rounded border border-white/10">
+                  {pkg.time}
+                </span>
+              </div>
 
-              {/* CTA */}
-              {pkg.ctaType === 'primary' ? (
-                <a
-                  href="#contact"
-                  className="w-full btn-primary group"
-                >
-                  <span>{pkg.cta}</span>
-                  <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
-              ) : (
-                <a
-                  href="#contact"
-                  className="w-full btn-ghost-blue"
-                >
-                  <span>{pkg.cta}</span>
-                </a>
-              )}
-
-              {/* Limited spots tag */}
-              {pkg.highlighted && (
-                <p className="text-center text-ag-text-muted text-xs mt-4 flex items-center justify-center gap-1">
-                  <Lock className="w-3 h-3" />
-                  Cupos limitados por mes
-                </p>
-              )}
+              {/* CTA Button - Primary for highlighted, ghost for others */}
+              <a
+                href="#contact"
+                className={`group/btn relative w-full py-5 px-8 rounded-2xl flex items-center justify-center gap-3 transition-all duration-500 font-black tracking-widest uppercase text-xs overflow-hidden ${pkg.highlighted
+                  ? 'bg-ag-blue text-white shadow-glow-blue hover:scale-[1.02] active:scale-95'
+                  : 'bg-white/5 text-white border border-white/10 hover:border-white/20 hover:bg-white/10'
+                }`}
+              >
+                <span>{pkg.id === 'completo' ? 'Agendar Consultoría' : `Empezar con ${pkg.name.toLowerCase().split(' ')[0]}`}</span>
+                <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-2 transition-transform duration-500" />
+              </a>
             </div>
           ))}
         </div>

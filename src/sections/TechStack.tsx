@@ -158,14 +158,14 @@ export default function TechStack() {
           </p>
         </div>
 
-        {/* Categories Grid */}
-        <div className="stack-grid grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Categories Grid - Scrollable on mobile */}
+        <div className="stack-grid flex lg:grid lg:grid-cols-4 gap-6 overflow-x-auto lg:overflow-visible pb-8 lg:pb-0 snap-x snap-mandatory hide-scrollbar">
           {techCategories.map((category, catIndex) => {
             const CategoryIcon = category.icon;
             return (
               <div
                 key={catIndex}
-                className="stack-category glass-card p-6 group hover:border-ag-blue/30 transition-colors duration-300"
+                className="stack-category flex-shrink-0 w-[280px] lg:w-auto snap-center glass-card p-6 group hover:border-ag-blue/30 transition-colors duration-300"
               >
                 {/* Category Header */}
                 <div className="flex items-center gap-3 mb-4">

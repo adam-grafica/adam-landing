@@ -106,7 +106,7 @@
   .favicon-shine-container {
     position: relative;
     overflow: hidden;
-    border-radius: 10px; /* Semi-square shape as requested */
+    border-radius: 10px; /* Rounded square shape as requested */
     animation: favicon-bg-glow 1s ease-in-out infinite;
   }
 
@@ -178,7 +178,7 @@
     padding: 6px 14px;
     background: linear-gradient(135deg, rgba(0, 102, 255, 0.1) 0%, rgba(0, 102, 255, 0.05) 100%);
     border: 1px solid rgba(0, 102, 255, 0.3);
-    border-radius: 4px;
+    border-radius: 999px;
     position: relative;
     overflow: hidden;
   }
@@ -251,7 +251,7 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
+    border-radius: 24px;
     transition-property: background-color, border-color, box-shadow, transform;
     transition-duration: 0.4s;
     transition-timing-function: var(--ease-expo-out);

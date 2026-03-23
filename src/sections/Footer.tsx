@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Instagram, Linkedin, MessageCircle, Mail, Phone, MapPin, Heart } from 'lucide-react';
+import { Instagram, Linkedin, MessageCircle, Mail, Phone, MapPin, Heart, Facebook } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,8 +22,9 @@ const footerLinks = {
 
 const socialLinks = [
   { icon: Instagram, href: 'https://instagram.com/adamgrafica', label: 'Instagram' },
+  { icon: Facebook, href: 'https://facebook.com/adamgraficaCL', label: 'Facebook' },
   { icon: Linkedin, href: 'https://linkedin.com/company/adamgrafica', label: 'LinkedIn' },
-  { icon: MessageCircle, href: 'https://wa.me/', label: 'WhatsApp' },
+  { icon: MessageCircle, href: 'https://wa.me/569XXXXXXXX', label: 'WhatsApp' },
 ];
 
 export default function Footer() {
@@ -136,11 +137,11 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="mailto:hola@adamgrafica.cl"
+                  href="mailto:somos@adamgrafica.online"
                   className="flex items-center gap-2 text-ag-text-gray text-sm hover:text-white transition-colors duration-200"
                 >
                   <Mail className="w-4 h-4 text-ag-blue" />
-                  hola@adamgrafica.cl
+                  somos@adamgrafica.online
                 </a>
               </li>
               <li>
