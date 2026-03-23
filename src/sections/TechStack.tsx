@@ -1,12 +1,9 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { 
   Cloud, Database, Github, Bot, Code, Palette, 
   Video, FileText, MessageSquare, Zap, Cpu, Layers 
 } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const techCategories = [
   {

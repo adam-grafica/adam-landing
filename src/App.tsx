@@ -20,8 +20,6 @@ const FAQ = lazy(() => import('./sections/FAQ'));
 const CTAFinal = lazy(() => import('./sections/CTAFinal'));
 const Footer = lazy(() => import('./sections/Footer'));
 
-import './App.css';
-
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
@@ -93,21 +91,21 @@ function App() {
       <main>
         <Hero />
         <Suspense fallback={<div className="min-h-screen bg-ag-bg-primary" />}>
-          <PainAgitation />
-          <Solution />
-          <Services />
-          <Process />
-          <Testimonials />
-          <Comparison />
-          <Portfolio />
-          <TechStack />
-          <Founder />
-          <FAQ />
-          <CTAFinal />
+          <div className="content-hidden-below-fold"><PainAgitation /></div>
+          <div className="content-hidden-below-fold"><Solution /></div>
+          <div className="content-hidden-below-fold"><Services /></div>
+          <div className="content-hidden-below-fold"><Process /></div>
+          <div className="content-hidden-below-fold"><Testimonials /></div>
+          <div className="content-hidden-below-fold"><Comparison /></div>
+          <div className="content-hidden-below-fold"><Portfolio /></div>
+          <div className="content-hidden-below-fold"><TechStack /></div>
+          <div className="content-hidden-below-fold"><Founder /></div>
+          <div className="content-hidden-below-fold"><FAQ /></div>
+          <div className="content-hidden-below-fold"><CTAFinal /></div>
         </Suspense>
       </main>
       <Suspense fallback={null}>
-        <Footer />
+        <div className="content-hidden-below-fold"><Footer /></div>
       </Suspense>
     </div>
   );

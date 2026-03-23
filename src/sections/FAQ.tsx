@@ -1,9 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronDown, HelpCircle } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const faqs = [
   {

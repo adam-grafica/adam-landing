@@ -1,9 +1,6 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { EyeOff, Monitor, TrendingDown } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const painPoints = [
   {

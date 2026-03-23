@@ -1,9 +1,6 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Lock, Zap, MapPin, Cpu } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const trustSignals = [
   { icon: Lock, text: 'Sin compromiso' },
