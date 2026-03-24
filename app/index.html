@@ -3,19 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
     
     <!-- Primary Meta Tags -->
     <title>AdamGráfica | Agencia Digital 95% IA en Chile - Diseño Web, Branding & Ads</title>
-    <meta name="title" content="AdamGráfica | Agencia Digital 95% IA en Chile - Diseño Web, Branding & Ads" />
     <meta name="description" content="Potenciamos tu negocio con IA. Branding futurista, sitios web de alto rendimiento y automatizaciones avanzadas. Resultados reales en 4 semanas." />
     <meta name="keywords" content="agencia digital ia, diseño web chile, branding futurista, automatizacion negocios, inteligencia artificial chile, adamgrafica, marketing digital ia" />
     <meta name="author" content="AdamGráfica" />
     <meta name="robots" content="index, follow" />
-    
-    <!-- CDNs for Essential Libraries (Optimization) -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://adamgrafica.cl" />
@@ -41,13 +36,13 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     
-    <!-- Preconnect to Google Fonts -->
+    <!-- Google Fonts — async non-render-blocking load -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
-    <!-- Preload Critical Fonts -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" as="style" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
+    </noscript>
     
     <!-- Theme Color -->
     <meta name="theme-color" content="#0A0A0A" />
@@ -63,10 +58,7 @@
       "url": "https://adamgrafica.cl",
       "logo": "https://adamgrafica.cl/logo.png",
       "description": "La primera agencia digital 95% operada por IA en Chile. Especialistas en branding, desarrollo web y automatizaciones.",
-      "founder": {
-        "@type": "Person",
-        "name": "Nash Adam"
-      },
+      "founder": { "@type": "Person", "name": "Nash Adam" },
       "foundingDate": "2018",
       "address": {
         "@type": "PostalAddress",
@@ -97,7 +89,6 @@
       "name": "AdamGráfica",
       "image": "https://adamgrafica.cl/logo.png",
       "url": "https://adamgrafica.cl",
-      "telephone": "",
       "email": "hola@adamgrafica.cl",
       "address": {
         "@type": "PostalAddress",
@@ -105,11 +96,7 @@
         "addressRegion": "Valparaíso",
         "addressCountry": "CL"
       },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": -33.0472,
-        "longitude": -71.4447
-      },
+      "geo": { "@type": "GeoCoordinates", "latitude": -33.0472, "longitude": -71.4447 },
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
@@ -126,42 +113,15 @@
       "@context": "https://schema.org",
       "@type": "Service",
       "serviceType": "Agencia Digital",
-      "provider": {
-        "@type": "Organization",
-        "name": "AdamGráfica"
-      },
-      "areaServed": {
-        "@type": "Country",
-        "name": "Chile"
-      },
+      "provider": { "@type": "Organization", "name": "AdamGráfica" },
+      "areaServed": { "@type": "Country", "name": "Chile" },
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Servicios AdamGráfica",
         "itemListElement": [
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Génesis - Identidad Visual",
-              "description": "Identidad visual completa desde $400.000 CLP"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Imperio Digital",
-              "description": "Sitio web de alto rendimiento y branding desde $600.000 CLP"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Sistema Completo",
-              "description": "Ecosistema digital automatizado con IA desde $1.500.000 CLP"
-            }
-          }
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Génesis - Identidad Visual", "description": "Identidad visual completa desde $400.000 CLP" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Imperio Digital", "description": "Sitio web de alto rendimiento y branding desde $600.000 CLP" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Sistema Completo", "description": "Ecosistema digital automatizado con IA desde $1.500.000 CLP" } }
         ]
       }
     }

@@ -1,9 +1,6 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Search, FileText, Cpu, Zap } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const steps = [
   {
@@ -110,8 +107,8 @@ export default function Process() {
       // Step nodes pop-in
       gsap.from('.step-node', {
         scrollTrigger: {
-          trigger: '.process-steps',
-          start: 'top 80%',
+          trigger: sectionRef.current,
+          start: 'top 70%',
         },
         opacity: 0,
         scale: 0.8,
@@ -123,8 +120,8 @@ export default function Process() {
       // Cards slide-in
       gsap.from('.step-card', {
         scrollTrigger: {
-          trigger: '.process-steps',
-          start: 'top 75%',
+          trigger: sectionRef.current,
+          start: 'top 65%',
         },
         opacity: 0,
         y: 30,

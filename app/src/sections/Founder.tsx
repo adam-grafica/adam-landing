@@ -1,9 +1,6 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Calendar, MapPin, Rocket, Cpu, User } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const badges = [
   { icon: Calendar, text: 'Desde 2018' },

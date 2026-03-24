@@ -14,6 +14,12 @@ RUN npm run build
 # Etapa 2: Servidor Web (Nginx)
 FROM nginx:alpine
 
+# Remove default nginx config
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copiar configuración optimizada
+COPY nginx.conf /etc/nginx/conf.d/
+
 # Copiar los archivos construidos desde la etapa anterior
 COPY --from=builder /app/dist /usr/share/nginx/html
 

@@ -1,9 +1,6 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { EyeOff, Monitor, TrendingDown } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const painPoints = [
   {
@@ -117,7 +114,7 @@ export default function PainAgitation() {
             return (
               <div
                 key={index}
-                className="pain-card glass-card p-8 lg:p-10 group border border-red-500/20 flex flex-col h-full transition-all duration-500 hover:border-red-500/40 hover:bg-red-500/[0.04] hover:shadow-[0_0_50px_rgba(220,38,38,0.15)] relative overflow-hidden"
+                className="pain-card glass-card p-8 lg:p-10 group border border-red-500/20 flex flex-col items-center text-center h-full transition-all duration-500 hover:border-red-500/40 hover:bg-red-500/[0.04] hover:shadow-[0_0_50px_rgba(220,38,38,0.15)] relative overflow-hidden"
               >
                 {/* Subtle red background glow on hover */}
                 <div className="absolute inset-0 bg-red-600/0 group-hover:bg-red-600/[0.02] transition-colors duration-500 pointer-events-none" />
@@ -138,7 +135,7 @@ export default function PainAgitation() {
                 </p>
                 
                 {/* Decorative line */}
-                <div className="mt-8 h-0.5 bg-gradient-to-r from-red-600 to-transparent w-0 group-hover:w-full transition-all duration-700" />
+                <div className="mt-8 h-0.5 bg-gradient-to-r from-red-600 to-transparent w-0 group-hover:w-full transition-all duration-700 mx-auto" />
               </div>
             );
           })}

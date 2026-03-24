@@ -1,9 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Check, ArrowRight, Zap } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const packages = [
   {
@@ -217,10 +214,10 @@ export default function Services() {
                 ))}
               </ul>
 
-              {/* Delivery Time - Mono font, normal weight */}
-              <div className="flex items-center gap-3 mb-8 text-sm border-t border-white/10 pt-6 relative z-10">
-                <span className="text-ag-text-secondary font-medium italic">Tiempo de entrega:</span>
-                <span className="text-white font-mono text-xs uppercase tracking-tighter bg-white/5 px-2 py-0.5 rounded border border-white/10">
+              {/* Delivery Time - Normal text, smaller */}
+              <div className="flex items-center justify-center gap-3 mb-8 pt-6 relative z-10">
+                <span className="text-white/60 font-normal text-xs">Tiempo de entrega:</span>
+                <span className="text-white font-sans text-xs uppercase tracking-tight bg-white/5 px-2 py-0.5 rounded border border-white/10">
                   {pkg.time}
                 </span>
               </div>

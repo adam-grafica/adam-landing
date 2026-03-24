@@ -1,9 +1,6 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Instagram, Linkedin, MessageCircle, Mail, Phone, MapPin, Heart, Facebook } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const footerLinks = {
   services: [
