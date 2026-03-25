@@ -310,6 +310,7 @@
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     transition: left 0.5s;
+    pointer-events: none;
   }
 
   .btn-primary:hover::before {
@@ -337,6 +338,7 @@
     background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), transparent);
     opacity: 0;
     transition: opacity 0.3s;
+    pointer-events: none;
   }
 
   .btn-ghost:hover::before {
@@ -500,10 +502,77 @@
     will-change: transform;
   }
 
-  /* Content visibility for performance */
-  .content-visibility {
-    content-visibility: auto;
-    contain-intrinsic-size: 0 500px;
+  /* ============================================
+     REVEAL SYSTEM — Hybrid Reveal Engine v2
+     ============================================ */
+  
+  /* Base reveal state: invisible, shifted */
+  .reveal-up,
+  .reveal-down,
+  .reveal-left,
+  .reveal-right,
+  .reveal-scale,
+  .reveal-fade {
+    opacity: 0;
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-up    { transform: translateY(40px); }
+  .reveal-down  { transform: translateY(-40px); }
+  .reveal-left  { transform: translateX(-40px); }
+  .reveal-right { transform: translateX(40px); }
+  .reveal-scale { transform: scale(0.92); }
+  .reveal-fade  { transform: none; }
+
+  /* Revealed state: visible, in position */
+  .reveal-up.revealed,
+  .revealed .reveal-up,
+  .reveal-down.revealed,
+  .revealed .reveal-down,
+  .reveal-left.revealed,
+  .revealed .reveal-left,
+  .reveal-right.revealed,
+  .revealed .reveal-right,
+  .reveal-scale.revealed,
+  .revealed .reveal-scale,
+  .reveal-fade.revealed,
+  .revealed .reveal-fade {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1);
+  }
+
+  /* Staggered group children — automatic cascade */
+  .reveal-group > .reveal-child {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-group.revealed > .reveal-child:nth-child(1)  { transition-delay: 0ms; }
+  .reveal-group.revealed > .reveal-child:nth-child(2)  { transition-delay: 80ms; }
+  .reveal-group.revealed > .reveal-child:nth-child(3)  { transition-delay: 160ms; }
+  .reveal-group.revealed > .reveal-child:nth-child(4)  { transition-delay: 240ms; }
+  .reveal-group.revealed > .reveal-child:nth-child(5)  { transition-delay: 320ms; }
+  .reveal-group.revealed > .reveal-child:nth-child(6)  { transition-delay: 400ms; }
+  .reveal-group.revealed > .reveal-child:nth-child(7)  { transition-delay: 480ms; }
+  .reveal-group.revealed > .reveal-child:nth-child(8)  { transition-delay: 560ms; }
+
+  .reveal-group.revealed > .reveal-child {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Accessibility: skip all reveals for reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-up, .reveal-down, .reveal-left, .reveal-right,
+    .reveal-scale, .reveal-fade,
+    .reveal-group > .reveal-child {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
   }
 }
 
@@ -541,12 +610,5 @@
 @media print {
   .no-print {
     display: none !important;
-  }
-}
-
-@layer utilities {
-  .content-hidden-below-fold {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 1000px;
   }
 }

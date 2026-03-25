@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useReveal } from '../hooks/useReveal';
+import { useRevealGroup } from '../hooks/useRevealGroup';
 import { EyeOff, Monitor, TrendingDown } from 'lucide-react';
 
 const painPoints = [
@@ -21,70 +21,8 @@ const painPoints = [
 ];
 
 export default function PainAgitation() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from('.pain-eyebrow', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.pain-title', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 75%',
-        },
-        opacity: 0,
-        y: 40,
-        duration: 0.6,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.pain-card', {
-        scrollTrigger: {
-          trigger: '.pain-cards',
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 50,
-        duration: 0.7,
-        stagger: 0.15,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.pain-closing', {
-        scrollTrigger: {
-          trigger: '.pain-closing',
-          start: 'top 90%',
-        },
-        opacity: 0,
-        y: 30,
-        duration: 0.6,
-        ease: 'expo.out',
-      });
-
-      // Icon animations
-      gsap.to('.pain-icon', {
-        scrollTrigger: {
-          trigger: '.pain-cards',
-          start: 'top 70%',
-        },
-        scale: 1,
-        duration: 0.5,
-        stagger: 0.2,
-        ease: 'back.out(1.7)',
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const [sectionRef] = useReveal<HTMLDivElement>();
+  const cardsRef = useRevealGroup<HTMLDivElement>();
 
   return (
     <section
@@ -98,29 +36,29 @@ export default function PainAgitation() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <span className="pain-eyebrow eyebrow mb-4 inline-flex">
+          <span className="pain-eyebrow eyebrow mb-4 inline-flex reveal-fade">
             <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse" />
             EL PROBLEMA
           </span>
-          <h2 id="pain-title" className="pain-title font-display text-display-3 lg:text-display-2 text-white">
+          <h2 id="pain-title" className="pain-title font-display text-display-3 lg:text-display-2 text-white reveal-up">
             ¿Te identificas con alguno de estos?
           </h2>
         </div>
 
         {/* Cards - Forced stretch alignment and hover illumination */}
-        <div className="pain-cards grid md:grid-cols-3 gap-6 lg:gap-8 mb-16 items-stretch">
+        <div ref={cardsRef} className="pain-cards grid md:grid-cols-3 gap-6 lg:gap-8 mb-16 items-stretch reveal-group">
           {painPoints.map((point, index) => {
             const Icon = point.icon;
             return (
               <div
                 key={index}
-                className="pain-card glass-card p-8 lg:p-10 group border border-red-500/20 flex flex-col h-full transition-all duration-500 hover:border-red-500/40 hover:bg-red-500/[0.04] hover:shadow-[0_0_50px_rgba(220,38,38,0.15)] relative overflow-hidden"
+                className="pain-card glass-card p-8 lg:p-10 group border border-red-500/20 flex flex-col items-center text-center h-full transition-all duration-500 hover:border-red-500/40 hover:bg-red-500/[0.04] hover:shadow-[0_0_50px_rgba(220,38,38,0.15)] relative overflow-hidden reveal-child"
               >
                 {/* Subtle red background glow on hover */}
                 <div className="absolute inset-0 bg-red-600/0 group-hover:bg-red-600/[0.02] transition-colors duration-500 pointer-events-none" />
 
                 {/* Icon with animation */}
-                <div className="pain-icon w-14 h-14 rounded-2xl bg-gradient-to-br from-red-600/20 to-red-500/10 border border-red-600/30 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:border-red-600/50 transition-all duration-300">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-600/20 to-red-500/10 border border-red-600/30 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:border-red-600/50 transition-all duration-300">
                   <Icon className="w-7 h-7 text-red-500" />
                 </div>
 
@@ -135,14 +73,14 @@ export default function PainAgitation() {
                 </p>
                 
                 {/* Decorative line */}
-                <div className="mt-8 h-0.5 bg-gradient-to-r from-red-600 to-transparent w-0 group-hover:w-full transition-all duration-700" />
+                <div className="mt-8 h-0.5 bg-gradient-to-r from-red-600 to-transparent w-0 group-hover:w-full transition-all duration-700 mx-auto" />
               </div>
             );
           })}
         </div>
 
         {/* Closing Line */}
-        <div className="pain-closing text-center">
+        <div className="pain-closing text-center reveal-up">
           <p className="font-display text-2xl lg:text-3xl text-white">
             Nosotros lo resolvemos.{' '}
             <span className="gradient-text font-bold">Completamente.</span>{' '}

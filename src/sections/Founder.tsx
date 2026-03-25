@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import gsap from 'gsap';
+import { useReveal } from '../hooks/useReveal';
 import { Calendar, MapPin, Rocket, Cpu, User } from 'lucide-react';
 
 const badges = [
@@ -10,55 +11,10 @@ const badges = [
 ];
 
 export default function Founder() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [sectionRef] = useReveal<HTMLDivElement>();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from('.founder-eyebrow', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.founder-image', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 75%',
-        },
-        opacity: 0,
-        x: -50,
-        duration: 0.7,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.founder-content', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-        },
-        opacity: 0,
-        x: 50,
-        duration: 0.7,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.founder-badge', {
-        scrollTrigger: {
-          trigger: '.founder-badges',
-          start: 'top 90%',
-        },
-        opacity: 0,
-        y: 20,
-        duration: 0.4,
-        stagger: 0.1,
-        ease: 'expo.out',
-      });
-
       // Floating animation for image
       gsap.to('.founder-image-inner', {
         y: -15,
@@ -70,7 +26,7 @@ export default function Founder() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [sectionRef]);
 
   return (
     <section
@@ -85,7 +41,7 @@ export default function Founder() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left Column - Image */}
-          <div className="founder-image relative">
+          <div className="founder-image relative reveal-left">
             <div className="founder-image-inner relative aspect-[3/4] max-w-md mx-auto rounded-3xl overflow-hidden">
               {/* Founder Photo */}
               <img 
@@ -115,8 +71,8 @@ export default function Founder() {
           </div>
 
           {/* Right Column - Content */}
-          <div className="founder-content">
-            <span className="founder-eyebrow eyebrow mb-4 inline-flex">
+          <div className="founder-content reveal-right">
+            <span className="founder-eyebrow eyebrow mb-4 inline-flex reveal-fade">
               <User className="w-3 h-3 text-ag-blue" />
               EL FUNDADOR
             </span>
@@ -149,7 +105,7 @@ export default function Founder() {
                 return (
                   <div
                     key={index}
-                    className="founder-badge inline-flex items-center gap-2 px-4 py-2 bg-white/[0.05] border border-white/10 rounded-full hover:border-ag-blue/30 hover:bg-ag-blue/5 transition-colors duration-300"
+                    className="founder-badge inline-flex items-center gap-2 px-4 py-2 bg-white/[0.05] border border-white/10 rounded-full hover:border-ag-blue/30 hover:bg-ag-blue/5 transition-colors duration-300 reveal-up"
                   >
                     <Icon className="w-4 h-4 text-ag-blue" />
                     <span className="text-white text-sm">{badge.text}</span>

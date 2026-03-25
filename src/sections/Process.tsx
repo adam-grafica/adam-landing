@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { useReveal } from '../hooks/useReveal';
+import { useRevealGroup } from '../hooks/useRevealGroup';
 import { Search, FileText, Cpu, Zap } from 'lucide-react';
 
 const steps = [
@@ -30,7 +32,8 @@ const steps = [
 ];
 
 export default function Process() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [sectionRef] = useReveal<HTMLDivElement>();
+  const gridRef = useRevealGroup<HTMLDivElement>();
   const lineRefH = useRef<HTMLDivElement>(null);
   const lineRefV = useRef<HTMLDivElement>(null);
   const pulseRefH = useRef<HTMLDivElement>(null);
@@ -104,35 +107,10 @@ export default function Process() {
         );
       }
 
-      // Step nodes pop-in
-      gsap.from('.step-node', {
-        scrollTrigger: {
-          trigger: '.process-steps',
-          start: 'top 80%',
-        },
-        opacity: 0,
-        scale: 0.8,
-        stagger: 0.1,
-        duration: 0.5,
-        ease: 'back.out(1.7)',
-      });
-
-      // Cards slide-in
-      gsap.from('.step-card', {
-        scrollTrigger: {
-          trigger: '.process-steps',
-          start: 'top 75%',
-        },
-        opacity: 0,
-        y: 30,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: 'expo.out',
-      });
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [sectionRef]);
 
   return (
     <section
@@ -143,11 +121,11 @@ export default function Process() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-32">
-          <span className="process-eyebrow eyebrow mb-6 inline-flex uppercase tracking-[0.3em] bg-ag-blue/10 border-ag-blue/20">
+          <span className="process-eyebrow eyebrow mb-6 inline-flex uppercase tracking-[0.3em] bg-ag-blue/10 border-ag-blue/20 reveal-fade">
             <Zap className="w-4 h-4 text-ag-blue fill-ag-blue/20" />
             EL PROCESO
           </span>
-          <h2 className="process-title font-display text-5xl lg:text-8xl text-white tracking-tighter">
+          <h2 className="process-title font-display text-5xl lg:text-8xl text-white tracking-tighter reveal-up">
             Así de simple es trabajar
             <br />
             <span className="text-ag-text-gray italic">con nosotros.</span>
@@ -194,11 +172,11 @@ export default function Process() {
           </div>
 
           {/* Steps Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-16 lg:gap-8 relative z-10">
+          <div ref={gridRef} className="grid grid-cols-1 lg:grid-cols-4 gap-16 lg:gap-8 relative z-10 reveal-group">
             {steps.map((step, index) => {
               const Icon = step.icon;
               return (
-                <div key={index} className="process-step group flex flex-col items-start lg:items-center">
+                <div key={index} className="process-step group flex flex-col items-start lg:items-center reveal-child">
                   
                   {/* Station Node - Minimalist circle */}
                   <div className="step-node relative z-20 mb-12 flex items-center justify-center">

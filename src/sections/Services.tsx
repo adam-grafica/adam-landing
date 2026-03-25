@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
-import gsap from 'gsap';
+import { useState } from 'react';
+import { useReveal } from '../hooks/useReveal';
+import { useRevealGroup } from '../hooks/useRevealGroup';
 import { Check, ArrowRight, Zap } from 'lucide-react';
 
 const packages = [
@@ -64,47 +65,8 @@ const packages = [
 
 export default function Services() {
   const [currency, setCurrency] = useState<'CLP' | 'USD'>('CLP');
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from('.services-eyebrow', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.services-title', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 75%',
-        },
-        opacity: 0,
-        y: 40,
-        duration: 0.6,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.service-card', {
-        scrollTrigger: {
-          trigger: '.services-grid',
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 60,
-        duration: 0.7,
-        stagger: 0.15,
-        ease: 'expo.out',
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const [sectionRef] = useReveal<HTMLElement>();
+  const gridRef = useRevealGroup<HTMLDivElement>();
 
   return (
     <section
@@ -120,11 +82,11 @@ export default function Services() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <span className="services-eyebrow eyebrow mb-4 inline-flex">
+          <span className="services-eyebrow eyebrow mb-4 inline-flex reveal-fade">
             <Zap className="w-3 h-3 text-ag-blue" />
             ELIGE TU NIVEL DE TRANSFORMACIÓN
           </span>
-          <h2 id="services-title" className="services-title font-display text-display-3 lg:text-display-2 text-white">
+          <h2 id="services-title" className="services-title font-display text-display-3 lg:text-display-2 text-white reveal-up">
             Construimos tu presencia digital completa.
             <br />
             <span className="text-ag-text-gray">No a pedazos — completa.</span>
@@ -153,11 +115,11 @@ export default function Services() {
         </div>
 
         {/* Pricing Grid */}
-        <div className="services-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+        <div ref={gridRef} className="services-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch reveal-group">
           {packages.map((pkg, index) => (
             <div
               key={index}
-              className={`service-card relative rounded-[32px] p-8 lg:p-10 transition-all duration-700 flex flex-col ${pkg.highlighted
+              className={`service-card relative rounded-[32px] p-8 lg:p-10 transition-all duration-700 flex flex-col reveal-child ${pkg.highlighted
                 ? 'bg-white/[0.04] border-2 border-ag-blue shadow-none z-10'
                 : pkg.specialBorder === 'green'
                   ? 'glass-card border border-green-500/30'
@@ -214,10 +176,10 @@ export default function Services() {
                 ))}
               </ul>
 
-              {/* Delivery Time - Mono font, normal weight */}
-              <div className="flex items-center gap-3 mb-8 text-sm border-t border-white/10 pt-6 relative z-10">
-                <span className="text-ag-text-secondary font-medium italic">Tiempo de entrega:</span>
-                <span className="text-white font-mono text-xs uppercase tracking-tighter bg-white/5 px-2 py-0.5 rounded border border-white/10">
+              {/* Delivery Time - Normal text, smaller */}
+              <div className="flex items-center justify-center gap-3 mb-8 pt-6 relative z-10">
+                <span className="text-white/60 font-normal text-xs">Tiempo de entrega:</span>
+                <span className="text-white font-sans text-xs uppercase tracking-tight bg-white/5 px-2 py-0.5 rounded border border-white/10">
                   {pkg.time}
                 </span>
               </div>

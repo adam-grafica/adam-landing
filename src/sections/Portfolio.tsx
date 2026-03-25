@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useReveal } from '../hooks/useReveal';
+import { useRevealGroup } from '../hooks/useRevealGroup';
 import { ArrowRight, Lock, Layers } from 'lucide-react';
 
 const projects = [
@@ -11,6 +11,7 @@ const projects = [
   },
   {
     name: 'Formativa OTEC',
+    role: 'Web + Automatización',
     tag: 'Web + Automatización',
     gradient: 'from-blue-900/60 to-cyan-900/40',
     status: 'completed',
@@ -42,58 +43,8 @@ const projects = [
 ];
 
 export default function Portfolio() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from('.portfolio-eyebrow', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.portfolio-title', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 75%',
-        },
-        opacity: 0,
-        y: 40,
-        duration: 0.6,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.portfolio-card', {
-        scrollTrigger: {
-          trigger: '.portfolio-grid',
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 50,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.portfolio-cta', {
-        scrollTrigger: {
-          trigger: '.portfolio-cta',
-          start: 'top 90%',
-        },
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        ease: 'expo.out',
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const [sectionRef] = useReveal<HTMLDivElement>();
+  const gridRef = useRevealGroup<HTMLDivElement>();
 
   return (
     <section
@@ -105,11 +56,11 @@ export default function Portfolio() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <span className="portfolio-eyebrow eyebrow mb-4 inline-flex">
+          <span className="portfolio-eyebrow eyebrow mb-4 inline-flex reveal-fade">
             <Layers className="w-3 h-3 text-ag-blue" />
             LO QUE CONSTRUIMOS
           </span>
-          <h2 id="portfolio-title" className="portfolio-title font-display text-display-3 lg:text-display-2 text-white">
+          <h2 id="portfolio-title" className="portfolio-title font-display text-display-3 lg:text-display-2 text-white reveal-up">
             Cada proyecto es un
             <br />
             <span className="gradient-text">sistema de crecimiento.</span>
@@ -117,11 +68,11 @@ export default function Portfolio() {
         </div>
 
         {/* Projects Grid */}
-        <div className="portfolio-grid grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div ref={gridRef} className="portfolio-grid grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 reveal-group">
           {projects.map((project, index) => (
             <div
               key={index}
-              className="portfolio-card group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer"
+              className="portfolio-card group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer reveal-child"
             >
               {/* Background */}
               <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} transition-transform duration-700 group-hover:scale-110`} />
@@ -159,7 +110,7 @@ export default function Portfolio() {
         </div>
 
         {/* CTA */}
-        <div className="portfolio-cta text-center">
+        <div className="portfolio-cta text-center reveal-up">
           <a
             href="#"
             className="inline-flex items-center gap-2 px-8 py-4 border border-ag-blue text-ag-blue font-medium rounded-full transition-all duration-300 hover:bg-ag-blue/10 hover:shadow-glow-blue group"
