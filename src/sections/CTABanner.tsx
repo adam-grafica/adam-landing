@@ -105,19 +105,16 @@ export default function CTABanner() {
           }}
         >
           <div className="grid lg:grid-cols-2 items-center">
-            {/* Image */}
-            <div ref={imageRef} className="relative perspective-1000">
-              <div className="relative preserve-3d">
-                <img
-                  src="/football-player.png"
-                  alt="Football Player"
-                  className="w-full h-auto max-h-[600px] object-contain object-bottom"
-                  style={{
-                    transform: 'rotateY(-8deg)',
-                  }}
-                />
-                {/* Glow effect */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-cyan/40 rounded-full blur-3xl" />
+            {/* CSS-based Glowing Orbe (Featherweight replacement for heavy image) */}
+            <div ref={imageRef} className="relative perspective-1000 flex items-center justify-center py-10">
+              <div className="relative w-64 h-64 lg:w-80 lg:h-80 preserve-3d">
+                <div className="absolute inset-0 bg-white/20 rounded-full blur-[60px] animate-pulse" />
+                <div className="absolute inset-10 bg-white/10 rounded-full border border-white/20 backdrop-blur-sm flex items-center justify-center">
+                  <ArrowRight className="w-20 h-20 text-white opacity-40 -rotate-45" />
+                </div>
+                {/* Floating particles */}
+                <div className="absolute top-0 right-0 w-4 h-4 bg-white/30 rounded-full blur-sm animate-float" />
+                <div className="absolute bottom-10 left-0 w-6 h-6 bg-white/20 rounded-full blur-md animate-float-delayed" />
               </div>
             </div>
 
