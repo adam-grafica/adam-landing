@@ -24,7 +24,6 @@ const OVERLAY_STYLE: React.CSSProperties = {
   background: 'rgba(6, 6, 10, 0.55)',
   backdropFilter: 'blur(32px) saturate(160%)',
   WebkitBackdropFilter: 'blur(32px) saturate(160%)',
-  willChange: 'opacity, transform',
 };
 
 const BURGER_STYLE: React.CSSProperties = {
