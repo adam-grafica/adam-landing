@@ -7,10 +7,13 @@ import Navbar from './sections/Navbar';
 import Hero from './sections/Hero';
 import PainAgitation from './sections/PainAgitation';
 import Solution from './sections/Solution';
+import Stats from './sections/Stats';
 import Services from './sections/Services';
+import CTABanner from './sections/CTABanner';
 import Process from './sections/Process';
 import Testimonials from './sections/Testimonials';
 import Comparison from './sections/Comparison';
+import WhatSetsUsApart from './sections/WhatSetsUsApart';
 import Portfolio from './sections/Portfolio';
 import TechStack from './sections/TechStack';
 import Founder from './sections/Founder';
@@ -41,10 +44,13 @@ function App() {
         <Hero />
         <PainAgitation />
         <Solution />
+        <Stats />
         <Services />
+        <CTABanner />
         <Process />
         <Testimonials />
         <Comparison />
+        <WhatSetsUsApart />
         <Portfolio />
         <TechStack />
         <Founder />
