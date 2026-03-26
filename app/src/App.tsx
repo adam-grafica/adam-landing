@@ -23,25 +23,14 @@ gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   useEffect(() => {
-    // Configure ScrollTrigger defaults
-    ScrollTrigger.defaults({
-      toggleActions: 'play none none none',
-    });
-
-    // Optimize ScrollTrigger for performance
+    // ScrollTrigger solo se usa para animaciones complejas (scrub, loops)
+    // Los reveals de entrada ahora usan IntersectionObserver (useReveal hook)
     ScrollTrigger.config({
       ignoreMobileResize: true,
     });
 
-    // Refresh ScrollTrigger when window fully loads (images, fonts, etc.)
-    const handleLoad = () => {
-      ScrollTrigger.refresh(true);
-    };
-    window.addEventListener('load', handleLoad);
-
-    // Cleanup
     return () => {
-      window.removeEventListener('load', handleLoad);
+      ScrollTrigger.getAll().forEach(t => t.kill());
     };
   }, []);
 

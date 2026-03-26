@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useReveal } from '../hooks/useReveal';
 import { Instagram, Linkedin, MessageCircle, Mail, Phone, MapPin, Heart, Facebook } from 'lucide-react';
 
 const footerLinks = {
@@ -25,24 +24,7 @@ const socialLinks = [
 ];
 
 export default function Footer() {
-  const footerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from('.footer-content', {
-        scrollTrigger: {
-          trigger: footerRef.current,
-          start: 'top 95%',
-        },
-        opacity: 0,
-        y: 30,
-        duration: 0.6,
-        ease: 'expo.out',
-      });
-    }, footerRef);
-
-    return () => ctx.revert();
-  }, []);
+  const [footerRef] = useReveal<HTMLDivElement>();
 
   return (
     <footer ref={footerRef} className="relative bg-ag-bg-footer pt-16 pb-8">
@@ -51,7 +33,7 @@ export default function Footer() {
         <div className="w-full h-full bg-gradient-to-r from-transparent via-ag-blue to-transparent animate-pulse" />
       </div>
       
-      <div className="footer-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="footer-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 reveal-up">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Column 1 - Logo & Tagline */}
           <div className="lg:col-span-1">
@@ -60,10 +42,10 @@ export default function Footer() {
                 <img 
                   src="/favicon.svg" 
                   alt="" 
-                  width="24"
-                  height="24"
+                  width="40"
+                  height="40"
                   loading="lazy"
-                  className="w-6 h-6 object-contain transition-transform duration-300 group-hover:scale-110 animate-favicon-glow" 
+                  className="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110 animate-favicon-glow" 
                 />
               </div>
               <h3 className="font-display text-lg text-white hover:text-ag-blue transition-colors uppercase">

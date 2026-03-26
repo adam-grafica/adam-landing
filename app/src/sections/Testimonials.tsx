@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useReveal } from '../hooks/useReveal';
+import { useRevealGroup } from '../hooks/useRevealGroup';
 import { Star, MessageCircle } from 'lucide-react';
 
 const testimonials = [
@@ -37,72 +37,9 @@ const metrics = [
 ];
 
 export default function Testimonials() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from('.testimonials-eyebrow', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.testimonials-title', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 75%',
-        },
-        opacity: 0,
-        y: 40,
-        duration: 0.6,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.testimonial-card', {
-        scrollTrigger: {
-          trigger: '.testimonials-grid',
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 50,
-        duration: 0.7,
-        stagger: 0.15,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.metrics-item', {
-        scrollTrigger: {
-          trigger: '.metrics-bar',
-          start: 'top 90%',
-        },
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        stagger: 0.1,
-        ease: 'expo.out',
-      });
-
-      // Star animation
-      gsap.from('.star-icon', {
-        scrollTrigger: {
-          trigger: '.testimonials-grid',
-          start: 'top 70%',
-        },
-        scale: 0,
-        rotation: -180,
-        duration: 0.4,
-        stagger: 0.05,
-        ease: 'back.out(1.7)',
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const [sectionRef] = useReveal<HTMLDivElement>();
+  const gridRef = useRevealGroup<HTMLDivElement>();
+  const metricsRef = useRevealGroup<HTMLDivElement>();
 
   return (
     <section
@@ -116,11 +53,11 @@ export default function Testimonials() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <span className="testimonials-eyebrow eyebrow mb-4 inline-flex">
+          <span className="testimonials-eyebrow eyebrow mb-4 inline-flex reveal-fade">
             <MessageCircle className="w-3 h-3 text-ag-blue" />
             LO QUE DICEN NUESTROS CLIENTES
           </span>
-          <h2 id="testimonials-title" className="testimonials-title font-display text-display-3 lg:text-display-2 text-white">
+          <h2 id="testimonials-title" className="testimonials-title font-display text-display-3 lg:text-display-2 text-white reveal-up">
             Resultados reales.
             <br />
             <span className="text-ag-text-gray">Negocios reales.</span>
@@ -128,11 +65,11 @@ export default function Testimonials() {
         </div>
 
         {/* Testimonials Grid */}
-        <div className="testimonials-grid grid md:grid-cols-3 gap-6 lg:gap-8 mb-16">
+        <div ref={gridRef} className="testimonials-grid grid md:grid-cols-3 gap-6 lg:gap-8 mb-16 reveal-group">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="testimonial-card glass-card p-8 group hover:border-ag-blue/30 transition-colors duration-300"
+              className="testimonial-card glass-card p-8 group hover:border-ag-blue/30 transition-colors duration-300 reveal-child"
             >
               {/* Stars */}
               <div className="flex gap-1 mb-6">
@@ -172,13 +109,13 @@ export default function Testimonials() {
         </div>
 
         {/* Metrics Bar */}
-        <div className="metrics-bar glass-card p-8 relative overflow-hidden">
+        <div ref={metricsRef} className="metrics-bar glass-card p-8 relative overflow-hidden reveal-group">
           {/* Shimmer effect */}
           <div className="absolute inset-0 shimmer opacity-30" />
           
           <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-8">
             {metrics.map((metric, index) => (
-              <div key={index} className="metrics-item text-center">
+              <div key={index} className="metrics-item text-center reveal-child">
                 <p className="font-display text-3xl lg:text-4xl text-white mb-1">
                   {metric.value}
                 </p>

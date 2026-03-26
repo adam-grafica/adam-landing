@@ -1,5 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import gsap from 'gsap';
+import { useReveal } from '../hooks/useReveal';
+import { useRevealGroup } from '../hooks/useRevealGroup';
 import { Check, X, Cpu, Zap } from 'lucide-react';
 
 const comparisonData = [
@@ -36,55 +38,11 @@ const comparisonData = [
 ];
 
 export default function Comparison() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [sectionRef] = useReveal<HTMLDivElement>();
+  const tableRef = useRevealGroup<HTMLDivElement>();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from('.comparison-eyebrow', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.comparison-title', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 75%',
-        },
-        opacity: 0,
-        y: 40,
-        duration: 0.6,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.comparison-row', {
-        scrollTrigger: {
-          trigger: '.comparison-table',
-          start: 'top 80%',
-        },
-        opacity: 0,
-        x: -30,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.comparison-visual', {
-        scrollTrigger: {
-          trigger: '.comparison-visual',
-          start: 'top 80%',
-        },
-        opacity: 0,
-        scale: 0.9,
-        duration: 0.8,
-        ease: 'expo.out',
-      });
-
       // Pulse animation for nodes
       gsap.to('.network-node', {
         scale: 1.2,
@@ -99,7 +57,7 @@ export default function Comparison() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [sectionRef]);
 
   return (
     <section
@@ -110,11 +68,11 @@ export default function Comparison() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <span className="comparison-eyebrow eyebrow mb-4 inline-flex">
+          <span className="comparison-eyebrow eyebrow mb-4 inline-flex reveal-fade">
             <Zap className="w-3 h-3 text-ag-blue" />
             LA VENTAJA IA
           </span>
-          <h2 id="comparison-title" className="comparison-title font-display text-display-3 lg:text-display-2 text-white">
+          <h2 id="comparison-title" className="comparison-title font-display text-display-3 lg:text-display-2 text-white reveal-up">
             IA no es el futuro.
             <br />
             <span className="gradient-text">Es nuestra operación diaria.</span>
@@ -123,7 +81,7 @@ export default function Comparison() {
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Comparison Table */}
-          <div className="comparison-table">
+          <div ref={tableRef} className="comparison-table reveal-group">
             {/* Table Header */}
             <div className="grid grid-cols-3 gap-4 mb-6 pb-4 border-b border-white/10">
               <div className="text-ag-text-muted text-sm">Característica</div>
@@ -139,7 +97,7 @@ export default function Comparison() {
               {comparisonData.map((row, index) => (
                 <div
                   key={index}
-                  className="comparison-row grid grid-cols-3 gap-4 py-4 px-4 rounded-xl transition-colors duration-300 hover:bg-white/[0.03]"
+                  className="comparison-row grid grid-cols-3 gap-4 py-4 px-4 rounded-xl transition-colors duration-300 hover:bg-white/[0.03] reveal-child"
                 >
                   <div className="text-white text-sm font-medium flex items-center">
                     {row.feature}
@@ -158,7 +116,7 @@ export default function Comparison() {
           </div>
 
           {/* Visual - Network of Nodes */}
-          <div className="comparison-visual relative aspect-square max-w-md mx-auto">
+          <div className="comparison-visual relative aspect-square max-w-md mx-auto reveal-scale">
             {/* Background Glow */}
             <div className="absolute inset-0 bg-gradient-to-br from-ag-blue/20 to-ag-blue-light/10 rounded-full blur-3xl animate-pulse" />
             

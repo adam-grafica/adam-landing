@@ -1,5 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import gsap from 'gsap';
+import { useReveal } from '../hooks/useReveal';
+import { useRevealGroup } from '../hooks/useRevealGroup';
 import { 
   Cloud, Database, Github, Bot, Code, Palette, 
   Video, FileText, MessageSquare, Zap, Cpu, Layers 
@@ -79,44 +81,11 @@ const techCategories = [
 ];
 
 export default function TechStack() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [sectionRef] = useReveal<HTMLDivElement>();
+  const gridRef = useRevealGroup<HTMLDivElement>();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from('.stack-eyebrow', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.stack-title', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 75%',
-        },
-        opacity: 0,
-        y: 40,
-        duration: 0.6,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.stack-category', {
-        scrollTrigger: {
-          trigger: '.stack-grid',
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 40,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: 'expo.out',
-      });
-
       // Infinite scroll animation for tools
       gsap.to('.tools-marquee', {
         x: '-50%',
@@ -127,7 +96,7 @@ export default function TechStack() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [sectionRef]);
 
   return (
     <section
@@ -141,28 +110,28 @@ export default function TechStack() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <span className="stack-eyebrow eyebrow mb-4 inline-flex">
+          <span className="stack-eyebrow eyebrow mb-4 inline-flex reveal-fade">
             <Cpu className="w-3 h-3 text-ag-blue" />
             STACK TECNOLÓGICO
           </span>
-          <h2 id="stack-title" className="stack-title font-display text-display-3 lg:text-display-2 text-white">
+          <h2 id="stack-title" className="stack-title font-display text-display-3 lg:text-display-2 text-white reveal-up">
             Herramientas de
             <span className="gradient-text"> élite</span>
           </h2>
-          <p className="text-ag-text-gray mt-4 max-w-2xl mx-auto">
+          <p className="text-ag-text-gray mt-4 max-w-2xl mx-auto reveal-up">
             Tecnología de punta para resultados de punta. Cada herramienta seleccionada 
             por su capacidad de entregar más, mejor y más rápido.
           </p>
         </div>
 
         {/* Categories Grid - Scrollable on mobile */}
-        <div className="stack-grid flex lg:grid lg:grid-cols-4 gap-6 overflow-x-auto lg:overflow-visible pb-8 lg:pb-0 snap-x snap-mandatory hide-scrollbar">
+        <div ref={gridRef} className="stack-grid flex lg:grid lg:grid-cols-4 gap-6 overflow-x-auto lg:overflow-visible pb-8 lg:pb-0 snap-x snap-mandatory hide-scrollbar reveal-group">
           {techCategories.map((category, catIndex) => {
             const CategoryIcon = category.icon;
             return (
               <div
                 key={catIndex}
-                className="stack-category flex-shrink-0 w-[280px] lg:w-auto snap-center glass-card p-6 group hover:border-ag-blue/30 transition-colors duration-300"
+                className="stack-category flex-shrink-0 w-[280px] lg:w-auto snap-center glass-card p-6 group hover:border-ag-blue/30 transition-colors duration-300 reveal-child"
               >
                 {/* Category Header */}
                 <div className="flex items-center gap-3 mb-4">

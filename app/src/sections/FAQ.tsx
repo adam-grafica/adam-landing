@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { useState } from 'react';
+import { useReveal } from '../hooks/useReveal';
+import { useRevealGroup } from '../hooks/useRevealGroup';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 
 const faqs = [
@@ -31,51 +32,12 @@ const faqs = [
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [sectionRef] = useReveal<HTMLDivElement>();
+  const listRef = useRevealGroup<HTMLDivElement>();
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from('.faq-eyebrow', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.faq-title', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 75%',
-        },
-        opacity: 0,
-        y: 40,
-        duration: 0.6,
-        ease: 'expo.out',
-      });
-
-      gsap.from('.faq-item', {
-        scrollTrigger: {
-          trigger: '.faq-list',
-          start: 'top 80%',
-        },
-        opacity: 0,
-        y: 30,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: 'expo.out',
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
     <section
@@ -86,11 +48,11 @@ export default function FAQ() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <span className="faq-eyebrow eyebrow mb-4 inline-flex">
+          <span className="faq-eyebrow eyebrow mb-4 inline-flex reveal-fade">
             <HelpCircle className="w-3 h-3 text-ag-blue" />
             PREGUNTAS FRECUENTES
           </span>
-          <h2 id="faq-title" className="faq-title font-display text-display-3 lg:text-display-2 text-white">
+          <h2 id="faq-title" className="faq-title font-display text-display-3 lg:text-display-2 text-white reveal-up">
             Todo lo que necesitas
             <br />
             <span className="text-ag-text-gray">saber antes de empezar.</span>
@@ -98,11 +60,11 @@ export default function FAQ() {
         </div>
 
         {/* FAQ List */}
-        <div className="faq-list space-y-3">
+        <div ref={listRef} className="faq-list space-y-3 reveal-group">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className={`faq-item glass-card overflow-hidden transition-colors duration-300 ${
+              className={`faq-item glass-card overflow-hidden transition-colors duration-300 reveal-child ${
                 openIndex === index ? 'border-ag-blue/30' : ''
               }`}
             >
