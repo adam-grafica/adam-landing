@@ -40,7 +40,7 @@ export default function Footer() {
             <div className="flex items-center gap-2 mb-4 group cursor-pointer">
               <div className="favicon-shine-container">
                 <img 
-                  src="/favicon.svg" 
+                  src="/favicon.svg?v=2" 
                   alt="" 
                   width="40"
                   height="40"

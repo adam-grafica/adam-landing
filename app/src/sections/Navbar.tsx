@@ -62,7 +62,7 @@ export default function Navbar() {
           >
             <div className="favicon-shine-container">
               <img
-                src="/favicon.svg"
+                src="/favicon.svg?v=2"
                 alt="AdamGráfica Logo"
                 width="40"
                 height="40"
@@ -118,10 +118,10 @@ export default function Navbar() {
 
       {/* ── Mobile full-screen overlay ── */}
       <div
-        className={`lg:hidden fixed inset-0 h-[100dvh] w-full flex flex-col px-8 pb-10 transition-all duration-600 ${
+        className={`lg:hidden fixed inset-0 h-[100dvh] w-full flex flex-col px-8 pb-10 transition-opacity duration-600 ${
           isMobileMenuOpen
-            ? 'opacity-100 pointer-events-auto translate-y-0'
-            : 'opacity-0 pointer-events-none -translate-y-3'
+            ? 'opacity-100 pointer-events-auto'
+            : 'opacity-0 pointer-events-none'
         }`}
         style={OVERLAY_STYLE}
       >
