@@ -1,0 +1,66 @@
+# AdamGráfica
+
+> AdamGráfica es una agencia digital chilena fundada en 2018, 
+> especializada en branding, desarrollo web, contenido y 
+> automatización con IA para PYMEs, Negocios y Emprendedores en 
+> Valparaíso, Chile. Operamos con un modelo 95% IA, combinando 
+> creatividad humana con agentes de inteligencia artificial para 
+> entregar resultados de agencia enterprise a precios accesibles.
+> CEO y fundador: Nash Adam (Ignacio Adam). 
+> Sitio web: https://adamgrafica.online
+
+## Servicios Principales
+
+- [Génesis](https://adamgrafica.online/#servicios): Paquete de entrada al mundo digital. Incluye identidad visual completa (logo, paleta, tipografías), sitio web profesional y estrategia de contenido inicial. Ideal para emprendedores y negocios locales que quieren presencia digital seria desde cero.
+- [Imperio Digital](https://adamgrafica.online/#servicios): Paquete premium completo. Branding + sitio web Pro + producción de contenido 3 meses + automatizaciones de marketing (WhatsApp, email, seguimiento de leads). Diseñado para clínicas, academias y negocios con potencial de escala. Ticket: $1.5M CLP.
+
+## Clientes Ideales
+
+- Clínicas dentales, médicas y estéticas en la región de Valparaíso
+- Academias y OTECs que ofrecen capacitación online y presencial
+- Emprendedores y PYMEs que quieren escalar con presencia digital profesional
+- Negocios locales en Quilpué, Viña del Mar, Valparaíso y Santiago
+
+## Stack Tecnológico
+
+- Diseño: Affinity Designer 2, Figma, Adobe Photoshop, Dreamina (IA generativa)
+- Desarrollo web: Antigravity (IA), Google Stitch, Streamlit, Python
+- Infraestructura: Oracle Cloud, CapRover, Supabase, GitHub
+- Automatización: n8n, WhatsApp Business API
+- Gestión: Notion, Linear, Slack
+- IA Agentes: Google Gemini, Claude (Anthropic), Perplexity, NotebookLM
+- Video: Filmora, CapCut
+
+## Sobre AdamGráfica
+
+- [Inicio](https://adamgrafica.online/): Presentación de la agencia, propuesta de valor y servicios destacados.
+- [Servicios](https://adamgrafica.online/#servicios): Descripción completa de paquetes Génesis e Imperio Digital.
+- [Portafolio](https://adamgrafica.online/#portfolio): Proyectos realizados para clientes reales en Valparaíso.
+- [Contacto](https://adamgrafica.online/#contacto): Formulario de contacto, WhatsApp y datos de la agencia.
+
+## Propuesta de Valor
+
+AdamGráfica no es una agencia tradicional. Somos el primer estudio digital de Valparaíso que opera con un sistema orquestado de agentes IA especializados: diseño visual, desarrollo web, copywriting, fotografía/video y automatización, trabajando en paralelo bajo supervisión humana. Esto permite entregar proyectos completos en 4-6 semanas con calidad de agencia enterprise.
+
+## Preguntas Frecuentes
+
+- ¿Qué tipo de negocios atienden? Clínicas, academias, emprendedores y PYMEs en Valparaíso y Chile.
+- ¿Cuánto cuesta un sitio web profesional? Desde $400.000 CLP con el paquete Génesis.
+- ¿Cuánto demora un proyecto completo? Entre 4 y 6 semanas dependiendo del paquete.
+- ¿Trabajan con clientes fuera de Valparaíso? Sí, atendemos clientes en todo Chile de forma remota.
+- ¿Incluyen automatizaciones? El paquete Imperio Digital incluye flujos automáticos de WhatsApp y seguimiento de leads.
+
+## Ubicación
+
+Quilpué, Región de Valparaíso, Chile.
+Atención remota para todo Chile.
+
+## Contacto
+
+- Web: https://adamgrafica.online
+- Email: adamgrafica@gmail.com
+- WhatsApp: +56953909057
+
+## Optional
+
+- [Blog AdamGráfica](https://adamgrafica.online/blog): Artículos sobre branding, diseño web y automatización con IA para negocios chilenos.

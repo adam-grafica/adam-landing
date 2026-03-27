@@ -120,21 +120,23 @@ export default function CTABanner() {
 
             {/* Content */}
             <div className="p-12 lg:p-16 text-center lg:text-left">
-              <h2 className="cta-headline font-display text-4xl md:text-5xl lg:text-display-2 text-white leading-tight mb-6">
-                <span>Si llegaste hasta aquí,</span>
+              <h2 className="cta-headline font-display text-display-2 md:text-[50px] text-white leading-none mb-6">
+                <span className="inline-block">¿LISTO PARA</span>
                 <br />
-                <span>ya sabes que lo necesitas.</span>
+                <span className="inline-block">HABLAR DE</span>
+                <br />
+                <span className="inline-block">RESULTADOS?</span>
               </h2>
 
-              <p className="cta-subheadline text-lg text-white/90 mb-8 max-w-xl mx-auto lg:mx-0">
-                Agenda una sesión de diagnóstico gratuita de 30 min. Te decimos exactamente qué necesita tu negocio — y cuánto cuesta.
+              <p className="cta-subheadline text-lg text-white/80 mb-8">
+                Construyamos, escalemos y evolucionemos—juntos.
               </p>
 
               <a
-                href="#contact"
-                className="cta-button inline-flex items-center gap-3 px-8 py-4 bg-white text-ag-blue rounded-full font-bold transition-all duration-300 hover:shadow-glow-white hover:scale-105 group"
+                href="mailto:hola@adamgrafica.com"
+                className="cta-button inline-flex items-center gap-3 px-8 py-4 bg-white text-blue-primary rounded-full font-medium transition-all duration-300 hover:shadow-lg hover:scale-105 group"
               >
-                <span>Agendar diagnóstico gratuito</span>
+                <span>Contáctanos</span>
                 <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-2" />
               </a>
             </div>

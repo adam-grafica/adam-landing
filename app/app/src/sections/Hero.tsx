@@ -221,7 +221,7 @@ export default function Hero() {
               <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
             </a>
             <a
-              href="#services"
+              href="#process"
               className="btn-ghost group"
               aria-label="Ver cómo funciona nuestro proceso"
             >
@@ -234,7 +234,7 @@ export default function Hero() {
           <div className="hero-social-proof pt-8 border-t border-white/10">
             <div className="flex flex-wrap items-center gap-4 lg:gap-6 text-sm text-ag-text-gray">
               {[
-                { icon: '✦', text: '+30 PYMEs transformadas desde 2018' },
+                { icon: '✦', text: '+30 proyectos entregados' },
                 { icon: '📍', text: 'Valparaíso, Chile' },
                 { icon: '⚡', text: 'Respuesta en 24h' },
                 { icon: '🤖', text: 'Operación 95% IA' },

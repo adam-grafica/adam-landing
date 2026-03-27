@@ -5,10 +5,17 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const mainStats = [
-  { value: 30, suffix: '+', label: 'Proyectos entregados' },
-  { value: 8, suffix: ' años', label: 'De experiencia real' },
-  { value: 4, suffix: ' sem', label: 'Tiempo promedio entrega' },
-  { value: 95, suffix: '%', label: 'Operación potenciada con IA' },
+  { value: 30, suffix: '+', label: 'Proyectos 100%' },
+  { value: 100, suffix: '%', label: 'Tasa de entrega' },
+  { value: 4, suffix: ' sem', label: 'Tiempo promedio' },
+  { value: 95, suffix: '%', label: 'Operación IA' },
+];
+
+const secondaryStats = [
+  { value: 15, suffix: 'M+', label: 'Interacciones/Día' },
+  { value: 500, suffix: '+', label: 'Brands impactadas' },
+  { value: 24, suffix: '/7', label: 'Monitoreo Agentes' },
+  { value: 10, suffix: 'x', label: 'Más rápido que agencias' },
 ];
 
 function AnimatedCounter({
@@ -64,6 +71,7 @@ export default function Stats() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Headline
       gsap.from('.stats-headline', {
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -76,6 +84,7 @@ export default function Stats() {
         ease: 'expo.out',
       });
 
+      // Subheadline
       gsap.from('.stats-subheadline', {
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -88,6 +97,7 @@ export default function Stats() {
         ease: 'power2.out',
       });
 
+      // Main stats
       gsap.from('.main-stat', {
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -102,9 +112,10 @@ export default function Stats() {
         ease: 'expo.out',
       });
 
-      gsap.from('.mega-year', {
+      // Mega counter
+      gsap.from('.mega-counter', {
         scrollTrigger: {
-          trigger: '.mega-year',
+          trigger: '.mega-counter',
           start: 'top 80%',
           toggleActions: 'play none none reverse',
         },
@@ -112,6 +123,20 @@ export default function Stats() {
         opacity: 0,
         duration: 1,
         ease: 'expo.out',
+      });
+
+      // Secondary stats
+      gsap.from('.secondary-stat', {
+        scrollTrigger: {
+          trigger: '.secondary-stats',
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+        y: 20,
+        opacity: 0,
+        duration: 0.4,
+        stagger: 0.05,
+        ease: 'power2.out',
       });
     }, sectionRef);
 
@@ -140,11 +165,11 @@ export default function Stats() {
           <h2 className="stats-headline font-display text-display-2 md:text-[60px] text-white leading-none mb-6">
             RAZONES PARA
             <br />
-            <span className="gradient-text">CREERNOS</span>
+            <span className="text-gradient">CREERNOS</span>
           </h2>
           <p className="stats-subheadline text-lg text-white/60 max-w-lg">
-            Sin promesas infladas. Solo números reales de 8 años construyendo
-            presencias digitales que funcionan.
+            Lo que otros prometen, nosotros cumplimos. Porque el rendimiento es nuestra
+            línea base.
           </p>
         </div>
 
@@ -152,31 +177,39 @@ export default function Stats() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
           {mainStats.map((stat) => (
             <div key={stat.label} className="main-stat text-center">
-              <div className="font-display text-5xl md:text-6xl lg:text-7xl text-white mb-3 rounded-lg py-4">
+              <div className="font-display text-5xl md:text-6xl lg:text-7xl text-white mb-3 animate-pulse-glow rounded-lg py-4">
                 <AnimatedCounter
                   value={stat.value}
                   suffix={stat.suffix}
                   isVisible={isVisible}
                 />
               </div>
-              <div className="h-1 w-16 bg-gradient-to-r from-ag-blue to-ag-blue-light mx-auto mb-3 rounded-full" />
+              <div className="h-1 w-16 bg-gradient-to-r from-blue-primary to-cyan mx-auto mb-3 rounded-full" />
               <p className="text-white/60 text-sm">{stat.label}</p>
             </div>
           ))}
         </div>
 
-        {/* Mega Year — founding story */}
-        <div className="mega-year text-center py-12 border-y border-white/10">
-          <div className="font-display text-7xl md:text-8xl lg:text-9xl text-white/10 mb-4 select-none">
-            2018
+        {/* Mega Counter */}
+        <div className="mega-counter text-center mb-16 py-12 border-y border-white/10">
+          <div className="font-display text-7xl md:text-8xl lg:text-9xl text-white mb-4">
+            <AnimatedCounter value={15000000} suffix="+" isVisible={isVisible} />
           </div>
-          <p className="text-white font-display text-2xl md:text-3xl -mt-16 relative z-10">
-            El año que empezamos a{' '}
-            <span className="gradient-text">construir imperios.</span>
+          <p className="text-white/60 text-lg uppercase tracking-wider">
+            Interacciones generadas por día
           </p>
-          <p className="text-white/40 text-sm mt-4 uppercase tracking-widest">
-            Quilpué, Valparaíso · Chile
-          </p>
+        </div>
+
+        {/* Secondary Stats */}
+        <div className="secondary-stats flex flex-wrap justify-center gap-x-8 gap-y-4">
+          {secondaryStats.map((stat) => (
+            <div key={stat.label} className="secondary-stat flex items-center gap-2">
+              <span className="font-display text-xl text-white">
+                <AnimatedCounter value={stat.value} suffix={stat.suffix} isVisible={isVisible} />
+              </span>
+              <span className="text-white/50 text-sm">{stat.label}</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>
