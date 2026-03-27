@@ -1,45 +1,45 @@
 import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Rocket, Palette, Shield, CheckCircle, Headphones, Sparkles } from 'lucide-react';
+import { Rocket, TrendingUp, Palette, Shield, CheckCircle, Headphones, Sparkles } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const features = [
   {
     id: 1,
-    title: 'ENTREGAMOS EN 4 SEMANAS, NO EN 6 MESES',
-    description: 'Proceso probado, sin idas y vueltas infinitas. Tú apruebas, nosotros ejecutamos — con velocidad de startup y calidad de agencia premium.',
+    title: 'LANZAMIENTO RÁPIDO, CRECIMIENTO ACELERADO',
+    description: 'Lanza tu marca en tiempo récord con nuestros procesos optimizados y equipos especializados.',
     icon: Rocket,
   },
   {
     id: 2,
-    title: 'IA EN EL NÚCLEO DE TODO',
-    description: 'Operamos 95% con IA — no como moda, como ventaja real. Producimos más rápido, con mejor calidad y a menor costo que una agencia tradicional.',
-    icon: Sparkles,
+    title: 'ESCALA SIN LÍMITES',
+    description: 'Nuestra infraestructura crece contigo, desde startups hasta empresas globales.',
+    icon: TrendingUp,
   },
   {
     id: 3,
-    title: 'NADA ES PLANTILLA',
-    description: 'Cada identidad, cada web, cada automatización es construida desde cero para tu negocio. No compras una plantilla con tu nombre encima.',
+    title: 'PERSONALIZACIÓN TOTAL',
+    description: 'Cada proyecto es único. Adaptamos nuestras soluciones a tus necesidades específicas.',
     icon: Palette,
   },
   {
     id: 4,
-    title: 'INFRAESTRUCTURA PROPIA EN ORACLE CLOUD',
-    description: 'Tu web vive en servidores propios administrados por nosotros — no en hosting compartido. Velocidad, seguridad y control total.',
+    title: 'SEGURIDAD DE ALTO NIVEL',
+    description: 'Descansa tranquilo con protección de nivel empresarial que cumple con los estándares internacionales más estrictos. Tu negocio y datos de clientes están siempre seguros.',
     icon: Shield,
   },
   {
     id: 5,
-    title: 'UN SOCIO, NO UN PROVEEDOR',
-    description: 'No desaparecemos al entregar. Te entrenamos para usar lo que construimos y te acompañamos en la evolución de tu negocio digital.',
+    title: 'CUMPLIMIENTO A PRUEBA DE FUTURO',
+    description: 'Navega los cambios regulatorios sin esfuerzo. Nuestra plataforma adaptativa evoluciona con los requisitos de la industria, manteniéndote conforme en todos los mercados.',
     icon: CheckCircle,
   },
   {
     id: 6,
-    title: 'COMUNICACIÓN REAL, SIN BUROCRACIA',
-    description: 'Hablas directamente con quien hace el trabajo. Sin cuentas ejecutivas, sin tickets. Respuesta en menos de 24h, siempre.',
+    title: 'SOPORTE EXPERTO 24/7',
+    description: 'Nunca enfrentes desafíos solo. Nuestro equipo dedicado asegura que tu operación funcione sin problemas las 24 horas, los 7 días de la semana, en cualquier parte del mundo.',
     icon: Headphones,
   },
 ];
@@ -184,8 +184,8 @@ export default function WhatSetsUsApart() {
               ref={iconRef}
               className="relative w-80 h-80 mx-auto lg:mx-0 mt-12"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-ag-blue to-ag-blue-light rounded-full opacity-20 blur-3xl" />
-              <div className="relative w-full h-full bg-gradient-to-br from-ag-blue to-ag-blue-light rounded-3xl flex items-center justify-center transition-all duration-600 ease-expo-out">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-primary to-cyan rounded-full opacity-20 blur-3xl" />
+              <div className="relative w-full h-full bg-gradient-to-br from-blue-primary to-cyan rounded-3xl flex items-center justify-center transition-all duration-600 ease-expo-out">
                 <ActiveIcon className="w-32 h-32 text-white transition-all duration-600" />
               </div>
             </div>
@@ -198,8 +198,8 @@ export default function WhatSetsUsApart() {
                 key={feature.id}
                 className={`feature-item group cursor-pointer transition-all duration-300 ${
                   activeFeature === feature.id
-                    ? 'bg-gradient-to-r from-ag-blue/20 to-transparent border-l-[3px] border-ag-blue'
-                    : 'hover:bg-black/5 border-l-[3px] border-transparent'
+                    ? 'bg-gradient-to-r from-blue-primary/20 to-transparent border-l-3 border-blue-primary'
+                    : 'hover:bg-black/5 border-l-3 border-transparent'
                 } rounded-r-xl p-5`}
                 onClick={() => setActiveFeature(feature.id)}
               >
@@ -207,8 +207,8 @@ export default function WhatSetsUsApart() {
                   <h4
                     className={`font-display text-lg transition-colors duration-300 ${
                       activeFeature === feature.id
-                        ? 'text-ag-blue'
-                        : 'text-black group-hover:text-ag-blue'
+                        ? 'text-blue-primary'
+                        : 'text-black group-hover:text-blue-primary'
                     }`}
                   >
                     {feature.title}
@@ -216,7 +216,7 @@ export default function WhatSetsUsApart() {
                   <span
                     className={`text-sm font-medium transition-colors duration-300 ${
                       activeFeature === feature.id
-                        ? 'text-ag-blue'
+                        ? 'text-blue-primary'
                         : 'text-black/40'
                     }`}
                   >
