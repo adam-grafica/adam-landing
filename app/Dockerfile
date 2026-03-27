@@ -3,12 +3,12 @@ FROM node:20-alpine as builder
 
 WORKDIR /app
 
-# Copiamos package.json de la capeta app/ para instalar dependencias de la versión más reciente
-COPY app/package*.json ./
+# Copiamos package.json para instalar dependencias
+COPY package*.json ./
 RUN npm install --legacy-peer-deps
 
-# Copiamos el resto de la carpeta app/
-COPY app/ .
+# Copiamos el resto de los archivos
+COPY . .
 
 # Corregimos si hay una subcarpeta anidada app accidental (para que Vite no genere dist/app/index.html)
 RUN rm -rf app
@@ -22,7 +22,7 @@ FROM nginx:alpine
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Copiar configuración optimizada
-COPY app/nginx.conf /etc/nginx/conf.d/
+COPY nginx.conf /etc/nginx/conf.d/
 
 # Copiar los archivos construidos desde la etapa anterior
 COPY --from=builder /app/dist /usr/share/nginx/html
