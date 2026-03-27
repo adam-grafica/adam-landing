@@ -104,109 +104,95 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* ── MOBILE FULL-SCREEN OVERLAY ── rendered outside nav so it covers everything */}
+      {/* ── MOBILE OVERLAY ── (Full Reset) */}
       <div
-        className="lg:hidden fixed inset-0 z-40 flex flex-col px-8 pb-10"
-        style={{
-          /* Solid dark base ensures blur is always visible even if backdrop-filter unsupported */
-          background: open ? 'rgba(3, 3, 7, 0.94)' : 'rgba(3, 3, 7, 0)',
-          backdropFilter: open ? 'blur(30px) saturate(160%)' : 'blur(0px)',
-          WebkitBackdropFilter: open ? 'blur(30px) saturate(160%)' : 'blur(0px)',
-          /* Single transition for the whole container */
-          transition: 'background 0.35s cubic-bezier(0.16,1,0.3,1), backdrop-filter 0.35s cubic-bezier(0.16,1,0.3,1)',
-          /* Hide from pointer events when closed */
-          pointerEvents: open ? 'auto' : 'none',
-          /* Prevent any child clipping */
-          overflow: 'hidden',
-        }}
-        aria-hidden={!open}
+        className={`lg:hidden fixed inset-0 z-40 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
       >
-        {/* Subtle ambient blue glow — top right */}
-        <div
-          className="absolute top-20 right-4 w-56 h-56 rounded-full pointer-events-none"
+        {/* The Actual Blur Layer — Explicitly separated for better browser support */}
+        <div 
+          className="absolute inset-0 w-full h-full"
           style={{
-            background: 'radial-gradient(circle, rgba(0,102,255,0.25) 0%, transparent 70%)',
-            transform: open ? 'scale(1)' : 'scale(0.4)',
-            opacity: open ? 1 : 0,
-            transition: 'opacity 0.35s 0.1s, transform 0.4s 0.05s cubic-bezier(0.16,1,0.3,1)',
+            background: 'rgba(5, 5, 8, 0.9)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
           }}
         />
 
-        {/* Subtle ambient cyan glow — bottom left */}
-        <div
-          className="absolute bottom-8 -left-8 w-64 h-64 rounded-full pointer-events-none"
-          style={{
-            background: 'radial-gradient(circle, rgba(0,170,255,0.15) 0%, transparent 70%)',
-            transform: open ? 'scale(1)' : 'scale(0.4)',
-            opacity: open ? 1 : 0,
-            transition: 'opacity 0.35s 0.15s, transform 0.4s 0.1s cubic-bezier(0.16,1,0.3,1)',
-          }}
+        {/* Floating background glows */}
+        <div 
+          className="absolute top-[-50px] right-[-50px] w-80 h-80 bg-ag-blue/20 rounded-full blur-[100px] transition-transform duration-700" 
+          style={{ transform: open ? 'scale(1)' : 'scale(0.5)' }} 
+        />
+        <div 
+          className="absolute bottom-[-50px] left-[-50px] w-80 h-80 bg-ag-blue-light/10 rounded-full blur-[100px] transition-transform duration-700 delay-100" 
+          style={{ transform: open ? 'scale(1)' : 'scale(0.5)' }} 
         />
 
-        {/* Spacer for navbar height */}
-        <div className="h-14" />
+        <div className="relative z-10 h-full w-full flex flex-col px-8 pb-10">
+          {/* Navbar Spacer */}
+          <div className="h-14" />
 
-        {/* Nav Links */}
-        <div className="relative z-10 flex flex-col justify-center flex-grow gap-2 mt-4">
-          {navLinks.map((link, index) => {
-            const delay = open ? 60 + index * 50 : 0;
-            return (
+          {/* Nav Links Container */}
+          <div className="flex-grow flex flex-col justify-center gap-2">
+            {navLinks.map((link, index) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={close}
-                className="group block w-full py-4"
+                className="group block py-2"
               >
                 <div
+                  className="transition-all duration-500"
                   style={{
-                    transform: open ? 'translateY(0)' : 'translateY(30px)',
+                    transform: open ? 'translateY(0)' : 'translateY(40px)',
                     opacity: open ? 1 : 0,
-                    transition: `transform 0.4s ${delay}ms cubic-bezier(0.16,1,0.3,1), opacity 0.3s ${delay}ms`,
+                    transitionDelay: `${open ? 100 + index * 80 : 0}ms`,
                   }}
                 >
-                  <div className="flex items-center gap-5 pl-2">
-                    <span className="font-mono text-xs text-ag-blue/50 tracking-widest w-6 shrink-0">
+                  <div className="flex items-center gap-6">
+                    <span className="font-mono text-[10px] text-ag-blue/40 tracking-[0.2em] w-6 shrink-0">
                       {String(index + 1).padStart(2, '0')}
                     </span>
-                    <span className="font-display text-5xl text-white font-bold tracking-tighter leading-none transition-colors duration-200 group-hover:text-ag-blue">
+                    <span className="font-display text-5xl text-white font-bold tracking-tighter leading-none group-hover:text-ag-blue transition-colors">
                       {link.label}
                     </span>
                   </div>
                 </div>
               </a>
-            );
-          })}
-        </div>
+            ))}
+          </div>
 
-        {/* Footer strip */}
-        <div
-          className="relative z-10 flex flex-col gap-4 w-full"
-          style={{
-            transform: open ? 'translateY(0)' : 'translateY(20px)',
-            opacity: open ? 1 : 0,
-            transition: `transform 0.4s ${open ? 350 : 0}ms cubic-bezier(0.16,1,0.3,1), opacity 0.3s ${open ? 350 : 0}ms`,
-          }}
-        >
-          <div className="h-px w-full bg-gradient-to-r from-white/15 via-white/5 to-transparent" />
-          <div className="flex justify-between items-center">
-            <div className="flex flex-col gap-0.5">
-              <span className="text-white/35 text-[10px] tracking-[0.2em] font-mono uppercase">Iniciar Proyecto</span>
+          {/* Footer inside menu */}
+          <div
+            className="mt-auto transition-all duration-500"
+            style={{
+              transform: open ? 'translateY(0)' : 'translateY(20px)',
+              opacity: open ? 1 : 0,
+              transitionDelay: `${open ? 450 : 0}ms`,
+            }}
+          >
+            <div className="h-px w-full bg-white/10 mb-6" />
+            <div className="flex justify-between items-center">
+              <div className="flex flex-col gap-0.5">
+                <span className="text-white/30 text-[9px] tracking-[0.2em] font-mono uppercase">Iniciar Proyecto</span>
+                <a
+                  href="mailto:somos@adamgrafica.online"
+                  className="text-white text-base font-semibold hover:text-ag-blue transition-colors"
+                >
+                  somos@adamgrafica.online
+                </a>
+              </div>
               <a
-                href="mailto:somos@adamgrafica.online"
-                className="text-white text-base font-medium hover:text-ag-blue transition-colors duration-200"
+                href="#contact"
+                onClick={close}
+                className="flex items-center justify-center w-12 h-12 rounded-full bg-ag-blue text-white shadow-[0_0_20px_rgba(0,102,255,0.4)]"
+                aria-label="Agendar llamada"
               >
-                somos@adamgrafica.online
+                <MessageSquare className="w-5 h-5" />
               </a>
             </div>
-            <a
-              href="#contact"
-              onClick={close}
-              className="flex items-center justify-center w-12 h-12 rounded-full bg-ag-blue text-white transition-transform duration-200 hover:scale-110 active:scale-95"
-              style={{ boxShadow: '0 0 24px rgba(0,102,255,0.45)' }}
-              aria-label="Agendar llamada"
-            >
-              <MessageSquare className="w-5 h-5" />
-            </a>
           </div>
         </div>
       </div>
