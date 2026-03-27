@@ -21,10 +21,9 @@ const NAV_STYLE: React.CSSProperties = {
 
 const OVERLAY_STYLE: React.CSSProperties = {
   zIndex: 55,
-  background: 'rgba(6, 6, 10, 0.90)',
+  background: 'rgba(6, 6, 10, 0.55)',
   backdropFilter: 'blur(32px) saturate(160%)',
   WebkitBackdropFilter: 'blur(32px) saturate(160%)',
-  willChange: 'opacity, transform',
 };
 
 const BURGER_STYLE: React.CSSProperties = {
@@ -63,11 +62,11 @@ export default function Navbar() {
           >
             <div className="favicon-shine-container">
               <img
-                src="/favicon.svg"
+                src="/favicon.svg?v=2"
                 alt="AdamGráfica Logo"
-                width="28"
-                height="28"
-                className="w-7 h-7 object-contain transition-transform duration-300 group-hover:scale-110 animate-favicon-glow"
+                width="40"
+                height="40"
+                className="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110 animate-favicon-glow"
               />
             </div>
             <span className="font-display text-sm lg:text-base font-bold text-white tracking-tight transition-colors duration-300 group-hover:text-ag-blue uppercase">
@@ -119,10 +118,10 @@ export default function Navbar() {
 
       {/* ── Mobile full-screen overlay ── */}
       <div
-        className={`lg:hidden fixed inset-0 h-[100dvh] w-full flex flex-col px-8 pb-10 transition-all duration-600 ${
+        className={`lg:hidden fixed inset-0 h-[100dvh] w-full flex flex-col px-8 pb-10 transition-opacity duration-600 ${
           isMobileMenuOpen
-            ? 'opacity-100 pointer-events-auto translate-y-0'
-            : 'opacity-0 pointer-events-none -translate-y-3'
+            ? 'opacity-100 pointer-events-auto'
+            : 'opacity-0 pointer-events-none'
         }`}
         style={OVERLAY_STYLE}
       >

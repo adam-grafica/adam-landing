@@ -24,7 +24,7 @@ const packages = [
   {
     id: 'imperio',
     name: 'IMPERIO DIGITAL',
-    tagline: 'Uno de los más vendidos',
+    tagline: 'EL MÁS ELEGIDO',
     prices: {
       CLP: { main: '600.000', installments: '300.000' },
       USD: { main: '650', installments: '325' },
@@ -38,13 +38,13 @@ const packages = [
       'Training para usar el sistema',
     ],
     time: '4 semanas',
-    highlighted: false,
+    highlighted: true,
     specialBorder: 'green',
   },
   {
     id: 'completo',
     name: 'SISTEMA COMPLETO',
-    tagline: 'ENTERPRISE / PREMIUM',
+    tagline: 'PARA ESCALAR',
     prices: {
       CLP: { main: '1.500.000', installments: '750.000' },
       USD: { main: '1.600', installments: '800' },
@@ -59,7 +59,7 @@ const packages = [
       'Reportes de resultados detallados',
     ],
     time: '6 semanas',
-    highlighted: true,
+    highlighted: false,
   },
 ];
 

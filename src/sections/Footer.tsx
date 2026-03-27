@@ -40,12 +40,12 @@ export default function Footer() {
             <div className="flex items-center gap-2 mb-4 group cursor-pointer">
               <div className="favicon-shine-container">
                 <img 
-                  src="/favicon.svg" 
+                  src="/favicon.svg?v=2" 
                   alt="" 
-                  width="24"
-                  height="24"
+                  width="40"
+                  height="40"
                   loading="lazy"
-                  className="w-6 h-6 object-contain transition-transform duration-300 group-hover:scale-110 animate-favicon-glow" 
+                  className="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110 animate-favicon-glow" 
                 />
               </div>
               <h3 className="font-display text-lg text-white hover:text-ag-blue transition-colors uppercase">
