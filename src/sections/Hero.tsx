@@ -113,7 +113,7 @@ export default function Hero() {
           </div>
 
           {/* Headline — LCP element: siempre visible, solo anima en Y */}
-          <h1 className="hero-headline lcp-element font-display text-4xl sm:text-5xl lg:text-display-1 mb-8 leading-[1.08]">
+          <h1 className="hero-headline lcp-element font-display text-4xl sm:text-5xl lg:text-display-1 mb-8 leading-[1.08]" style={{ overflow: 'hidden' }}>
             <span className="block text-white">Tu negocio merece</span>
             <span className="block gradient-text">verse tan poderoso</span>
             <span className="block text-white">como realmente es.</span>

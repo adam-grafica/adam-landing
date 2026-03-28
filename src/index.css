@@ -17,8 +17,8 @@
     --green-glow: rgba(0, 255, 136, 0.3);
 
     --text-white: #FFFFFF;
-    --text-gray: #A0A0A0;
-    --text-muted: #888888;
+    --text-gray: #B8B8B8;
+    --text-muted: #9E9E9E;
 
     --ease-expo-out: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-expo-in: cubic-bezier(0.7, 0, 0.84, 0);
@@ -301,16 +301,16 @@
   .reveal-scale,
   .reveal-fade {
     opacity: 0;
-    will-change: opacity, transform;
-    transition: opacity 0.45s var(--ease-expo-out),
-                transform 0.45s var(--ease-expo-out);
+    contain: layout style;
+    transition: opacity 0.5s var(--ease-expo-out),
+                transform 0.5s var(--ease-expo-out);
   }
 
-  .reveal-up    { transform: translateY(32px); }
-  .reveal-down  { transform: translateY(-32px); }
-  .reveal-left  { transform: translateX(-32px); }
-  .reveal-right { transform: translateX(32px); }
-  .reveal-scale { transform: scale(0.93); }
+  .reveal-up    { transform: translateY(32px); will-change: transform; }
+  .reveal-down  { transform: translateY(-32px); will-change: transform; }
+  .reveal-left  { transform: translateX(-32px); will-change: transform; }
+  .reveal-right { transform: translateX(32px); will-change: transform; }
+  .reveal-scale { transform: scale(0.93); will-change: transform; }
   .reveal-fade  { transform: none; }
 
   .reveal-up.revealed,    .revealed .reveal-up,
@@ -382,6 +382,7 @@
   opacity: 1;
   transform: translateY(40px);
   will-change: transform;
+  contain: layout;
 }
 
 @media (prefers-reduced-motion: reduce) {
