@@ -1,32 +1,59 @@
 import { useEffect, useRef } from 'react';
 import { ArrowRight, Play } from 'lucide-react';
-import gsap from 'gsap';
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Set initial states
-      gsap.set('.hero-eyebrow',     { opacity: 0, y: 20 });
-      gsap.set('.hero-headline span', { opacity: 0, y: 50 });
-      gsap.set('.hero-subheadline', { opacity: 0, y: 24 });
-      gsap.set('.hero-ctas',        { opacity: 0, y: 16 });
-      gsap.set('.hero-social-proof',{ opacity: 0, y: 16 });
-      gsap.set('.hero-mesh',        { opacity: 0, scale: 0.85 });
+    // Si el usuario prefiere movimiento reducido, el CSS ya los muestra visibles
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      // Entrance timeline — runs once, no repeats
-      const tl = gsap.timeline({ delay: 0.2 });
+    // gsap se declara fuera del import() para poder llamar ctx?.revert() en cleanup
+    let cleanupFn: (() => void) | undefined;
 
-      tl.to('.hero-mesh', { opacity: 1, scale: 1, duration: 1.2, ease: 'expo.out' })
-        .to('.hero-eyebrow',      { opacity: 1, y: 0, duration: 0.55, ease: 'expo.out' }, '-=0.9')
-        .to('.hero-headline span',{ opacity: 1, y: 0, duration: 0.7, stagger: 0.09, ease: 'expo.out' }, '-=0.4')
-        .to('.hero-subheadline',  { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, '-=0.35')
-        .to('.hero-ctas',         { opacity: 1, y: 0, duration: 0.45, ease: 'expo.out' }, '-=0.3')
-        .to('.hero-social-proof', { opacity: 1, y: 0, duration: 0.4,  ease: 'power2.out' }, '-=0.2');
-    }, heroRef);
+    // Carga lazy: GSAP no bloquea el primer render del browser
+    import('gsap').then(({ default: gsap }) => {
+      const ctx = gsap.context(() => {
+        // Estado inicial ya está en CSS (opacity: 0 en .hero-*)
+        // fromTo() lee el estado CSS y anima hacia el estado final
+        // SIN necesitar gsap.set() que causaba el segundo flash negro
+        const tl = gsap.timeline({ delay: 0.1 });
 
-    return () => ctx.revert();
+        tl.fromTo('.hero-mesh',
+            { opacity: 0, scale: 0.85 },
+            { opacity: 1, scale: 1, duration: 1.2, ease: 'expo.out' }
+          )
+          .fromTo('.hero-eyebrow',
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.55, ease: 'expo.out' },
+            '-=0.9'
+          )
+          .fromTo('.hero-headline span',
+            { opacity: 0, y: 50 },
+            { opacity: 1, y: 0, duration: 0.7, stagger: 0.09, ease: 'expo.out' },
+            '-=0.4'
+          )
+          .fromTo('.hero-subheadline',
+            { opacity: 0, y: 24 },
+            { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' },
+            '-=0.35'
+          )
+          .fromTo('.hero-ctas',
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: 0.45, ease: 'expo.out' },
+            '-=0.3'
+          )
+          .fromTo('.hero-social-proof',
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' },
+            '-=0.2'
+          );
+      }, heroRef);
+
+      cleanupFn = () => ctx.revert();
+    });
+
+    return () => cleanupFn?.();
   }, []);
 
   return (
