@@ -354,14 +354,14 @@
 }
 
 /* =============================================
-   HERO — ESTADO OCULTO INICIAL VÍA CSS
-   El estado opacity:0 se define acá en CSS,
-   NO en JavaScript, para que exista desde antes
-   de que GSAP cargue. Esto elimina el segundo
-   flash negro en mobile. GSAP usará fromTo().
+   HERO — ESTADO OCULTO INICIAL
+   El h1 (.lcp-element) NO va en opacity:0
+   porque es el LCP element — Google lo mide.
+   Solo anima en Y. El resto hace fade-in normal.
    ============================================= */
+
+/* Todo el hero oculto EXCEPTO el h1 */
 .hero-eyebrow,
-.hero-headline span,
 .hero-subheadline,
 .hero-ctas,
 .hero-social-proof {
@@ -373,13 +373,22 @@
   transform: scale(0.85);
 }
 
+/* El h1 es visible desde el primer paint (LCP) */
+/* Solo se desplaza desde Y=40px hacia Y=0 con GSAP */
+.lcp-element span {
+  display: block;
+  opacity: 1;
+  transform: translateY(40px);
+  will-change: transform;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-eyebrow,
-  .hero-headline span,
   .hero-subheadline,
   .hero-ctas,
   .hero-social-proof,
-  .hero-mesh {
+  .hero-mesh,
+  .lcp-element span {
     opacity: 1 !important;
     transform: none !important;
   }

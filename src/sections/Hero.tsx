@@ -29,8 +29,8 @@ export default function Hero() {
             '-=0.9'
           )
           .fromTo('.hero-headline span',
-            { opacity: 0, y: 50 },
-            { opacity: 1, y: 0, duration: 0.7, stagger: 0.09, ease: 'expo.out' },
+            { y: 40 },
+            { y: 0, duration: 0.7, stagger: 0.09, ease: 'expo.out' },
             '-=0.4'
           )
           .fromTo('.hero-subheadline',
@@ -112,8 +112,8 @@ export default function Hero() {
             </span>
           </div>
 
-          {/* Headline */}
-          <h1 className="hero-headline font-display text-4xl sm:text-5xl lg:text-display-1 mb-8 leading-[1.08]">
+          {/* Headline — LCP element: siempre visible, solo anima en Y */}
+          <h1 className="hero-headline lcp-element font-display text-4xl sm:text-5xl lg:text-display-1 mb-8 leading-[1.08]">
             <span className="block text-white">Tu negocio merece</span>
             <span className="block gradient-text">verse tan poderoso</span>
             <span className="block text-white">como realmente es.</span>
