@@ -30,8 +30,8 @@ export default function Hero() {
           )
 
           .fromTo('.hero-subheadline',
-            { opacity: 0, y: 24 },
-            { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' },
+            { y: 24 },
+            { y: 0, duration: 0.55, ease: 'power2.out' },
             '-=0.35'
           )
           .fromTo('.hero-ctas',
