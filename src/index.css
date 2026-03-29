@@ -380,9 +380,6 @@
 .lcp-element span {
   display: block;
   opacity: 1;
-  transform: translateY(40px);
-  will-change: transform;
-  contain: layout;
 }
 
 @media (prefers-reduced-motion: reduce) {

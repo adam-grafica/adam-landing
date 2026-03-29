@@ -28,11 +28,7 @@ export default function Hero() {
             { opacity: 1, y: 0, duration: 0.55, ease: 'expo.out' },
             '-=0.9'
           )
-          .fromTo('.hero-headline span',
-            { y: 40 },
-            { y: 0, duration: 0.7, stagger: 0.09, ease: 'expo.out' },
-            '-=0.4'
-          )
+
           .fromTo('.hero-subheadline',
             { opacity: 0, y: 24 },
             { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' },
