@@ -114,7 +114,7 @@ export default function WhatSetsUsApart() {
                 onClick={() => setActiveFeature(feature.id)}
               >
                 <div className="flex items-center justify-between">
-                  <h3
+                  <h4
                     className={`font-display text-lg transition-colors duration-200 ${
                       activeFeature === feature.id
                         ? 'text-ag-blue'
@@ -122,7 +122,7 @@ export default function WhatSetsUsApart() {
                     }`}
                   >
                     {feature.title}
-                  </h3>
+                  </h4>
                   <span
                     className={`text-sm font-medium transition-colors duration-200 ${
                       activeFeature === feature.id ? 'text-ag-blue' : 'text-black/40'

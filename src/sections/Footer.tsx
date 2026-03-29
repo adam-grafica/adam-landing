@@ -48,9 +48,9 @@ export default function Footer() {
                   className="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110 animate-favicon-glow" 
                 />
               </div>
-              <h2 className="font-display text-lg text-white hover:text-ag-blue transition-colors uppercase">
+              <h3 className="font-display text-lg text-white hover:text-ag-blue transition-colors uppercase">
                 ADAMGRÁFICA
-              </h2>
+              </h3>
             </div>
             <p className="text-ag-text-gray text-sm mb-6">
               Construimos imperios digitales con IA.
@@ -78,7 +78,7 @@ export default function Footer() {
           
           {/* Column 2 - Services */}
           <div>
-            <h3 className="font-display text-white mb-4">Servicios</h3>
+            <h4 className="font-display text-white mb-4">Servicios</h4>
             <ul className="space-y-3">
               {footerLinks.services.map((link, index) => (
                 <li key={index}>
@@ -95,7 +95,7 @@ export default function Footer() {
           
           {/* Column 3 - Company */}
           <div>
-            <h3 className="font-display text-white mb-4">Empresa</h3>
+            <h4 className="font-display text-white mb-4">Empresa</h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link, index) => (
                 <li key={index}>
@@ -112,7 +112,7 @@ export default function Footer() {
           
           {/* Column 4 - Contact */}
           <div>
-            <h3 className="font-display text-white mb-4">Contacto</h3>
+            <h4 className="font-display text-white mb-4">Contacto</h4>
             <ul className="space-y-3">
               <li>
                 <a

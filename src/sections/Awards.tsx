@@ -34,9 +34,9 @@ function AwardCard({ award }: { award: typeof awards[0] }) {
           {award.year}
         </span>
       </div>
-      <h3 className="font-display text-lg text-white group-hover:text-cyan transition-colors">
+      <h4 className="font-display text-lg text-white group-hover:text-cyan transition-colors">
         {award.name}
-      </h3>
+      </h4>
     </div>
   );
 }

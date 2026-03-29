@@ -91,7 +91,7 @@ export default function Testimonials() {
                   </span>
                 </div>
                 <div>
-                  <h3 className="font-display text-white">{testimonial.name}</h3>
+                  <h4 className="font-display text-white">{testimonial.name}</h4>
                   <p className="text-ag-text-gray text-sm">
                     {testimonial.role} — {testimonial.location}
                   </p>
