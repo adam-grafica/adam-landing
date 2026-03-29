@@ -362,8 +362,8 @@
    Solo anima en Y. El resto hace fade-in normal.
    ============================================= */
 
-/* Todo el hero oculto EXCEPTO el h1 y subheadline */
 .hero-eyebrow,
+.hero-subheadline,
 .hero-ctas,
 .hero-social-proof {
   opacity: 0;
@@ -379,6 +379,8 @@
 .lcp-element span {
   display: block;
   opacity: 1;
+  transform: translateY(40px);
+  will-change: transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
