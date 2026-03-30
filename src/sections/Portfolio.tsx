@@ -117,11 +117,18 @@ export default function Portfolio() {
               
               {/* Image Preview (for completed projects) */}
               {project.image && (
-                <img 
-                  src={project.image} 
-                  alt={project.name}
-                  className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay group-hover:scale-110 transition-transform duration-700"
-                />
+                <picture>
+                  <source srcSet={project.image.replace('.jpg', '.webp')} type="image/webp" />
+                  <img 
+                    src={project.image} 
+                    alt={project.name}
+                    loading="lazy"
+                    decoding="async"
+                    width="600"
+                    height="450"
+                    className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay group-hover:scale-110 transition-transform duration-700"
+                  />
+                </picture>
               )}
 
               {/* Gradient Overlay */}
@@ -174,11 +181,14 @@ export default function Portfolio() {
 
               {/* Hero Image */}
               <div className="relative aspect-video w-full overflow-hidden">
-                <img 
-                   src={selectedProject.image} 
-                   alt={selectedProject.name}
-                   className="w-full h-full object-cover"
-                />
+                <picture>
+                  <source srcSet={selectedProject.image.replace('.jpg', '.webp')} type="image/webp" />
+                  <img 
+                     src={selectedProject.image} 
+                     alt={selectedProject.name}
+                     className="w-full h-full object-cover"
+                  />
+                </picture>
                 <div className="absolute inset-0 bg-gradient-to-t from-ag-bg-secondary to-transparent" />
               </div>
 

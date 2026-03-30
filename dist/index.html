@@ -1,11 +1,110 @@
 <!doctype html>
 <html lang="es-CL">
   <head>
+    <!-- 1. CHARSET Y VIEWPORT: siempre primero -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark" />
-    
-    <!-- Primary Meta Tags -->
+
+    <!-- 2. PRELOAD CRÍTICO: fuente Syne ANTES que cualquier CSS -->
+    <link rel="preload" href="/fonts/syne.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="/fonts/dm-sans.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="/fonts/space-mono.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <!-- 3. CSS CRÍTICO INLINE (nav + hero, ~3KB) -->
+    <style id="critical-css">
+      /* RESET MÍNIMO */
+      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+      /* FUENTES — font-display:swap es la línea más importante */
+      @font-face{
+        font-family:'Syne';
+        src:url('/fonts/syne.woff2') format('woff2');
+        font-weight:100 900;
+        font-style:normal;
+        font-display:swap;
+      }
+      @font-face{
+        font-family:'DM Sans';
+        src:url('/fonts/dm-sans.woff2') format('woff2');
+        font-weight:100 900;
+        font-style:normal;
+        font-display:swap;
+      }
+      @font-face{
+        font-family:'Space Mono';
+        src:url('/fonts/space-mono.woff2') format('woff2');
+        font-weight:400 700;
+        font-display:swap;
+      }
+
+      /* BODY BASE */
+      body{
+        background-color:#0A0A0A;
+        color:#FFFFFF;
+        font-family:'DM Sans',system-ui,-apple-system,sans-serif;
+        overflow-x:hidden;
+        -webkit-font-smoothing:antialiased;
+        -moz-osx-font-smoothing:grayscale;
+      }
+
+      /* HEADINGS */
+      h1,h2,h3,h4,h5,h6{
+        font-family:'Syne',system-ui,sans-serif;
+        font-weight:700;
+        line-height:1.1;
+      }
+
+      /* NAV — visible de inmediato, above the fold */
+      nav{
+        position:fixed;
+        top:0;
+        left:0;
+        right:0;
+        z-index:50;
+        background:rgba(8,8,14,0.75);
+        backdrop-filter:blur(20px) saturate(180%);
+        -webkit-backdrop-filter:blur(20px) saturate(180%);
+        border-bottom:1px solid rgba(255,255,255,0.08);
+      }
+
+      /* HERO SECTION — visible de inmediato, NO opacity:0 */
+      section[aria-label="Hero Section"]{
+        position:relative;
+        min-height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        overflow:hidden;
+      }
+
+      /* H1 DEL HERO — el LCP element: SIEMPRE visible */
+      .hero-headline{
+        opacity:1 !important;
+        visibility:visible !important;
+      }
+      .lcp-element span{
+        display:block;
+        opacity:1;
+      }
+
+      /* Otros hero elements ocultos para animación GSAP */
+      .hero-eyebrow,.hero-subheadline,.hero-ctas,.hero-social-proof{opacity:0}
+      .hero-mesh{opacity:0;transform:scale(0.85)}
+
+      /* Gradient text utility */
+      .gradient-text{
+        background:linear-gradient(135deg,#0066FF 0%,#00AAFF 100%);
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+        background-clip:text;
+      }
+
+      /* Root div */
+      #root{min-height:100vh}
+    </style>
+
+    <!-- 4. SEO META TAGS -->
     <title>AdamGráfica | Agencia Digital 95% IA en Chile - Diseño Web, Branding & Ads</title>
     <meta name="description" content="Potenciamos tu negocio con IA. Branding futurista, sitios web de alto rendimiento y automatizaciones avanzadas. Resultados reales en 4 semanas." />
     <meta name="keywords" content="agencia digital ia, diseño web chile, branding futurista, automatizacion negocios, inteligencia artificial chile, adamgrafica, marketing digital ia" />
@@ -35,27 +134,11 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     
-    <!-- Preload Critical Images -->
-    <link rel="preload" as="image" href="/favicon.svg?v=2" type="image/svg+xml" />
-    <link rel="preload" as="image" href="/nash-adam.jpg" />
-    
-    <!-- Preconnects -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <!-- Solo pesos realmente usados (elimina Syne 400/600, DM Sans 700, Space Mono 700) -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400&display=swap" media="print" onload="this.media='all'" />
-
-    <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400&display=swap" />
-    </noscript>
-    
     <!-- Theme Color -->
     <meta name="theme-color" content="#0A0A0A" />
     <meta name="msapplication-TileColor" content="#0A0A0A" />
     
-    <!-- Structured Data - Organization -->
+    <!-- 5. Structured Data - Organization -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -133,13 +216,14 @@
       }
     }
     </script>
-    <script type="module" crossorigin src="/assets/index-DfPAgXAu.js"></script>
+    <script type="module" crossorigin src="/assets/index-BCtXqLTr.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/react-vendor-CYsl2QhN.js">
     <link rel="modulepreload" crossorigin href="/assets/lucide-icons-DQwdKhP-.js">
     <link rel="modulepreload" crossorigin href="/assets/gsap-vendor-DANJHl1w.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-C6jLdh8K.css">
+    <link rel="stylesheet" href="/assets/index-CpUznToo.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/assets/index-CpUznToo.css"></noscript>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"></div>
   </body>
 </html>

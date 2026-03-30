@@ -53,6 +53,7 @@ export default function Navbar() {
                   alt="AdamGráfica Logo"
                   width="40"
                   height="40"
+                  fetchPriority="high"
                   className="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110 animate-favicon-glow"
                 />
               </div>

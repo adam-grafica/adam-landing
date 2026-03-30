@@ -110,23 +110,23 @@ module.exports = {
           "50%": { opacity: "1" },
         },
         "shimmer": {
-          "0%": { left: "-100%" },
-          "50%": { left: "150%" },
-          "100%": { left: "150%" },
+          "0%": { transform: "translateX(-100%)" },
+          "50%": { transform: "translateX(150%)" },
+          "100%": { transform: "translateX(150%)" },
         },
         "scan": {
-          "0%": { top: "0", opacity: "0" },
+          "0%": { transform: "translateY(0)", opacity: "0" },
           "10%": { opacity: "1" },
           "90%": { opacity: "1" },
-          "100%": { top: "100%", opacity: "0" },
+          "100%": { transform: "translateY(100%)", opacity: "0" },
         },
         "marquee": {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
         "eyebrow-shine": {
-          "0%, 100%": { left: "-100%" },
-          "50%": { left: "100%" },
+          "0%, 100%": { transform: "translateX(-100%)" },
+          "50%": { transform: "translateX(100%)" },
         },
         "badge-pulse": {
           "0%, 100%": { boxShadow: "0 0 0 rgba(0, 255, 136, 0)" },

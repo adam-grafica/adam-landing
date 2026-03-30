@@ -45,11 +45,19 @@ export default function CTAFinal() {
         <img 
           src="/favicon.svg" 
           alt="" 
+          width="600"
+          height="600"
+          loading="lazy"
+          decoding="async"
           className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rotate-[15deg] animate-float opacity-50" 
         />
         <img 
           src="/favicon.svg" 
           alt="" 
+          width="500"
+          height="500"
+          loading="lazy"
+          decoding="async"
           className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rotate-[-12deg] animate-float opacity-40" 
           style={{ animationDelay: '-4s' }}
         />

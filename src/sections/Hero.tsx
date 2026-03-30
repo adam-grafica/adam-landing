@@ -16,8 +16,7 @@ export default function Hero() {
       const ctx = gsap.context(() => {
         // Estado inicial ya está en CSS (opacity: 0 en .hero-*)
         // fromTo() lee el estado CSS y anima hacia el estado final
-        // SIN necesitar gsap.set() que causaba el segundo flash negro
-        const tl = gsap.timeline({ delay: 0.1 });
+        const tl = gsap.timeline({ delay: 0 });
 
         tl.fromTo('.hero-mesh',
             { opacity: 0, scale: 0.85 },
@@ -28,20 +27,21 @@ export default function Hero() {
             { opacity: 1, y: 0, duration: 0.55, ease: 'expo.out' },
             '-=0.9'
           )
+          // H1 — reveal with transform y to avoid hiding the LCP element
           .fromTo('.hero-headline span',
-            { y: 40 },
-            { y: 0, duration: 0.7, stagger: 0.09, ease: 'expo.out' },
-            '-=0.4'
+            { y: 30 },
+            { y: 0, duration: 0.4, stagger: 0.08, ease: 'power3.out' },
+            '-=0.9'
           )
           .fromTo('.hero-subheadline',
             { opacity: 0, y: 24 },
             { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' },
-            '-=0.35'
+            '-=0.3'
           )
           .fromTo('.hero-ctas',
             { opacity: 0, y: 16 },
             { opacity: 1, y: 0, duration: 0.45, ease: 'expo.out' },
-            '-=0.3'
+            '-=0.25'
           )
           .fromTo('.hero-social-proof',
             { opacity: 0, y: 16 },

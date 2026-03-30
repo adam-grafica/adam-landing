@@ -60,11 +60,11 @@ export default function Process() {
 
       // Desktop Looping Pulse (Horizontal)
       if (pulseRefH.current) {
-        gsap.set(pulseRefH.current, { xPercent: -50, yPercent: -50 });
+        gsap.set(pulseRefH.current, { yPercent: -50 });
         gsap.fromTo(pulseRefH.current, 
-          { left: '0%', opacity: 0 }, 
+          { xPercent: -100, opacity: 0 }, 
           { 
-            left: '100%', 
+            xPercent: 100, 
             opacity: 1, 
             duration: 3, 
             repeat: -1, 
@@ -93,11 +93,11 @@ export default function Process() {
 
       // Mobile Looping Pulse (Vertical)
       if (pulseRefV.current) {
-        gsap.set(pulseRefV.current, { xPercent: -50, yPercent: -50 });
+        gsap.set(pulseRefV.current, { xPercent: -50 });
         gsap.fromTo(pulseRefV.current, 
-          { top: '0%', opacity: 0 }, 
+          { yPercent: -100, opacity: 0 }, 
           { 
-            top: '100%', 
+            yPercent: 100, 
             opacity: 1, 
             duration: 3, 
             repeat: -1, 
@@ -136,7 +136,7 @@ export default function Process() {
         <div className="process-steps relative">
           
           {/* DESKTOP PATH (Horizontal) */}
-          <div className="hidden lg:block absolute top-[40px] left-[12.5%] right-[12.5%] h-1 bg-white/[0.03] rounded-full">
+          <div className="hidden lg:block absolute top-[40px] left-[12.5%] right-[12.5%] h-1 bg-white/[0.03] rounded-full overflow-hidden">
             {/* Background Path Line */}
             <div 
               ref={lineRefH}
@@ -145,16 +145,16 @@ export default function Process() {
             {/* Looping Light Ray H */}
             <div 
               ref={pulseRefH}
-              className="absolute top-1/2 z-50 pointer-events-none"
+              className="absolute top-1/2 left-0 w-full z-50 pointer-events-none"
               style={{ opacity: 0 }}
             >
               <div className="w-24 h-1 bg-gradient-to-r from-transparent via-ag-blue to-transparent shadow-[0_0_20px_#0066FF,0_0_40px_#00AAFF] rounded-full blur-[2px]" />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full blur-[6px] shadow-[0_0_30px_#0066FF]" />
+              <div className="absolute top-1/2 left-12 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full blur-[6px] shadow-[0_0_30px_#0066FF]" />
             </div>
           </div>
 
           {/* MOBILE PATH (Vertical) */}
-          <div className="lg:hidden absolute top-[40px] bottom-[40px] left-[32px] w-1 bg-white/[0.03] rounded-full">
+          <div className="lg:hidden absolute top-[40px] bottom-[40px] left-[32px] w-1 bg-white/[0.03] rounded-full overflow-hidden">
             {/* Background Path Line */}
             <div 
               ref={lineRefV}
@@ -163,11 +163,11 @@ export default function Process() {
             {/* Looping Light Ray V */}
             <div 
               ref={pulseRefV}
-              className="absolute left-1/2 z-50 pointer-events-none"
+              className="absolute top-0 left-1/2 h-full z-50 pointer-events-none"
               style={{ opacity: 0 }}
             >
               <div className="w-1 h-24 bg-gradient-to-b from-transparent via-ag-blue to-transparent shadow-[0_0_20px_#0066FF,0_0_40px_#00AAFF] rounded-full blur-[2px]" />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full blur-[6px] shadow-[0_0_30px_#0066FF]" />
+              <div className="absolute top-12 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full blur-[6px] shadow-[0_0_30px_#0066FF]" />
             </div>
           </div>
 

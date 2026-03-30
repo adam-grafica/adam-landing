@@ -17,6 +17,8 @@ export default function CTABanner() {
           <img 
             src="/favicon.svg" 
             alt="" 
+            loading="lazy"
+            decoding="async"
             className="absolute top-[-20%] right-[-10%] w-[400px] opacity-10 rotate-[15deg] pointer-events-none" 
           />
 
@@ -32,6 +34,8 @@ export default function CTABanner() {
                 <img 
                   src="/favicon.svg" 
                   alt="AdamGráfica Logo" 
+                  loading="lazy"
+                  decoding="async"
                   className="relative z-10 w-24 h-24 lg:w-32 lg:h-32 object-contain drop-shadow-2xl"
                 />
 

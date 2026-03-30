@@ -376,12 +376,10 @@
 }
 
 /* El h1 es visible desde el primer paint (LCP) */
-/* Solo se desplaza desde Y=40px hacia Y=0 con GSAP */
+/* GSAP usa clipPath para el reveal visual — no translateY ni opacity:0 */
 .lcp-element span {
   display: block;
   opacity: 1;
-  transform: translateY(40px);
-  will-change: transform;
 }
 
 @media (prefers-reduced-motion: reduce) {

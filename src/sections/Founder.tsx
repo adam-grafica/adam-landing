@@ -44,15 +44,18 @@ export default function Founder() {
           <div className="founder-image relative reveal-left">
             <div className="founder-image-inner relative aspect-[3/4] max-w-md mx-auto rounded-3xl overflow-hidden">
               {/* Founder Photo */}
-              <img 
-                src="/nash-adam.jpg" 
-                alt="Nash Adam - CEO AdamGráfica" 
-                width="448"
-                height="597"
-                loading="lazy"
-                decoding="async"
-                className="absolute inset-0 w-full h-full object-cover grayscale mix-blend-luminosity opacity-80 transition-all duration-700 hover:scale-105 hover:grayscale-0 hover:mix-blend-normal hover:opacity-100"
-              />
+              <picture>
+                <source srcSet="/nash-adam.webp" type="image/webp" />
+                <img 
+                  src="/nash-adam.jpg" 
+                  alt="Nash Adam - CEO AdamGráfica" 
+                  width="448"
+                  height="597"
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover grayscale mix-blend-luminosity opacity-80 transition-all duration-700 hover:scale-105 hover:grayscale-0 hover:mix-blend-normal hover:opacity-100"
+                />
+              </picture>
               
               {/* Gradient Overlays */}
               <div className="absolute inset-0 bg-gradient-to-t from-ag-bg-secondary via-transparent to-transparent opacity-90" />
