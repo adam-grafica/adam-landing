@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Briefcase, Zap, Folder, Users, MessageSquare } from 'lucide-react';
+import { trackCTAClick } from '../utils/analytics';
 
 const navLinks = [
   { label: 'Servicios', href: '#services', icon: Briefcase },
@@ -80,6 +81,7 @@ export default function Navbar() {
             <div className="hidden lg:block">
               <a
                 href="#contact"
+                onClick={() => trackCTAClick('Agendar llamada', 'Navbar Desktop')}
                 className="inline-flex items-center gap-2 px-5 py-2 bg-ag-blue text-white text-sm font-medium rounded-full transition-all duration-200 hover:scale-105 group"
               >
                 <span>Agendar llamada</span>
@@ -187,7 +189,7 @@ export default function Navbar() {
               </div>
               <a
                 href="#contact"
-                onClick={close}
+                onClick={() => { close(); trackCTAClick('Agendar llamada', 'Navbar Mobile'); }}
                 className="flex items-center justify-center w-12 h-12 rounded-full bg-ag-blue text-white shadow-[0_0_20px_rgba(0,102,255,0.4)]"
                 aria-label="Agendar llamada"
               >

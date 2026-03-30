@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useReveal } from '../hooks/useReveal';
 import { useRevealGroup } from '../hooks/useRevealGroup';
 import { Check, ArrowRight, Zap } from 'lucide-react';
+import { trackServiceView } from '../utils/analytics';
 
 const packages = [
   {
@@ -187,6 +188,7 @@ export default function Services() {
               {/* CTA Button - Primary for highlighted, ghost for others */}
               <a
                 href="#contact"
+                onClick={() => trackServiceView(pkg.name)}
                 className={`group/btn relative w-full py-5 px-8 rounded-2xl flex items-center justify-center gap-3 transition-all duration-500 font-black tracking-widest uppercase text-xs overflow-hidden ${pkg.highlighted
                   ? 'bg-ag-blue text-white shadow-glow-blue hover:scale-[1.02] active:scale-95'
                   : 'bg-white/5 text-white border border-white/10 hover:border-white/20 hover:bg-white/10'

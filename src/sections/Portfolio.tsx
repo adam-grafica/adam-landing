@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useReveal } from '../hooks/useReveal';
 import { useRevealGroup } from '../hooks/useRevealGroup';
 import { ArrowRight, Lock, Layers, X, ExternalLink } from 'lucide-react';
+import { trackCTAClick, trackServiceView } from '../utils/analytics';
 
 const projects = [
   {
@@ -109,7 +110,7 @@ export default function Portfolio() {
           {projects.map((project, index) => (
             <div
               key={index}
-              onClick={() => openModal(project)}
+              onClick={() => { if(project.status === 'completed') trackServiceView('Portfolio View: ' + project.name); openModal(project); }}
               className={`portfolio-card group relative aspect-[4/3] rounded-2xl overflow-hidden reveal-child ${project.status === 'completed' ? 'cursor-pointer' : 'cursor-default'}`}
             >
               {/* Background */}
@@ -246,6 +247,7 @@ export default function Portfolio() {
                   <a
                     href="#contact"
                     onClick={() => {
+                      trackCTAClick('Quiero un proyecto así', 'Portfolio Modal');
                       closeModal();
                       // Small delay to allow the modal to start closing before anchor scroll
                       setTimeout(() => {

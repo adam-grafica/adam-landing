@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { ArrowRight, Play } from 'lucide-react';
+import { trackCTAClick } from '../utils/analytics';
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -127,11 +128,11 @@ export default function Hero() {
 
           {/* CTAs */}
           <div className="hero-ctas flex flex-col sm:flex-row gap-4 mb-12">
-            <a href="#contact" className="btn-primary group" aria-label="Agendar diagnóstico gratuito">
+            <a href="#contact" className="btn-primary group" aria-label="Agendar diagnóstico gratuito" onClick={() => trackCTAClick('Quiero mi Imperio Digital', 'Hero')}>
               <span>Quiero mi Imperio Digital</span>
               <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
             </a>
-            <a href="#services" className="btn-ghost group" aria-label="Ver cómo funciona nuestro proceso">
+            <a href="#services" className="btn-ghost group" aria-label="Ver cómo funciona nuestro proceso" onClick={() => trackCTAClick('Ver cómo funciona', 'Hero')}>
               <Play className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
               <span>Ver cómo funciona</span>
             </a>
