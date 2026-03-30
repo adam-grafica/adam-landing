@@ -1,21 +1,23 @@
-// All sections — eager imports ensure stable layout on first paint
+import React, { Suspense } from 'react';
 import Navbar from './sections/Navbar';
 import Hero from './sections/Hero';
-import PainAgitation from './sections/PainAgitation';
-import Solution from './sections/Solution';
-import Stats from './sections/Stats';
-import Services from './sections/Services';
-import CTABanner from './sections/CTABanner';
-import Process from './sections/Process';
-import Testimonials from './sections/Testimonials';
-import Comparison from './sections/Comparison';
-import WhatSetsUsApart from './sections/WhatSetsUsApart';
-import Portfolio from './sections/Portfolio';
-import TechStack from './sections/TechStack';
-import Founder from './sections/Founder';
-import FAQ from './sections/FAQ';
-import CTAFinal from './sections/CTAFinal';
 import Footer from './sections/Footer';
+
+// Secciones "below the fold" con carga aplazada para no bloquear el LCP inicial
+const PainAgitation = React.lazy(() => import('./sections/PainAgitation'));
+const Solution = React.lazy(() => import('./sections/Solution'));
+const Stats = React.lazy(() => import('./sections/Stats'));
+const Services = React.lazy(() => import('./sections/Services'));
+const CTABanner = React.lazy(() => import('./sections/CTABanner'));
+const Process = React.lazy(() => import('./sections/Process'));
+const Testimonials = React.lazy(() => import('./sections/Testimonials'));
+const Comparison = React.lazy(() => import('./sections/Comparison'));
+const WhatSetsUsApart = React.lazy(() => import('./sections/WhatSetsUsApart'));
+const Portfolio = React.lazy(() => import('./sections/Portfolio'));
+const TechStack = React.lazy(() => import('./sections/TechStack'));
+const Founder = React.lazy(() => import('./sections/Founder'));
+const FAQ = React.lazy(() => import('./sections/FAQ'));
+const CTAFinal = React.lazy(() => import('./sections/CTAFinal'));
 
 function App() {
   return (
@@ -23,20 +25,22 @@ function App() {
       <Navbar />
       <main>
         <Hero />
-        <PainAgitation />
-        <Solution />
-        <Stats />
-        <Services />
-        <CTABanner />
-        <Process />
-        <Testimonials />
-        <Comparison />
-        <WhatSetsUsApart />
-        <Portfolio />
-        <TechStack />
-        <Founder />
-        <FAQ />
-        <CTAFinal />
+        <Suspense fallback={null}>
+          <PainAgitation />
+          <Solution />
+          <Stats />
+          <Services />
+          <CTABanner />
+          <Process />
+          <Testimonials />
+          <Comparison />
+          <WhatSetsUsApart />
+          <Portfolio />
+          <TechStack />
+          <Founder />
+          <FAQ />
+          <CTAFinal />
+        </Suspense>
       </main>
       <Footer />
     </div>

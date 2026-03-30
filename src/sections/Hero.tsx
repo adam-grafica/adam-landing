@@ -29,7 +29,7 @@ export default function Hero() {
           )
           // H1 — reveal with transform y to avoid hiding the LCP element
           .fromTo('.hero-headline span',
-            { y: 30 },
+            { y: 30, immediateRender: false },
             { y: 0, duration: 0.4, stagger: 0.08, ease: 'power3.out' },
             '-=0.9'
           )
