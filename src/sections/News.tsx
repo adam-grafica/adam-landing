@@ -42,6 +42,9 @@ export default function News() {
     const ctx = gsap.context(() => {
       // Headline
       gsap.from('.news-headline', {
+        // @ts-ignore
+
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 80%',
@@ -55,6 +58,9 @@ export default function News() {
 
       // Subheadline
       gsap.from('.news-subheadline', {
+        // @ts-ignore
+
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 75%',
@@ -68,6 +74,9 @@ export default function News() {
 
       // Navigation
       gsap.from('.news-nav', {
+        // @ts-ignore
+
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 70%',
@@ -81,6 +90,9 @@ export default function News() {
 
       // Cards
       gsap.from('.news-card', {
+        // @ts-ignore
+
+        lazy: false,
         scrollTrigger: {
           trigger: '.news-container',
           start: 'top 80%',

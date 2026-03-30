@@ -13,6 +13,9 @@ export default function OnePlatform() {
     const ctx = gsap.context(() => {
       // Content animations
       gsap.from('.platform-headline', {
+        // @ts-ignore
+
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 80%',
@@ -27,6 +30,9 @@ export default function OnePlatform() {
       });
 
       gsap.from('.platform-desc', {
+        // @ts-ignore
+
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 70%',
@@ -39,6 +45,9 @@ export default function OnePlatform() {
       });
 
       gsap.from('.platform-feature', {
+        // @ts-ignore
+
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 60%',
@@ -52,6 +61,9 @@ export default function OnePlatform() {
       });
 
       gsap.from('.platform-divider', {
+        // @ts-ignore
+
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 55%',
@@ -64,6 +76,9 @@ export default function OnePlatform() {
 
       // Car image animation
       gsap.from(imageRef.current, {
+        // @ts-ignore
+
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 80%',
@@ -79,6 +94,9 @@ export default function OnePlatform() {
 
       // Parallax effect on scroll
       gsap.to(imageRef.current, {
+        // @ts-ignore
+
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top bottom',

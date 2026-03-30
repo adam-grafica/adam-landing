@@ -48,6 +48,9 @@ export default function Process() {
           { 
             scaleX: 1, 
             ease: 'none',
+            // @ts-ignore
+
+            lazy: false,
             scrollTrigger: {
               trigger: '.process-steps',
               start: 'top 60%',
@@ -81,6 +84,9 @@ export default function Process() {
           { 
             scaleY: 1, 
             ease: 'none',
+            // @ts-ignore
+
+            lazy: false,
             scrollTrigger: {
               trigger: '.process-steps',
               start: 'top 70%',

@@ -364,7 +364,6 @@
 
 /* Todo el hero oculto EXCEPTO el h1 */
 .hero-eyebrow,
-.hero-subheadline,
 .hero-ctas,
 .hero-social-proof {
   opacity: 0;
@@ -384,7 +383,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hero-eyebrow,
-  .hero-subheadline,
   .hero-ctas,
   .hero-social-proof,
   .hero-mesh,

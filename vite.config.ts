@@ -7,10 +7,22 @@ function asyncCssPlugin(): Plugin {
     name: 'async-css',
     enforce: 'post',
     transformIndexHtml(html) {
-      return html.replace(
+      let newHtml = html.replace(
         /<link rel="stylesheet" crossorigin href="(.*?)">/g,
         '<link rel="stylesheet" href="$1" media="print" onload="this.media=\'all\'">\n    <noscript><link rel="stylesheet" href="$1"></noscript>'
       );
+      
+      // Inject fetchpriority="high" for main script and low for gsap-vendor
+      newHtml = newHtml.replace(
+        /<script(.*?)src="(.*?\/index-.*?\.js)"(.*?)>/,
+        '<script$1src="$2"$3 fetchpriority="high">'
+      );
+      newHtml = newHtml.replace(
+        /<script(.*?)src="(.*?\/gsap-vendor-.*?\.js)"(.*?)>/,
+        '<script$1src="$2"$3 fetchpriority="low">'
+      );
+
+      return newHtml;
     }
   }
 }

@@ -27,6 +27,9 @@ export default function Partners() {
     const ctx = gsap.context(() => {
       // Headline
       gsap.from('.partners-headline', {
+        // @ts-ignore
+
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 80%',
@@ -40,6 +43,9 @@ export default function Partners() {
 
       // Description
       gsap.from('.partners-desc', {
+        // @ts-ignore
+
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 75%',
@@ -53,6 +59,9 @@ export default function Partners() {
 
       // CTA
       gsap.from('.partners-cta', {
+        // @ts-ignore
+
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 70%',
@@ -66,6 +75,9 @@ export default function Partners() {
 
       // Partner logos
       gsap.from('.partner-logo', {
+        // @ts-ignore
+
+        lazy: false,
         scrollTrigger: {
           trigger: '.partners-grid',
           start: 'top 80%',
