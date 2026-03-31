@@ -25,8 +25,8 @@ const faqs = [
     answer: 'Tienes 15 días de soporte post-entrega incluidos. Además puedes contratar un plan de soporte mensual si necesitas que sigamos optimizando tu sistema.',
   },
   {
-    question: '¿Trabajan fuera de Valparaíso o solo en Chile?',
-    answer: 'Operamos 100% digital, así que trabajamos con clientes en todo Chile y también en Latinoamérica. La ubicación no es una limitante.',
+    question: '¿Dónde están ubicados y cómo trabajaremos?',
+    answer: 'Somos una agencia creativa tecnológica y digital 100% remota. Operamos desde Chile para el mundo, lo que significa que estamos a una simple videollamada de distancia para empezar a trabajar juntos, sin importar dónde te encuentres.',
   },
 ];
 

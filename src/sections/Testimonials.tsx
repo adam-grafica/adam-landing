@@ -6,7 +6,7 @@ const testimonials = [
   {
     name: 'Carolina M.',
     role: 'Artista y Emprendedora',
-    location: 'Valparaíso',
+    location: 'Chile',
     avatar: 'CM',
     quote: 'Antes no tenía identidad. Ahora tengo marca, web y contenido que me hacen ver profesional. Los clientes me buscan a mí.',
     result: 'Web lista en 3 semanas',
@@ -14,7 +14,7 @@ const testimonials = [
   {
     name: 'Formativa OTEC',
     role: 'Academia de Capacitación',
-    location: 'V Región',
+    location: 'Latam',
     avatar: 'FO',
     quote: 'Necesitábamos una plataforma de cursos y nos entregaron algo que nunca esperábamos. Rápido, bien hecho y sin vueltas.',
     result: 'Plataforma operativa en 4 semanas',
@@ -22,8 +22,9 @@ const testimonials = [
   {
     name: 'Clínica San Fernando',
     role: 'Salud y Estética',
-    location: 'Quilpué',
+    location: 'Chile',
     avatar: 'CS',
+
     quote: 'El rebranding cambió completamente cómo nos perciben. Ahora llenamos agenda. La imagen sí vende.',
     result: '+40% consultas desde el primer mes',
   },

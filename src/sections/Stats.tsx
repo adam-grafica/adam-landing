@@ -108,7 +108,7 @@ export default function Stats() {
             <span className="gradient-text">construir imperios.</span>
           </p>
           <p className="text-white/40 text-sm mt-4 uppercase tracking-widest">
-            Quilpué, Valparaíso · Chile
+            De Chile para el mundo
           </p>
         </div>
       </div>

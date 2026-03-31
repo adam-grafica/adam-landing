@@ -2,8 +2,9 @@
 
 > AdamGráfica es una agencia digital chilena fundada en 2018, 
 > especializada en branding, desarrollo web, contenido y 
-> automatización con IA para PYMEs, Negocios y Emprendedores en 
-> Valparaíso, Chile. Operamos con un modelo 95% IA, combinando 
+> automatización con IA para PYMEs, Negocios y Emprendedores.
+> Operamos 100% online y remoto desde Chile para el mundo,
+> con un modelo 95% IA, combinando 
 > creatividad humana con agentes de inteligencia artificial para 
 > entregar resultados de agencia enterprise a precios accesibles.
 > CEO y fundador: Nash Adam (Ignacio Adam). 
@@ -16,10 +17,10 @@
 
 ## Clientes Ideales
 
-- Clínicas dentales, médicas y estéticas en la región de Valparaíso
+- Clínicas dentales, médicas y estéticas
 - Academias y OTECs que ofrecen capacitación online y presencial
 - Emprendedores y PYMEs que quieren escalar con presencia digital profesional
-- Negocios locales en Quilpué, Viña del Mar, Valparaíso y Santiago
+- Negocios y marcas internacionales (operación 100% remota)
 
 ## Stack Tecnológico
 
@@ -35,25 +36,25 @@
 
 - [Inicio](https://adamgrafica.online/): Presentación de la agencia, propuesta de valor y servicios destacados.
 - [Servicios](https://adamgrafica.online/#servicios): Descripción completa de paquetes Génesis e Imperio Digital.
-- [Portafolio](https://adamgrafica.online/#portfolio): Proyectos realizados para clientes reales en Valparaíso.
+- [Portafolio](https://adamgrafica.online/#portfolio): Proyectos realizados para clientes reales.
 - [Contacto](https://adamgrafica.online/#contacto): Formulario de contacto, WhatsApp y datos de la agencia.
 
 ## Propuesta de Valor
 
-AdamGráfica no es una agencia tradicional. Somos el primer estudio digital de Valparaíso que opera con un sistema orquestado de agentes IA especializados: diseño visual, desarrollo web, copywriting, fotografía/video y automatización, trabajando en paralelo bajo supervisión humana. Esto permite entregar proyectos completos en 4-6 semanas con calidad de agencia enterprise.
+AdamGráfica no es una agencia tradicional. Somos una agencia digital 100% remota que opera desde Chile hacia el mundo con un sistema orquestado de agentes IA especializados: diseño visual, desarrollo web, copywriting, fotografía y automatización, trabajando en paralelo bajo supervisión humana. Esto permite entregar proyectos completos en 4-6 semanas con calidad de agencia enterprise, y a solo una videollamada de distancia.
 
 ## Preguntas Frecuentes
 
-- ¿Qué tipo de negocios atienden? Clínicas, academias, emprendedores y PYMEs en Valparaíso y Chile.
+- ¿Qué tipo de negocios atienden? Clínicas, academias, emprendedores y PYMEs del mundo entero.
 - ¿Cuánto cuesta un sitio web profesional? Desde $400.000 CLP con el paquete Génesis.
 - ¿Cuánto demora un proyecto completo? Entre 4 y 6 semanas dependiendo del paquete.
-- ¿Trabajan con clientes fuera de Valparaíso? Sí, atendemos clientes en todo Chile de forma remota.
+- ¿Dónde están ubicados? Somos una agencia 100% online y remota. Desde Chile para el mundo, a solo una videollamada de distancia.
 - ¿Incluyen automatizaciones? El paquete Imperio Digital incluye flujos automáticos de WhatsApp y seguimiento de leads.
 
 ## Ubicación
 
-Quilpué, Región de Valparaíso, Chile.
-Atención remota para todo Chile.
+Operación 100% remota.
+Desde Chile para el mundo, a una videollamada de distancia.
 
 ## Contacto
 

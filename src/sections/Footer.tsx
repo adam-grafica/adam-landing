@@ -137,7 +137,7 @@ export default function Footer() {
               <li>
                 <span className="flex items-center gap-2 text-ag-text-gray text-sm">
                   <MapPin className="w-4 h-4 text-ag-blue" />
-                  Quilpué, Valparaíso, Chile
+                  Agencia 100% Remota · De Chile para el mundo
                 </span>
               </li>
             </ul>

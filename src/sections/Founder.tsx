@@ -5,7 +5,7 @@ import { Calendar, MapPin, Rocket, Cpu, User } from 'lucide-react';
 
 const badges = [
   { icon: Calendar, text: 'Desde 2018' },
-  { icon: MapPin, text: 'Valparaíso, Chile' },
+  { icon: MapPin, text: 'Tech & Creative Agency · Remoto' },
   { icon: Rocket, text: '+30 proyectos' },
   { icon: Cpu, text: 'Pionero IA' },
 ];

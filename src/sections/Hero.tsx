@@ -143,7 +143,7 @@ export default function Hero() {
             <div className="flex flex-wrap items-center gap-4 lg:gap-6 text-sm text-ag-text-gray">
               {[
                 { icon: '✦', text: '+30 PYMEs transformadas desde 2018' },
-                { icon: '📍', text: 'Valparaíso, Chile' },
+                { icon: '📍', text: 'Agencia 100% Remota' },
                 { icon: '⚡', text: 'Respuesta en 24h' },
                 { icon: '🤖', text: 'Operación 95% IA' },
               ].map((item, i) => (
