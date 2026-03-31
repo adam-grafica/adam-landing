@@ -224,6 +224,59 @@
       }
     }
     </script>
+    <!-- Structured Data - Graph (Organization + WebSite) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": ["Organization", "ProfessionalService"],
+          "@id": "https://adamgrafica.online/#about",
+          "name": "AdamGráfica",
+          "url": "https://adamgrafica.online",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://adamgrafica.online/favicon.svg",
+            "width": 400,
+            "height": 100
+          },
+          "description": "Agencia de diseño web y marketing digital para empresas que quieren crecer online. Especialistas en branding, desarrollo web y estrategia digital.",
+          "areaServed": ["Chile", "Latinoamérica"],
+          "serviceType": [
+            "Diseño Web",
+            "Desarrollo Web",
+            "Branding",
+            "Marketing Digital",
+            "Identidad Corporativa"
+          ],
+          "sameAs": [
+            "https://www.instagram.com/adamgrafica",
+            "https://www.facebook.com/adamgraficaCL"
+          ],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "sales",
+            "availableLanguage": "Spanish"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://adamgrafica.online/#about",
+          "url": "https://adamgrafica.online",
+          "name": "AdamGráfica",
+          "description": "Agencia de diseño web y marketing digital",
+          "publisher": {
+            "@id": "https://adamgrafica.online/#services"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://adamgrafica.online/?s={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->

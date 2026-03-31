@@ -48,13 +48,12 @@ export default function Awards() {
     const ctx = gsap.context(() => {
       // Headline
       gsap.from('.awards-headline', {
-        // @ts-ignore
-
-        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 80%',
           toggleActions: 'play none none reverse',
+          // @ts-ignore
+          lazy: false,
         },
         scale: 0.9,
         opacity: 0,
@@ -64,13 +63,12 @@ export default function Awards() {
 
       // Rows
       gsap.from('.awards-row-1', {
-        // @ts-ignore
-
-        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 70%',
           toggleActions: 'play none none reverse',
+          // @ts-ignore
+          lazy: false,
         },
         x: '100%',
         duration: 1,
@@ -78,13 +76,12 @@ export default function Awards() {
       });
 
       gsap.from('.awards-row-2', {
-        // @ts-ignore
-
-        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 65%',
           toggleActions: 'play none none reverse',
+          // @ts-ignore
+          lazy: false,
         },
         x: '-100%',
         duration: 1,

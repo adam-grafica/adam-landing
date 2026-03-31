@@ -48,14 +48,13 @@ export default function Process() {
           { 
             scaleX: 1, 
             ease: 'none',
-            // @ts-ignore
-
-            lazy: false,
             scrollTrigger: {
               trigger: '.process-steps',
               start: 'top 60%',
               end: 'bottom 80%',
               scrub: 1,
+              // @ts-ignore
+              lazy: false,
             }
           }
         );
@@ -84,14 +83,13 @@ export default function Process() {
           { 
             scaleY: 1, 
             ease: 'none',
-            // @ts-ignore
-
-            lazy: false,
             scrollTrigger: {
               trigger: '.process-steps',
               start: 'top 70%',
               end: 'bottom 90%',
               scrub: 1,
+              // @ts-ignore
+              lazy: false,
             }
           }
         );

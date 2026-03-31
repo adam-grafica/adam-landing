@@ -1,7 +1,14 @@
-import { createRoot } from 'react-dom/client'
-import './index.css'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
+import './index.css'
+import gsap from 'gsap'
 
-createRoot(document.getElementById('root')!).render(
-  <App />,
+// GSAP Performance Optimization: Prevent forced reflows by disabling lazy property updates
+gsap.config({ lazy: false });
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
 )

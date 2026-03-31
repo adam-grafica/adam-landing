@@ -44,13 +44,12 @@ export default function Certifications() {
     const ctx = gsap.context(() => {
       // Headline
       gsap.from('.cert-headline', {
-        // @ts-ignore
-
-        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 80%',
           toggleActions: 'play none none reverse',
+          // @ts-ignore
+          lazy: false,
         },
         y: 40,
         opacity: 0,
@@ -60,13 +59,12 @@ export default function Certifications() {
 
       // Cards
       gsap.from('.cert-card', {
-        // @ts-ignore
-
-        lazy: false,
         scrollTrigger: {
           trigger: '.cert-grid',
           start: 'top 80%',
           toggleActions: 'play none none reverse',
+          // @ts-ignore
+          lazy: false,
         },
         y: 50,
         opacity: 0,

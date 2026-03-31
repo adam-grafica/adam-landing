@@ -13,13 +13,12 @@ export default function OnePlatform() {
     const ctx = gsap.context(() => {
       // Content animations
       gsap.from('.platform-headline', {
-        // @ts-ignore
-
-        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 80%',
           toggleActions: 'play none none reverse',
+          // @ts-ignore
+          lazy: false,
         },
         x: -80,
         rotateY: -45,
@@ -30,13 +29,12 @@ export default function OnePlatform() {
       });
 
       gsap.from('.platform-desc', {
-        // @ts-ignore
-
-        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 70%',
           toggleActions: 'play none none reverse',
+          // @ts-ignore
+          lazy: false,
         },
         y: 40,
         opacity: 0,
@@ -45,13 +43,12 @@ export default function OnePlatform() {
       });
 
       gsap.from('.platform-feature', {
-        // @ts-ignore
-
-        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 60%',
           toggleActions: 'play none none reverse',
+          // @ts-ignore
+          lazy: false,
         },
         x: -60,
         opacity: 0,
@@ -61,13 +58,12 @@ export default function OnePlatform() {
       });
 
       gsap.from('.platform-divider', {
-        // @ts-ignore
-
-        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 55%',
           toggleActions: 'play none none reverse',
+          // @ts-ignore
+          lazy: false,
         },
         scaleX: 0,
         duration: 0.4,
@@ -76,13 +72,12 @@ export default function OnePlatform() {
 
       // Car image animation
       gsap.from(imageRef.current, {
-        // @ts-ignore
-
-        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 80%',
           toggleActions: 'play none none reverse',
+          // @ts-ignore
+          lazy: false,
         },
         x: 200,
         rotateY: 30,
@@ -94,14 +89,13 @@ export default function OnePlatform() {
 
       // Parallax effect on scroll
       gsap.to(imageRef.current, {
-        // @ts-ignore
-
-        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top bottom',
           end: 'bottom top',
           scrub: 1,
+          // @ts-ignore
+          lazy: false,
         },
         y: -50,
         rotateY: 5,
