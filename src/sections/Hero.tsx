@@ -129,7 +129,7 @@ export default function Hero() {
 
           {/* CTAs */}
           <div className="hero-ctas flex flex-col sm:flex-row gap-4 mb-12">
-            <a href="#contact" className="btn-primary group" aria-label="Agendar diagnóstico gratuito" onClick={() => trackCTAClick('Quiero mi Imperio Digital', 'Hero')}>
+            <a href="#contact" className="btn-primary group" aria-label="Agendar diagnóstico gratuito desde la sección de inicio" onClick={() => trackCTAClick('Quiero mi Imperio Digital', 'Hero')}>
               <span>Quiero mi Imperio Digital</span>
               <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
             </a>

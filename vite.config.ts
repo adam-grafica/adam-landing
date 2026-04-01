@@ -2,7 +2,7 @@ import path from "path"
 import react from "@vitejs/plugin-react"
 import { defineConfig, type Plugin } from "vite"
 import { compression } from 'vite-plugin-compression2'
-import { partytownVite } from '@builder.io/partytown/utils'
+
 
 function asyncCssPlugin(): Plugin {
   return {
@@ -35,9 +35,7 @@ export default defineConfig({
     react(), 
     asyncCssPlugin(), 
     compression({ exclude: [/\.(br)$/, /\.(gz)$/] }),
-    partytownVite({
-      dest: path.join(__dirname, 'public', '~partytown'),
-    })
+
   ],
   resolve: {
     alias: {

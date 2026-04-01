@@ -69,6 +69,7 @@ export default function CTABanner() {
                 <a
                   href="mailto:hola@adamgrafica.online?subject=Quiero%20mi%20Diagnóstico%20Gratuito"
                   onClick={() => trackCTAClick('Agendar diagnóstico gratuito', 'CTA Banner')}
+                  aria-label="Agendar diagnóstico gratuito desde el banner de acción"
                   className="group relative inline-flex items-center gap-3 px-8 py-4 bg-white text-ag-blue rounded-full font-bold text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] hover:-translate-y-1 active:scale-95"
                 >
                   <span>Agendar diagnóstico gratuito</span>
