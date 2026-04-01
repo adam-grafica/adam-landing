@@ -1,6 +1,7 @@
 import path from "path"
 import react from "@vitejs/plugin-react"
 import { defineConfig, type Plugin } from "vite"
+import { compression } from 'vite-plugin-compression2'
 
 function asyncCssPlugin(): Plugin {
   return {
@@ -29,7 +30,7 @@ function asyncCssPlugin(): Plugin {
 
 export default defineConfig({
   base: '/',
-  plugins: [react(), asyncCssPlugin()],
+  plugins: [react(), asyncCssPlugin(), compression({ exclude: [/\.(br)$/, /\.(gz)$/] })],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
