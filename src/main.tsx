@@ -5,6 +5,7 @@ import './index.css'
 import gsap from 'gsap'
 
 // GSAP Performance Optimization: Prevent forced reflows by disabling lazy property updates
+// @ts-ignore
 gsap.config({ lazy: false });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
