@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { useReveal } from '../hooks/useReveal';
 import { useRevealGroup } from '../hooks/useRevealGroup';
-import { ArrowRight, Lock, Layers, X, ExternalLink } from 'lucide-react';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right'
+import Lock from 'lucide-react/dist/esm/icons/lock'
+import Layers from 'lucide-react/dist/esm/icons/layers'
+import X from 'lucide-react/dist/esm/icons/x'
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import { trackCTAClick, trackServiceView } from '../utils/analytics';
 
 const projects = [

@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Briefcase, Zap, Folder, Users, MessageSquare } from 'lucide-react';
+import Briefcase from 'lucide-react/dist/esm/icons/briefcase'
+import Zap from 'lucide-react/dist/esm/icons/zap'
+import Folder from 'lucide-react/dist/esm/icons/folder'
+import Users from 'lucide-react/dist/esm/icons/users'
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
 import { trackCTAClick } from '../utils/analytics';
 
 const navLinks = [

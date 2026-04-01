@@ -1,7 +1,11 @@
 import { useEffect } from 'react';
 import gsap from 'gsap';
 import { useReveal } from '../hooks/useReveal';
-import { Calendar, MapPin, Rocket, Cpu, User } from 'lucide-react';
+import Calendar from 'lucide-react/dist/esm/icons/calendar'
+import MapPin from 'lucide-react/dist/esm/icons/map-pin'
+import Rocket from 'lucide-react/dist/esm/icons/rocket'
+import Cpu from 'lucide-react/dist/esm/icons/cpu'
+import User from 'lucide-react/dist/esm/icons/user';
 
 const badges = [
   { icon: Calendar, text: 'Desde 2018' },

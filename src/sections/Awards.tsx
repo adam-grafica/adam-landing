@@ -1,7 +1,11 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Award, Trophy, Star, Medal, Crown } from 'lucide-react';
+import Award from 'lucide-react/dist/esm/icons/award'
+import Trophy from 'lucide-react/dist/esm/icons/trophy'
+import Star from 'lucide-react/dist/esm/icons/star'
+import Medal from 'lucide-react/dist/esm/icons/medal'
+import Crown from 'lucide-react/dist/esm/icons/crown';
 
 gsap.registerPlugin(ScrollTrigger);
 

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useReveal } from '../hooks/useReveal';
 import { useRevealGroup } from '../hooks/useRevealGroup';
-import { ChevronDown, HelpCircle } from 'lucide-react';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down'
+import HelpCircle from 'lucide-react/dist/esm/icons/help-circle';
 
 const faqs = [
   {

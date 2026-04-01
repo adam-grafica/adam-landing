@@ -1,6 +1,7 @@
 import { useReveal } from '../hooks/useReveal';
 import { useRevealGroup } from '../hooks/useRevealGroup';
-import { Star, MessageCircle } from 'lucide-react';
+import Star from 'lucide-react/dist/esm/icons/star'
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 
 const testimonials = [
   {
@@ -92,7 +93,7 @@ export default function Testimonials() {
                   </span>
                 </div>
                 <div>
-                  <h4 className="font-display text-white">{testimonial.name}</h4>
+                    <h3 className="font-display text-white">{testimonial.name}</h3>
                   <p className="text-ag-text-gray text-sm">
                     {testimonial.role} — {testimonial.location}
                   </p>

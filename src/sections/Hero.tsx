@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { ArrowRight, Play } from 'lucide-react';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right'
+import Play from 'lucide-react/dist/esm/icons/play';
 import { trackCTAClick } from '../utils/analytics';
 
 export default function Hero() {

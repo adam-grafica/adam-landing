@@ -28,7 +28,7 @@ module.exports = {
         },
         'ag-text': {
           white: '#FFFFFF',
-          gray: '#A0A0A0',
+          gray: '#B3B3B3',
           muted: '#666666',
         },
         // shadcn defaults

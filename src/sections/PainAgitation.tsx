@@ -1,6 +1,8 @@
 import { useReveal } from '../hooks/useReveal';
 import { useRevealGroup } from '../hooks/useRevealGroup';
-import { EyeOff, Monitor, TrendingDown } from 'lucide-react';
+import EyeOff from 'lucide-react/dist/esm/icons/eye-off'
+import Monitor from 'lucide-react/dist/esm/icons/monitor'
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down';
 
 const painPoints = [
   {

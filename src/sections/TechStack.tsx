@@ -2,10 +2,18 @@ import { useEffect } from 'react';
 import gsap from 'gsap';
 import { useReveal } from '../hooks/useReveal';
 import { useRevealGroup } from '../hooks/useRevealGroup';
-import { 
-  Cloud, Database, Github, Bot, Code, Palette, 
-  Video, FileText, MessageSquare, Zap, Cpu, Layers 
-} from 'lucide-react';
+import Cloud from 'lucide-react/dist/esm/icons/cloud'
+import Database from 'lucide-react/dist/esm/icons/database'
+import Github from 'lucide-react/dist/esm/icons/github'
+import Bot from 'lucide-react/dist/esm/icons/bot'
+import Code from 'lucide-react/dist/esm/icons/code'
+import Palette from 'lucide-react/dist/esm/icons/palette'
+import Video from 'lucide-react/dist/esm/icons/video'
+import FileText from 'lucide-react/dist/esm/icons/file-text'
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square'
+import Zap from 'lucide-react/dist/esm/icons/zap'
+import Cpu from 'lucide-react/dist/esm/icons/cpu'
+import Layers from 'lucide-react/dist/esm/icons/layers';
 
 const techCategories = [
   {

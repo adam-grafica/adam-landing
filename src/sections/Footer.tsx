@@ -1,5 +1,12 @@
 import { useReveal } from '../hooks/useReveal';
-import { Instagram, Linkedin, MessageCircle, Mail, Phone, MapPin, Heart, Facebook } from 'lucide-react';
+import Instagram from 'lucide-react/dist/esm/icons/instagram'
+import Linkedin from 'lucide-react/dist/esm/icons/linkedin'
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle'
+import Mail from 'lucide-react/dist/esm/icons/mail'
+import Phone from 'lucide-react/dist/esm/icons/phone'
+import MapPin from 'lucide-react/dist/esm/icons/map-pin'
+import Heart from 'lucide-react/dist/esm/icons/heart'
+import Facebook from 'lucide-react/dist/esm/icons/facebook';
 
 const footerLinks = {
   services: [

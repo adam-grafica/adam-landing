@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useReveal } from '../hooks/useReveal';
 import { useRevealGroup } from '../hooks/useRevealGroup';
-import { Check, ArrowRight, Zap } from 'lucide-react';
+import Check from 'lucide-react/dist/esm/icons/check'
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right'
+import Zap from 'lucide-react/dist/esm/icons/zap';
 import { trackServiceView } from '../utils/analytics';
 
 const packages = [

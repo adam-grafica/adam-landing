@@ -1,6 +1,10 @@
 import { useReveal } from '../hooks/useReveal';
 import { useRevealGroup } from '../hooks/useRevealGroup';
-import { Zap, Target, TrendingUp, Layers, Cpu } from 'lucide-react';
+import Zap from 'lucide-react/dist/esm/icons/zap'
+import Target from 'lucide-react/dist/esm/icons/target'
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up'
+import Layers from 'lucide-react/dist/esm/icons/layers'
+import Cpu from 'lucide-react/dist/esm/icons/cpu';
 
 const bullets = [
   {

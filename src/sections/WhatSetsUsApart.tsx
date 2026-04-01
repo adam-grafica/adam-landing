@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { useReveal } from '../hooks/useReveal';
 import { useRevealGroup } from '../hooks/useRevealGroup';
-import { Rocket, Palette, Shield, CheckCircle, Headphones, Sparkles } from 'lucide-react';
+import Rocket from 'lucide-react/dist/esm/icons/rocket'
+import Palette from 'lucide-react/dist/esm/icons/palette'
+import Shield from 'lucide-react/dist/esm/icons/shield'
+import CheckCircle from 'lucide-react/dist/esm/icons/check-circle'
+import Headphones from 'lucide-react/dist/esm/icons/headphones'
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 
 const features = [
   {
@@ -114,7 +119,7 @@ export default function WhatSetsUsApart() {
                 onClick={() => setActiveFeature(feature.id)}
               >
                 <div className="flex items-center justify-between">
-                  <h4
+                  <h3
                     className={`font-display text-lg transition-colors duration-200 ${
                       activeFeature === feature.id
                         ? 'text-ag-blue'
@@ -122,7 +127,7 @@ export default function WhatSetsUsApart() {
                     }`}
                   >
                     {feature.title}
-                  </h4>
+                  </h3>
                   <span
                     className={`text-sm font-medium transition-colors duration-200 ${
                       activeFeature === feature.id ? 'text-ag-blue' : 'text-black/40'

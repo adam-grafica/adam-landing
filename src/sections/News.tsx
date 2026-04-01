@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ChevronLeft, ChevronRight, ArrowUpRight } from 'lucide-react';
+import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left'
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right'
+import ArrowUpRight from 'lucide-react/dist/esm/icons/arrow-up-right';
 
 gsap.registerPlugin(ScrollTrigger);
 

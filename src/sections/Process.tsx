@@ -2,7 +2,10 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { useReveal } from '../hooks/useReveal';
 import { useRevealGroup } from '../hooks/useRevealGroup';
-import { Search, FileText, Cpu, Zap } from 'lucide-react';
+import Search from 'lucide-react/dist/esm/icons/search'
+import FileText from 'lucide-react/dist/esm/icons/file-text'
+import Cpu from 'lucide-react/dist/esm/icons/cpu'
+import Zap from 'lucide-react/dist/esm/icons/zap';
 
 const steps = [
   {

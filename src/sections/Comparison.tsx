@@ -2,7 +2,10 @@ import { useEffect } from 'react';
 import gsap from 'gsap';
 import { useReveal } from '../hooks/useReveal';
 import { useRevealGroup } from '../hooks/useRevealGroup';
-import { Check, X, Cpu, Zap } from 'lucide-react';
+import Check from 'lucide-react/dist/esm/icons/check'
+import X from 'lucide-react/dist/esm/icons/x'
+import Cpu from 'lucide-react/dist/esm/icons/cpu'
+import Zap from 'lucide-react/dist/esm/icons/zap';
 
 const comparisonData = [
   {

@@ -1,7 +1,12 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { useReveal } from '../hooks/useReveal';
-import { ArrowRight, Calendar, Sparkles, Zap, ShieldCheck, Clock } from 'lucide-react';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right'
+import Calendar from 'lucide-react/dist/esm/icons/calendar'
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles'
+import Zap from 'lucide-react/dist/esm/icons/zap'
+import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check'
+import Clock from 'lucide-react/dist/esm/icons/clock';
 import { trackCTAClick } from '../utils/analytics';
 
 const trustSignals = [
