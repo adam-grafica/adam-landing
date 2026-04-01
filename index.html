@@ -6,23 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark" />
 
-    <!-- Google Tag Manager (Defferred on Interaction for Perf) -->
+    <!-- Partytown config — DEBE ir ANTES del script de GTM -->
     <script>
-      let gtmLoaded = false;
-      function loadGTM() {
-        if (gtmLoaded) return;
-        gtmLoaded = true;
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-MC5GNM34');
-      }
-      // Load on interaction or after 4s manually as fallback
-      ['scroll', 'mousemove', 'touchstart', 'click', 'keydown'].forEach(function(e) {
-        window.addEventListener(e, loadGTM, { once: true, passive: true });
-      });
-      setTimeout(loadGTM, 4000);
+      partytown = {
+        forward: ['dataLayer.push'],
+      };
+    </script>
+
+    <!-- Google Tag Manager — con type="text/partytown" -->
+    <script type="text/partytown">
+      (function(w,d,s,l,i){
+        w[l]=w[l]||[];
+        w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+        var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
+        j.async=true;
+        j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+        f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-MC5GNM34');
     </script>
     <!-- End Google Tag Manager -->
 
