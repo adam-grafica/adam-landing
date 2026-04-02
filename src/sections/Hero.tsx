@@ -1,10 +1,22 @@
 import { useEffect, useRef } from 'react';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right'
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import Play from 'lucide-react/dist/esm/icons/play';
 import { trackCTAClick } from '../utils/analytics';
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
+
+  // Limpiar el hero prerenderizado del HTML estático
+  // El CSS ya lo oculta vía #root:not(:empty) ~ #hero-prerender
+  // pero lo removemos del DOM para liberar memoria
+  useEffect(() => {
+    const prerender = document.getElementById('hero-prerender');
+    if (prerender) {
+      requestAnimationFrame(() => {
+        prerender.remove();
+      });
+    }
+  }, []);
 
   useEffect(() => {
     // Si el usuario prefiere movimiento reducido, el CSS ya los muestra visibles
@@ -17,15 +29,15 @@ export default function Hero() {
     import('gsap').then(({ default: gsap }) => {
       const ctx = gsap.context(() => {
         // Estado inicial ya está en CSS (opacity: 0 en .hero-*)
-        // fromTo() lee el estado CSS y anima hacia el estado final
-        const tl = gsap.timeline({ delay: 0 });
+        // fromTo() con immediateRender: false evita que GSAP ponga opacity:0 ANTES del paint
+        const tl = gsap.timeline({ delay: 0.2 });
 
         tl.fromTo('.hero-mesh',
-            { opacity: 0, scale: 0.85 },
+            { opacity: 0, scale: 0.85, immediateRender: false },
             { opacity: 1, scale: 1, duration: 1.2, ease: 'expo.out' }
           )
           .fromTo('.hero-eyebrow',
-            { opacity: 0, y: 20 },
+            { opacity: 0, y: 20, immediateRender: false },
             { opacity: 1, y: 0, duration: 0.55, ease: 'expo.out' },
             '-=0.9'
           )
@@ -41,12 +53,12 @@ export default function Hero() {
             '-=0.3'
           )
           .fromTo('.hero-ctas',
-            { opacity: 0, y: 16 },
+            { opacity: 0, y: 16, immediateRender: false },
             { opacity: 1, y: 0, duration: 0.45, ease: 'expo.out' },
             '-=0.25'
           )
           .fromTo('.hero-social-proof',
-            { opacity: 0, y: 16 },
+            { opacity: 0, y: 16, immediateRender: false },
             { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' },
             '-=0.2'
           );
@@ -131,10 +143,10 @@ export default function Hero() {
           <div className="hero-ctas flex flex-col sm:flex-row gap-4 mb-12">
             <a href="#contact" className="btn-primary group" aria-label="Agendar diagnóstico gratuito desde la sección de inicio" onClick={() => trackCTAClick('Quiero mi Imperio Digital', 'Hero')}>
               <span>Quiero mi Imperio Digital</span>
-              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
             </a>
             <a href="#services" className="btn-ghost group" aria-label="Ver cómo funciona nuestro proceso" onClick={() => trackCTAClick('Ver cómo funciona', 'Hero')}>
-              <Play className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
+              <Play className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
               <span>Ver cómo funciona</span>
             </a>
           </div>
@@ -149,7 +161,7 @@ export default function Hero() {
                 { icon: '🤖', text: 'Operación 95% IA' },
               ].map((item, i) => (
                 <span key={i} className="flex items-center gap-2">
-                  <span className="text-ag-blue">{item.icon}</span>
+                  <span className="text-ag-blue" aria-hidden="true">{item.icon}</span>
                   <span>{item.text}</span>
                 </span>
               ))}

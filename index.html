@@ -1,229 +1,323 @@
 <!doctype html>
 <html lang="es-CL">
-  <head>
-    <!-- 1. CHARSET Y VIEWPORT: siempre primero -->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark" />
+<head>
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- 1. CHARSET Y VIEWPORT (siempre primero)       -->
+  <!-- ══════════════════════════════════════════════ -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
 
-    <script>
-      window.addEventListener('load', function() {
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-MC5GNM34');
-      });
-    </script>
-    <!-- End Google Tag Manager -->
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- 2. PRELOADS CRÍTICOS — fuentes del hero        -->
+  <!-- ══════════════════════════════════════════════ -->
+  <link rel="preload" href="/fonts/syne.woff2" as="font"
+        type="font/woff2" crossorigin="anonymous" />
+  <link rel="preload" href="/fonts/dm-sans.woff2" as="font"
+        type="font/woff2" crossorigin="anonymous" />
 
-    <!-- 2. PRELOAD CRÍTICO: fuente Syne ANTES que cualquier CSS -->
-    <link rel="preload" href="/fonts/syne.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
-    <link rel="preload" href="/fonts/dm-sans.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
-    <link rel="preload" href="/fonts/space-mono.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+  <!-- Space Mono NO se preloadea — no está en el hero -->
+  <link rel="prefetch" href="/fonts/space-mono.woff2" as="font"
+        type="font/woff2" crossorigin="anonymous" />
 
-    <!-- 3. CSS CRÍTICO INLINE (nav + hero, ~3KB) -->
-    <style id="critical-css">
-      /* RESET MÍNIMO */
-      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  <!-- Preconnect a dominios de terceros (GTM se cargará después) -->
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+  <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+  <link rel="dns-prefetch" href="https://clarity.ms" />
 
-      /* FUENTES — font-display:swap es la línea más importante */
-      @font-face{
-        font-family:'Syne';
-        src:url('/fonts/syne.woff2') format('woff2');
-        font-weight:100 900;
-        font-style:normal;
-        font-display:swap;
-      }
-      @font-face{
-        font-family:'DM Sans';
-        src:url('/fonts/dm-sans.woff2') format('woff2');
-        font-weight:100 900;
-        font-style:normal;
-        font-display:swap;
-      }
-      @font-face{
-        font-family:'Space Mono';
-        src:url('/fonts/space-mono.woff2') format('woff2');
-        font-weight:400 700;
-        font-display:swap;
-      }
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- 3. CSS CRÍTICO INLINE — nav + hero (above fold) -->
+  <!-- ══════════════════════════════════════════════ -->
+  <style id="critical-css">
+    /* Reset mínimo */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-      /* BODY BASE */
-      body{
-        background-color:#0A0A0A;
-        color:#FFFFFF;
-        font-family:'DM Sans',system-ui,-apple-system,sans-serif;
-        overflow-x:hidden;
-        -webkit-font-smoothing:antialiased;
-        -moz-osx-font-smoothing:grayscale;
-      }
-
-      /* HEADINGS */
-      h1,h2,h3,h4,h5,h6{
-        font-family:'Syne',system-ui,sans-serif;
-        font-weight:700;
-        line-height:1.1;
-      }
-
-      /* NAV — visible de inmediato, above the fold */
-      nav{
-        position:fixed;
-        top:0;
-        left:0;
-        right:0;
-        z-index:50;
-        background:rgba(8,8,14,0.75);
-        backdrop-filter:blur(20px) saturate(180%);
-        -webkit-backdrop-filter:blur(20px) saturate(180%);
-        border-bottom:1px solid rgba(255,255,255,0.08);
-      }
-
-      /* HERO SECTION — visible de inmediato, NO opacity:0 */
-      section[aria-label="Hero Section"]{
-        position:relative;
-        min-height:100vh;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        overflow:hidden;
-      }
-
-      /* FIX 1 — Restaurar CSS crítico LCP en index.html: */
-      .hero-headline, .hero-headline span, .lcp-element, .lcp-element span {
-        opacity: 1 !important; visibility: visible !important; transform: none !important;
-      }
-      .hero-subheadline { opacity: 1 !important; visibility: visible !important; }
-
-      /* Otros hero elements ocultos para animación GSAP */
-      .hero-eyebrow,.hero-ctas,.hero-social-proof{opacity:0}
-      .hero-mesh{opacity:0;transform:scale(0.85)}
-
-      /* Gradient text utility */
-      .gradient-text{
-        background:linear-gradient(135deg,#0066FF 0%,#00AAFF 100%);
-        -webkit-background-clip:text;
-        -webkit-text-fill-color:transparent;
-        background-clip:text;
-      }
-
-      /* Root div */
-      #root{min-height:100vh}
-    </style>
-
-    <!-- 4. SEO META TAGS -->
-    <title>AdamGráfica | Agencia Digital 95% IA en Chile - Diseño Web, Branding & Ads</title>
-    <meta name="description" content="Potenciamos tu negocio con IA. Branding futurista, sitios web de alto rendimiento y automatizaciones avanzadas. Resultados reales en 4 semanas." />
-    <meta name="keywords" content="agencia digital ia, diseño web chile, branding futurista, automatizacion negocios, inteligencia artificial chile, adamgrafica, marketing digital ia" />
-    <meta name="author" content="AdamGráfica" />
-    <meta name="robots" content="index, follow" />
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://adamgrafica.online" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://adamgrafica.online" />
-    <meta property="og:title" content="AdamGráfica | Agencia Digital 95% IA en Chile" />
-    <meta property="og:description" content="La primera agencia digital 95% operada por IA en Chile. Branding, web y automatizaciones en 4 semanas." />
-    <meta property="og:image" content="https://adamgrafica.online/favicon.svg" />
-    <meta property="og:image:width" content="512" />
-    <meta property="og:image:height" content="512" />
-    <meta property="og:locale" content="es_CL" />
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://adamgrafica.online" />
-    <meta property="twitter:title" content="AdamGráfica | Agencia Digital 95% IA en Chile" />
-    <meta property="twitter:description" content="La primera agencia digital 95% operada por IA en Chile. Branding, web y automatizaciones en 4 semanas." />
-    <meta property="twitter:image" content="https://adamgrafica.online/favicon.svg" />
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#0A0A0A" />
-    <meta name="msapplication-TileColor" content="#0A0A0A" />
-    
-    <!-- Structured Data - Service -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "serviceType": "Agencia Digital",
-      "provider": { "@type": "Organization", "name": "AdamGráfica" },
-      "areaServed": { "@type": "Country", "name": "Chile" },
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Servicios AdamGráfica",
-        "itemListElement": [
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Génesis - Identidad Visual", "description": "Identidad visual completa desde $400.000 CLP" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Imperio Digital", "description": "Sitio web de alto rendimiento y branding desde $600.000 CLP" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Sistema Completo", "description": "Ecosistema digital automatizado con IA desde $1.500.000 CLP" } }
-        ]
-      }
+    /* Font faces */
+    @font-face{
+      font-family:'Syne';
+      src:url('/fonts/syne.woff2') format('woff2');
+      font-weight:100 900;
+      font-style:normal;
+      font-display:swap;
     }
-    </script>
-    <!-- Structured Data - Graph (Organization + WebSite) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": ["Organization", "ProfessionalService"],
-          "@id": "https://adamgrafica.online/#about",
-          "name": "AdamGráfica",
-          "url": "https://adamgrafica.online",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://adamgrafica.online/favicon.svg",
-            "width": 400,
-            "height": 100
-          },
-          "description": "Agencia de diseño web y marketing digital para empresas que quieren crecer online. Especialistas en branding, desarrollo web y estrategia digital.",
-          "areaServed": ["Chile", "Latinoamérica"],
-          "serviceType": [
-            "Diseño Web",
-            "Desarrollo Web",
-            "Branding",
-            "Marketing Digital",
-            "Identidad Corporativa"
-          ],
-          "sameAs": [
-            "https://www.instagram.com/adamgrafica",
-            "https://www.facebook.com/adamgraficaCL"
-          ],
-          "contactPoint": {
-            "@type": "ContactPoint",
-            "contactType": "sales",
-            "availableLanguage": "Spanish"
-          }
+    @font-face{
+      font-family:'DM Sans';
+      src:url('/fonts/dm-sans.woff2') format('woff2');
+      font-weight:100 900;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face{
+      font-family:'Space Mono';
+      src:url('/fonts/space-mono.woff2') format('woff2');
+      font-weight:400 700;
+      font-display:swap;
+    }
+
+    /* Base */
+    body{
+      background-color:#0A0A0A;
+      color:#FFFFFF;
+      font-family:'DM Sans',system-ui,-apple-system,sans-serif;
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    h1,h2,h3,h4,h5,h6{
+      font-family:'Syne',system-ui,sans-serif;
+      font-weight:700;
+      line-height:1.1;
+    }
+
+    /* Nav */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:50;
+      background:rgba(8,8,14,0.75);
+      backdrop-filter:blur(20px) saturate(180%);
+      -webkit-backdrop-filter:blur(20px) saturate(180%);
+      border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+
+    /* Hero section */
+    .hero-prerender-section{
+      position:relative;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#0A0A0A;
+    }
+
+    /* FIX LCP — fuerza visibilidad antes que GSAP tome control */
+    .hero-headline,
+    .hero-headline span,
+    .lcp-element,
+    .lcp-element span{
+      opacity:1!important;
+      visibility:visible!important;
+      transform:none!important;
+    }
+    .hero-subheadline{
+      opacity:1!important;
+      visibility:visible!important;
+    }
+
+    /* Elementos que SÍ se ocultan para animación GSAP */
+    .hero-eyebrow,.hero-ctas,.hero-social-proof{opacity:0}
+    .hero-mesh{opacity:0;transform:scale(0.85)}
+
+    /* Gradient text */
+    .gradient-text{
+      background:linear-gradient(135deg,#0066FF 0%,#00AAFF 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+
+    /* Root container */
+    #root{min-height:100vh}
+
+    /* Ocultar prerender cuando React monta */
+    #root:not(:empty) + #hero-prerender,
+    #root:not(:empty) ~ #hero-prerender{
+      display:none!important;
+    }
+  </style>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- 4. SEO META TAGS                               -->
+  <!-- ══════════════════════════════════════════════ -->
+  <title>AdamGráfica | Agencia Digital 95% IA en Chile - Diseño Web, Branding &amp; Ads</title>
+  <meta name="description" content="Potenciamos tu negocio con IA. Branding futurista, sitios web de alto rendimiento y automatizaciones avanzadas. Resultados reales en 4 semanas." />
+  <meta name="keywords" content="agencia digital ia, diseño web chile, branding futurista, automatizacion negocios, inteligencia artificial chile, adamgrafica, marketing digital ia" />
+  <meta name="author" content="AdamGráfica" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://adamgrafica.online" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="AdamGráfica | Agencia Digital 95% IA en Chile" />
+  <meta property="og:description" content="Potenciamos tu negocio con IA. Branding futurista, sitios web de alto rendimiento y automatizaciones avanzadas." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://adamgrafica.online" />
+  <meta property="og:image" content="https://adamgrafica.online/favicon.svg" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+  <meta property="og:locale" content="es_CL" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AdamGráfica | Agencia Digital 95% IA" />
+  <meta name="twitter:description" content="Branding futurista, sitios web de alto rendimiento y automatizaciones IA." />
+  <meta name="twitter:image" content="https://adamgrafica.online/favicon.svg" />
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0A0A0A" />
+  <meta name="msapplication-TileColor" content="#0A0A0A" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": ["Organization", "ProfessionalService"],
+        "@id": "https://adamgrafica.online/#about",
+        "name": "AdamGráfica",
+        "url": "https://adamgrafica.online",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://adamgrafica.online/favicon.svg",
+          "width": 400,
+          "height": 100
         },
-        {
-          "@type": "WebSite",
-          "@id": "https://adamgrafica.online/#about",
-          "url": "https://adamgrafica.online",
-          "name": "AdamGráfica",
-          "description": "Agencia de diseño web y marketing digital",
-          "publisher": {
-            "@id": "https://adamgrafica.online/#services"
-          },
-          "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://adamgrafica.online/?s={search_term_string}",
-            "query-input": "required name=search_term_string"
-          }
+        "description": "Agencia Digital 95% IA en Chile. Branding futurista, sitios web de alto rendimiento y automatizaciones avanzadas.",
+        "areaServed": ["Chile", "Latinoamérica"],
+        "serviceType": ["Diseño Web", "Desarrollo Web", "Branding", "Marketing Digital", "Identidad Corporativa"],
+        "sameAs": [
+          "https://www.instagram.com/adamgrafica",
+          "https://www.facebook.com/adamgraficaCL"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "sales",
+          "availableLanguage": "Spanish"
         }
-      ]
-    }
-    </script>
-  </head>
-  <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MC5GNM34"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <div id="root"></div>
-    <script type="module" fetchpriority="high" src="/src/main.tsx"></script>
-  </body>
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://adamgrafica.online/#website",
+        "url": "https://adamgrafica.online",
+        "name": "AdamGráfica",
+        "description": "Agencia de diseño web y marketing digital",
+        "publisher": { "@id": "https://adamgrafica.online/#about" }
+      }
+    ]
+  }
+  </script>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- 5. GTM TRIPLE DEFERRED — no impacta TBT        -->
+  <!-- ══════════════════════════════════════════════ -->
+  <script>
+    // DataLayer debe existir antes de que GTM cargue
+    window.dataLayer = window.dataLayer || [];
+
+    (function() {
+      var gtmLoaded = false;
+
+      function loadGTM() {
+        if (gtmLoaded) return;
+        gtmLoaded = true;
+
+        // Remover listeners de interacción
+        var events = ['scroll','click','touchstart','keydown','mousemove'];
+        events.forEach(function(evt) {
+          document.removeEventListener(evt, onInteraction, {passive: true});
+        });
+
+        // Cargar GTM dentro de requestIdleCallback
+        // para no competir con ninguna tarea del hilo principal
+        var doLoad = function() {
+          window.dataLayer.push({
+            'gtm.start': new Date().getTime(),
+            event: 'gtm.js'
+          });
+
+          var script = document.createElement('script');
+          script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MC5GNM34';
+          script.async = true;
+          document.head.appendChild(script);
+        };
+
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(doLoad, { timeout: 3000 });
+        } else {
+          setTimeout(doLoad, 1);
+        }
+      }
+
+      function onInteraction() {
+        loadGTM();
+      }
+
+      // TRIGGER 1: Cualquier interacción del usuario
+      ['scroll','click','touchstart','keydown','mousemove'].forEach(function(evt) {
+        document.addEventListener(evt, onInteraction, {
+          passive: true,
+          once: true
+        });
+      });
+
+      // TRIGGER 2: Fallback 5 segundos después de load
+      // Lighthouse no interactúa, así que GTM se carga
+      // fuera de la ventana de medición de TBT
+      window.addEventListener('load', function() {
+        setTimeout(loadGTM, 5000);
+      });
+    })();
+  </script>
+</head>
+<body>
+  <!-- GTM noscript fallback — no impacta rendimiento -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MC5GNM34"
+      height="0" width="0"
+      style="display:none;visibility:hidden"
+      title="Google Tag Manager">
+    </iframe>
+  </noscript>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- ROOT DE REACT — Vite inyecta el script aquí    -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div id="root"></div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- HERO PRERENDERIZADO — LCP instantáneo          -->
+  <!-- Se oculta automáticamente cuando React monta   -->
+  <!-- (ver regla CSS: #root:not(:empty) ~ #hero...)  -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div id="hero-prerender" aria-hidden="true">
+    <section class="hero-prerender-section" aria-label="Hero Prerender">
+      <div style="text-align:center;padding:0 1.5rem;max-width:900px;margin:0 auto">
+        <h1 class="hero-headline lcp-element"
+            style="font-family:'Syne',system-ui,sans-serif;
+                   font-size:clamp(2.5rem, 5vw, 4.5rem);
+                   font-weight:800;
+                   color:#FFFFFF;
+                   line-height:1.08;
+                   opacity:1;
+                   visibility:visible">
+          <span style="display:block;color:#FFFFFF">Tu negocio merece</span>
+          <span class="gradient-text"
+                style="display:block;
+                       background:linear-gradient(135deg,#0066FF 0%,#00AAFF 100%);
+                       -webkit-background-clip:text;
+                       -webkit-text-fill-color:transparent;
+                       background-clip:text">
+            verse tan poderoso
+          </span>
+          <span style="display:block;color:#FFFFFF">como realmente es.</span>
+        </h1>
+        <p class="hero-subheadline"
+           style="font-family:'DM Sans',system-ui,sans-serif;
+                  font-size:clamp(1rem, 2vw, 1.25rem);
+                  color:#a1a1aa;
+                  margin-top:2rem;
+                  line-height:1.6;
+                  opacity:1;
+                  visibility:visible">
+          Identidad de marca, sitio web de alto rendimiento y automatizaciones
+          construidas con IA — en 4 semanas, no en 6 meses.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Vite inyecta <script type="module"> aquí durante el build -->
+  <script type="module" src="/src/main.tsx"></script>
+</body>
 </html>

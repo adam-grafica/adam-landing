@@ -100,7 +100,7 @@ export default function Certifications() {
           <h2 className="cert-headline font-display text-display-2 md:text-[60px] text-white leading-none mb-4">
             CERTIFICACIONES
           </h2>
-          <p className="cert-headline text-white/50 text-lg">
+          <p className="cert-headline text-white/75 text-lg">
             Confirmando la confiabilidad de nuestra plataforma
           </p>
         </div>
@@ -148,7 +148,7 @@ export default function Certifications() {
               <div className="relative z-10">
                 <p
                   className={`text-xs uppercase tracking-wider mb-2 ${
-                    index % 2 === 0 ? 'text-black/50' : 'text-white/50'
+                    index % 2 === 0 ? 'text-black/75' : 'text-white/75'
                   }`}
                 >
                   {cert.subtitle}
@@ -177,7 +177,7 @@ export default function Certifications() {
 
         {/* CTA */}
         <div className="mt-16 text-center">
-          <p className="text-white/50 mb-4">
+          <p className="text-white/75 mb-4">
             Elige AdamGráfica, donde tu visión se convierte en liderazgo de mercado
           </p>
           <a

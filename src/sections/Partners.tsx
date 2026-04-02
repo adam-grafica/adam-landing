@@ -124,7 +124,7 @@ export default function Partners() {
               LÍDERES
             </h2>
 
-            <p className="partners-desc text-lg text-white/60 leading-relaxed max-w-md">
+            <p className="partners-desc text-lg text-white/80 leading-relaxed max-w-md">
               Nuestros partners vienen por tecnología flexible y se quedan por resultados
               probados. Trabajamos codo a codo con empresas líderes para resolver
               desafíos reales y avanzar rápido.

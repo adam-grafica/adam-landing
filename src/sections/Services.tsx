@@ -109,7 +109,7 @@ export default function Services() {
                 className={`px-10 py-2.5 rounded-full text-sm font-bold tracking-widest transition-all duration-500 ${currency === option.id
                   ? 'bg-ag-blue text-white shadow-glow-blue'
                   : 'text-ag-text-gray hover:text-white'
-                }`}
+                  }`}
               >
                 {option.label}
               </button>
@@ -127,14 +127,14 @@ export default function Services() {
                 : pkg.specialBorder === 'green'
                   ? 'glass-card border border-green-500/30'
                   : 'glass-card border border-white/10'
-              }`}
+                }`}
             >
               {/* Tagline Badge */}
               <div className="mb-4 relative z-10">
                 <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border ${pkg.specialBorder === 'green'
                   ? 'bg-green-500/10 border-green-500/30 text-green-400'
                   : 'bg-white/5 border-white/10 text-ag-text-gray'
-                }`}>
+                  }`}>
                   {pkg.tagline}
                 </span>
               </div>
@@ -169,7 +169,7 @@ export default function Services() {
                 {pkg.features.map((feature, fIndex) => (
                   <li key={fIndex} className="flex items-start gap-4 group/item">
                     <div className={`mt-1 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors duration-300 ${pkg.highlighted ? 'bg-ag-blue/20 text-ag-blue' : 'bg-white/5 text-ag-text-gray group-hover/item:text-white'
-                    }`}>
+                      }`}>
                       <Check className="w-3.5 h-3.5 stroke-[3]" />
                     </div>
                     <span className="text-ag-text-gray group-hover/item:text-white transition-colors duration-300 text-[14px] leading-snug">
@@ -181,7 +181,7 @@ export default function Services() {
 
               {/* Delivery Time - Normal text, smaller */}
               <div className="flex items-center justify-center gap-3 mb-8 pt-6 relative z-10">
-                <span className="text-white/60 font-normal text-xs">Tiempo de entrega:</span>
+                <span className="text-white/80 font-normal text-xs">Tiempo de entrega:</span>
                 <span className="text-white font-sans text-xs uppercase tracking-tight bg-white/5 px-2 py-0.5 rounded border border-white/10">
                   {pkg.time}
                 </span>
@@ -194,7 +194,7 @@ export default function Services() {
                 className={`group/btn relative w-full py-5 px-8 rounded-2xl flex items-center justify-center gap-3 transition-all duration-500 font-black tracking-widest uppercase text-xs overflow-hidden ${pkg.highlighted
                   ? 'bg-ag-blue text-white shadow-glow-blue hover:scale-[1.02] active:scale-95'
                   : 'bg-white/5 text-white border border-white/10 hover:border-white/20 hover:bg-white/10'
-                }`}
+                  }`}
               >
                 <span>{pkg.id === 'completo' ? 'Agendar Consultoría' : `Empezar con ${pkg.name.toLowerCase().split(' ')[0]}`}</span>
                 <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-2 transition-transform duration-500" />

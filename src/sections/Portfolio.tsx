@@ -155,7 +155,7 @@ export default function Portfolio() {
                     <ArrowRight className="w-5 h-5 text-white" />
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center gap-2 opacity-60">
+                  <div className="flex flex-col items-center gap-2 opacity-80">
                     <Lock className="w-5 h-5 text-white" />
                     <span className="text-white text-[10px] uppercase font-bold tracking-widest">Próximamente</span>
                   </div>
@@ -179,9 +179,10 @@ export default function Portfolio() {
               {/* Close Button */}
               <button 
                 onClick={closeModal}
+                aria-label="Cerrar detalles del proyecto"
                 className="absolute top-6 right-6 z-10 p-3 bg-white/5 hover:bg-white/10 rounded-full transition-colors group"
               >
-                <X className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+                <X className="w-6 h-6 text-white group-hover:scale-110 transition-transform" aria-hidden="true" />
               </button>
 
               {/* Hero Image */}

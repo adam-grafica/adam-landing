@@ -135,15 +135,17 @@ export default function News() {
           <div className="news-nav flex gap-4">
             <button
               onClick={prevSlide}
+              aria-label="Noticia anterior"
               className="w-14 h-14 border border-black/20 rounded-xl flex items-center justify-center transition-all duration-300 hover:bg-black hover:text-white hover:border-black group"
             >
-              <ChevronLeft className="w-6 h-6 transition-transform duration-300 group-hover:-translate-x-1" />
+              <ChevronLeft className="w-6 h-6 transition-transform duration-300 group-hover:-translate-x-1" aria-hidden="true" />
             </button>
             <button
               onClick={nextSlide}
+              aria-label="Noticia siguiente"
               className="w-14 h-14 border border-black/20 rounded-xl flex items-center justify-center transition-all duration-300 hover:bg-black hover:text-white hover:border-black group"
             >
-              <ChevronRight className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1" />
+              <ChevronRight className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -190,7 +192,7 @@ export default function News() {
 
                   {/* Footer */}
                   <div className="relative z-10 flex items-center justify-between">
-                    <span className="text-white/50 text-sm">{item.date}</span>
+                    <span className="text-white/75 text-sm">{item.date}</span>
                     <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-white group-hover:text-black">
                       <ArrowUpRight className="w-5 h-5" />
                     </div>

@@ -1,41 +1,16 @@
 import path from "path"
 import react from "@vitejs/plugin-react"
-import { defineConfig, type Plugin } from "vite"
+import { defineConfig } from "vite"
 import { compression } from 'vite-plugin-compression2'
-
-
-function asyncCssPlugin(): Plugin {
-  return {
-    name: 'async-css',
-    enforce: 'post',
-    transformIndexHtml(html) {
-      let newHtml = html.replace(
-        /<link rel="stylesheet" crossorigin href="(.*?)">/g,
-        '<link rel="stylesheet" href="$1" media="print" onload="this.media=\'all\'">\n    <noscript><link rel="stylesheet" href="$1"></noscript>'
-      );
-      
-      // Inject fetchpriority="high" for main script and low for gsap-vendor
-      newHtml = newHtml.replace(
-        /<script(.*?)src="(.*?\/index-.*?\.js)"(.*?)>/,
-        '<script$1src="$2"$3 fetchpriority="high">'
-      );
-      newHtml = newHtml.replace(
-        /<script(.*?)src="(.*?\/gsap-vendor-.*?\.js)"(.*?)>/,
-        '<script$1src="$2"$3 fetchpriority="low">'
-      );
-
-      return newHtml;
-    }
-  }
-}
 
 export default defineConfig({
   base: '/',
   plugins: [
-    react(), 
-    asyncCssPlugin(), 
-    compression({ exclude: [/\.(br)$/, /\.(gz)$/] }),
-
+    react(),
+    compression({
+      exclude: [/\.(br)$/, /\.(gz)$/],
+      algorithms: ['gzip'],
+    }),
   ],
   resolve: {
     alias: {
@@ -43,19 +18,36 @@ export default defineConfig({
     },
   },
   esbuild: {
+    // Eliminar console.log y debugger en producción
     drop: ['console', 'debugger'],
   },
   build: {
-    target: 'esnext',
+    // es2020 elimina polyfills innecesarios (~35KB ahorro)
+    // pero mantiene compatibilidad con browsers de últimos 2 años
+    target: 'es2020',
+
+    // Separar CSS por chunk
     cssCodeSplit: true,
+
+    // Minificar CSS con esbuild (incluido en Vite, no requiere instalación)
+    cssMinify: true,
+
+    // Advertir si un chunk supera 80KB
+    chunkSizeWarningLimit: 80,
+
     rollupOptions: {
       output: {
         manualChunks: {
+          // React en su propio chunk (se cachea independiente)
           'react-vendor': ['react', 'react-dom'],
+
+          // GSAP separado — se carga async desde main.tsx
           'gsap-vendor': ['gsap'],
-          'lucide-icons': ['lucide-react']
-        }
-      }
-    }
-  }
-});
+
+          // Lucide icons separados — solo se usan below-the-fold
+          'lucide-icons': ['lucide-react'],
+        },
+      },
+    },
+  },
+})
