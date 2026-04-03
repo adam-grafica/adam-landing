@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "postbuild": "critical dist/index.html --inline --base dist/ --width 1300 --height 900",
     "lint": "eslint .",
     "preview": "vite preview"
   },
