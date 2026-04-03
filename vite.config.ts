@@ -22,32 +22,29 @@ export default defineConfig({
     drop: ['console', 'debugger'],
   },
   build: {
-    // es2020 elimina polyfills innecesarios (~35KB ahorro)
-    // pero mantiene compatibilidad con browsers de últimos 2 años
-    target: 'es2020',
+    // Modern targets = no unnecessary polyfills (saves ~35 KiB)
+    target: ['es2020', 'chrome90', 'firefox88', 'safari14', 'edge90'],
 
-    // Separar CSS por chunk
-    cssCodeSplit: true,
-
-    // Minificar CSS con esbuild (incluido en Vite, no requiere instalación)
-    cssMinify: true,
-
-    // Advertir si un chunk supera 80KB
-    chunkSizeWarningLimit: 80,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        passes: 2,
+      },
+    },
 
     rollupOptions: {
       output: {
-        manualChunks: {
-          // React en su propio chunk (se cachea independiente)
-          'react-vendor': ['react', 'react-dom'],
-
-          // GSAP separado — se carga async desde main.tsx
-          'gsap-vendor': ['gsap'],
-
-          // Lucide icons separados — solo se usan below-the-fold
-          'lucide-icons': ['lucide-react'],
+        manualChunks: (id) => {
+          if (id.includes('gsap')) return 'gsap';
+          if (id.includes('react-dom')) return 'react';
+          if (id.includes('lucide')) return 'icons';
         },
       },
     },
+
+    cssCodeSplit: true,
+    sourcemap: false,
   },
 })

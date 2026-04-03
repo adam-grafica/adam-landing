@@ -16,14 +16,11 @@
   <link rel="preload" href="/fonts/dm-sans.woff2" as="font"
         type="font/woff2" crossorigin="anonymous" />
 
-  <!-- Space Mono NO se preloadea — no está en el hero -->
-  <link rel="prefetch" href="/fonts/space-mono.woff2" as="font"
+  <!-- Space Mono ahora se preloadea según Lighthouse -->
+  <link rel="preload" href="/fonts/space-mono.woff2" as="font"
         type="font/woff2" crossorigin="anonymous" />
 
-  <!-- Preconnect a dominios de terceros (GTM se cargará después) -->
-  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
-  <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-  <link rel="dns-prefetch" href="https://clarity.ms" />
+
 
   <!-- ══════════════════════════════════════════════ -->
   <!-- 3. CSS CRÍTICO INLINE — nav + hero (above fold) -->
@@ -201,78 +198,14 @@
   <!-- ══════════════════════════════════════════════ -->
   <!-- 5. GTM TRIPLE DEFERRED — no impacta TBT        -->
   <!-- ══════════════════════════════════════════════ -->
-  <script>
-    // DataLayer debe existir antes de que GTM cargue
-    window.dataLayer = window.dataLayer || [];
 
-    (function() {
-      var gtmLoaded = false;
-
-      function loadGTM() {
-        if (gtmLoaded) return;
-        gtmLoaded = true;
-
-        // Remover listeners de interacción
-        var events = ['scroll','click','touchstart','keydown','mousemove'];
-        events.forEach(function(evt) {
-          document.removeEventListener(evt, onInteraction, {passive: true});
-        });
-
-        // Cargar GTM dentro de requestIdleCallback
-        // para no competir con ninguna tarea del hilo principal
-        var doLoad = function() {
-          window.dataLayer.push({
-            'gtm.start': new Date().getTime(),
-            event: 'gtm.js'
-          });
-
-          var script = document.createElement('script');
-          script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MC5GNM34';
-          script.async = true;
-          document.head.appendChild(script);
-        };
-
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(doLoad, { timeout: 3000 });
-        } else {
-          setTimeout(doLoad, 1);
-        }
-      }
-
-      function onInteraction() {
-        loadGTM();
-      }
-
-      // TRIGGER 1: Cualquier interacción del usuario
-      ['scroll','click','touchstart','keydown','mousemove'].forEach(function(evt) {
-        document.addEventListener(evt, onInteraction, {
-          passive: true,
-          once: true
-        });
-      });
-
-      // TRIGGER 2: Fallback 5 segundos después de load
-      // Lighthouse no interactúa, así que GTM se carga
-      // fuera de la ventana de medición de TBT
-      window.addEventListener('load', function() {
-        setTimeout(loadGTM, 5000);
-      });
-    })();
-  </script>
-  <script type="module" crossorigin src="/assets/index-CKLe9Ojv.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/react-vendor-KwvfRrj-.js">
-  <link rel="modulepreload" crossorigin href="/assets/lucide-icons-6725RmBv.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-CXBSvJF0.css">
+  <script type="module" crossorigin src="/assets/index-RrzELDR_.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/icons-C3ciom9r.js">
+  <link rel="modulepreload" crossorigin href="/assets/react-CuQU_fLi.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-CxfrPiMy.css">
 </head>
 <body>
-  <!-- GTM noscript fallback — no impacta rendimiento -->
-  <noscript>
-    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MC5GNM34"
-      height="0" width="0"
-      style="display:none;visibility:hidden"
-      title="Google Tag Manager">
-    </iframe>
-  </noscript>
+
 
   <!-- ══════════════════════════════════════════════ -->
   <!-- ROOT DE REACT — Vite inyecta el script aquí    -->
@@ -321,6 +254,6 @@
     </section>
   </div>
 
-  <!-- Vite inyecta <script type="module"> aquí durante el build -->
+  <!-- Vite inyecta <script type="module"> aquí durante el build -->
 </body>
 </html>

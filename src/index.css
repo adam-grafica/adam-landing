@@ -233,14 +233,34 @@
   .glow-blue  { box-shadow: 0 0 36px rgba(0, 102, 255, 0.32); }
   .glow-green { box-shadow: 0 0 28px rgba(0, 255, 136, 0.22); }
 
-  /* Pulse — opacity only */
+  /* Pulse — opacity and transform, GPU composited */
   .animate-pulse-glow {
-    animation: pulse-opacity 2.5s ease-in-out infinite;
-    will-change: opacity;
+    animation: pulse-glow 2.5s ease-in-out infinite;
+    transform-origin: center;
   }
-  @keyframes pulse-opacity {
-    0%, 100% { opacity: 0.45; }
-    50%       { opacity: 1; }
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 0.4;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.8);
+    }
+  }
+
+  .hero-mesh svg {
+    will-change: transform;
+    isolation: isolate;
+  }
+
+  section#contact .animate-pulse-glow {
+    animation: contact-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes contact-pulse {
+    0%, 100% { opacity: 0.15; }
+    50%       { opacity: 0.35; }
   }
 
   /* Float — transform only, GPU composited */

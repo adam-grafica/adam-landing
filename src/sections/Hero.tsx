@@ -47,11 +47,7 @@ export default function Hero() {
             { y: 0, duration: 0.4, stagger: 0.08, ease: 'power3.out' },
             '-=0.9'
           )
-          .fromTo('.hero-subheadline',
-            { opacity: 0, y: 24, immediateRender: false },
-            { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' },
-            '-=0.3'
-          )
+
           .fromTo('.hero-ctas',
             { opacity: 0, y: 16, immediateRender: false },
             { opacity: 1, y: 0, duration: 0.45, ease: 'expo.out' },

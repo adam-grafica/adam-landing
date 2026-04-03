@@ -18,9 +18,9 @@ module.exports = {
           footer: '#050505',
         },
         'ag-blue': {
-          DEFAULT: '#0066FF',
-          light: '#00AAFF',
-          glow: 'rgba(0, 102, 255, 0.4)',
+          DEFAULT: '#3385FF',
+          light: '#66A3FF',
+          glow: 'rgba(51, 133, 255, 0.4)',
         },
         'ag-green': {
           DEFAULT: '#00FF88',
@@ -29,7 +29,7 @@ module.exports = {
         'ag-text': {
           white: '#FFFFFF',
           gray: '#D1D5DB',
-          muted: '#666666',
+          muted: '#A0A8B5',
         },
         // shadcn defaults
         border: "hsl(var(--border))",
@@ -102,8 +102,8 @@ module.exports = {
           "50%": { transform: "translateY(-20px) rotate(2deg)" },
         },
         "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(0, 102, 255, 0.3)" },
-          "50%": { boxShadow: "0 0 50px rgba(0, 102, 255, 0.6)" },
+          "0%, 100%": { opacity: "0.4", transform: "scale(1)" },
+          "50%": { opacity: "1", transform: "scale(1.8)" },
         },
         "grid-pulse": {
           "0%, 100%": { opacity: "0.5" },
