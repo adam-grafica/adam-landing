@@ -440,7 +440,7 @@ export default function ModalForm() {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               100% seguro
             </div>
-            <button className="bg-[#0A0A0E] hover:bg-[#13131A] text-white font-semibold flex items-center justify-center gap-2 py-3 px-8 rounded-full transition-all duration-300 shadow-[0_0_30px_rgba(0,102,255,0.15)] ml-auto border border-white/5 cursor-pointer" onClick={handleNext} aria-label="Siguiente paso">
+            <button className="bg-[#0066FF] hover:bg-[#0052d6] text-white font-bold flex items-center justify-center gap-2 py-3 px-8 rounded-full transition-all duration-300 ml-auto border-none cursor-pointer" onClick={handleNext} aria-label="Siguiente paso">
               {currentStep === 4 ? 'Confirmar' : 'Siguiente'}
               {currentStep === 4 ? (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="16" height="16"><path d="M20 6L9 17l-5-5"/></svg>
