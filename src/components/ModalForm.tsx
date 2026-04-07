@@ -15,6 +15,9 @@ export default function ModalForm() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
 
+  const [telefono, setTelefono] = useState('');
+  const [telefonoError, setTelefonoError] = useState(false);
+
   const [servicios, setServicios] = useState<string[]>([]);
   const [serviciosError, setServiciosError] = useState(false);
 
@@ -35,8 +38,8 @@ export default function ModalForm() {
         setIsOpen(true);
         setCurrentStep(1);
         setExitingStep(null);
-        setNombre(''); setEmail(''); setServicios([]); setFecha(null);
-        setNombreError(false); setEmailError(false); setServiciosError(false); setFechaError(false);
+        setNombre(''); setEmail(''); setTelefono(''); setServicios([]); setFecha(null);
+        setNombreError(false); setEmailError(false); setTelefonoError(false); setServiciosError(false); setFechaError(false);
         setCalendarDate(new Date());
         setTimeout(() => inputNombreRef.current?.focus(), 200);
       }
@@ -61,6 +64,8 @@ export default function ModalForm() {
       const payload = {
         nombre,
         email,
+        telefono,
+        telefonoCompleto: telefono ? `+56${telefono}` : '',
         servicios,
         fecha: fecha ? fecha.toISOString().split('T')[0] : null,
         timestamp: new Date().toISOString(),
@@ -84,8 +89,13 @@ export default function ModalForm() {
     }
     if (step === 2) {
       const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!email.trim() || !re.test(email.trim())) { setEmailError(true); return false; }
-      setEmailError(false); return true;
+      const emailOk = email.trim() && re.test(email.trim());
+      const telOk = telefono === '' || (telefono.length === 9 && telefono.startsWith('9'));
+      
+      if (!emailOk) setEmailError(true); else setEmailError(false);
+      if (!telOk) setTelefonoError(true); else setTelefonoError(false);
+
+      return !!(emailOk && telOk);
     }
     if (step === 3) {
       if (servicios.length === 0) { setServiciosError(true); return false; }
@@ -291,9 +301,43 @@ export default function ModalForm() {
                 value={email}
                 onChange={(e) => { setEmail(e.target.value); setEmailError(false); }}
                 onKeyDown={handleKeyDown}
+                style={{ fontSize: '16px' }}
               />
               <p className="error-msg">Por favor ingresa un correo válido.</p>
             </div>
+
+            <label style={{ display: 'block', color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)', marginTop: '16px', marginBottom: '8px', fontWeight: 600 }}>
+              📱 Tu WhatsApp <span style={{ color: 'var(--color-success)' }}>(prioridad)</span>
+            </label>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+              <span style={{
+                background: 'var(--color-surface-2)', border: '1.5px solid var(--color-border)',
+                borderRadius: 'var(--radius-lg)', padding: 'var(--space-4) var(--space-5)', color: 'var(--color-text)',
+                fontSize: '16px', whiteSpace: 'nowrap', userSelect: 'none', height: '100%', display: 'flex', alignItems: 'center'
+              }}>
+                🇨🇱 +56
+              </span>
+              <div className={`input-wrap ${telefonoError ? 'show-error' : ''}`} style={{ flex: 1 }}>
+                <input 
+                  type="tel" 
+                  className={`form-input ${telefonoError ? 'input-error' : ''}`}
+                  placeholder="9 XXXX XXXX" 
+                  maxLength={9}
+                  value={telefono}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, '').slice(0, 9);
+                    setTelefono(val);
+                    setTelefonoError(false);
+                  }}
+                  onKeyDown={handleKeyDown}
+                  style={{ fontSize: '16px', width: '100%' }}
+                />
+                <p className="error-msg" style={{ marginTop: '0.25rem' }}>Debe empezar con 9 (9 dígitos).</p>
+              </div>
+            </div>
+            <p style={{ color: 'var(--color-text-faint)', fontSize: '12px', marginTop: '6px' }}>
+              Opcional · Solo te escribimos para confirmar tu reunión
+            </p>
           </div>
 
           {/* PASO 3 */}
