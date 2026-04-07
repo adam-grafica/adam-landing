@@ -71,7 +71,7 @@ export default function ModalForm() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
-      }).catch(err => console.log('Lead capturado offline:', payload));
+      }).catch(() => console.log('Lead capturado offline:', payload));
     }
   }, [currentStep]);
 
