@@ -190,6 +190,7 @@ export default function Services() {
               {/* CTA Button - Primary for highlighted, ghost for others */}
               <a
                 href="#contact"
+                data-open-modal="contact"
                 onClick={() => trackServiceView(pkg.name)}
                 className={`group/btn relative w-full py-5 px-8 rounded-2xl flex items-center justify-center gap-3 transition-all duration-500 font-black tracking-widest uppercase text-xs overflow-hidden ${pkg.highlighted
                   ? 'bg-ag-blue text-white shadow-glow-blue hover:scale-[1.02] active:scale-95'

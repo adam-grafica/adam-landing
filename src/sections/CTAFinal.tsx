@@ -121,7 +121,8 @@ export default function CTAFinal() {
         {/* CTA Button — Ultra Premium */}
         <div className="flex flex-col items-center gap-6 reveal-scale">
           <a
-            href="mailto:hola@adamgrafica.online?subject=Quiero%20mi%20Diagnóstico%20Digital"
+            href="#contact"
+            data-open-modal="contact"
             onClick={() => trackCTAClick('Agendar Diagnóstico Gratuito', 'CTA Final')}
             aria-label="Agendar diagnóstico gratuito y sesión de consultoría final"
             className="group relative inline-flex items-center gap-4 px-10 py-5 bg-ag-blue text-white text-xl font-bold rounded-full overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95"

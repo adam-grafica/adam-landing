@@ -18,6 +18,7 @@ const TechStack = React.lazy(() => import('./sections/TechStack'));
 const Founder = React.lazy(() => import('./sections/Founder'));
 const FAQ = React.lazy(() => import('./sections/FAQ'));
 const CTAFinal = React.lazy(() => import('./sections/CTAFinal'));
+const ModalForm = React.lazy(() => import('./components/ModalForm'));
 
 function App() {
   return (
@@ -43,6 +44,9 @@ function App() {
         </Suspense>
       </main>
       <Footer />
+      <Suspense fallback={null}>
+        <ModalForm />
+      </Suspense>
     </div>
   );
 }
