@@ -116,10 +116,10 @@
   text-align: left;
 }
 .modal-brand-icon {
-  width: 44px; height: 44px;
+  width: 56px; height: 56px;
   background: #000;
   border: 1px solid var(--color-divider);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
