@@ -1,26 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { X, CheckCircle, ChevronRight, Calendar } from 'lucide-react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import './ModalForm.css';
 
-/**
- * ModalForm Component
- * Props:
- * - Se activa usando el atributo data-open-modal="contact" en cualquier botón/enlace de la landing.
- * - Implementa un formulario multi-paso con captura de leads hacia n8n.
- */
+const MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+const DIAS = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'];
+
 export default function ModalForm() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-  
-  const [formData, setFormData] = useState({
-    nombre: '',
-    email: '',
-    servicios: [] as string[],
-    fecha: ''
-  });
+  const [exitingStep, setExitingStep] = useState<number | null>(null);
 
-  const totalSteps = 4;
+  const [nombre, setNombre] = useState('');
+  const [nombreError, setNombreError] = useState(false);
+
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
+
+  const [servicios, setServicios] = useState<string[]>([]);
+  const [serviciosError, setServiciosError] = useState(false);
+
+  const [fecha, setFecha] = useState<Date | null>(null);
+  const [fechaError, setFechaError] = useState(false);
+
+  const [calendarDate, setCalendarDate] = useState<Date>(new Date());
+  
+  const totalSteps = 5;
+  const inputNombreRef = useRef<HTMLInputElement>(null);
+  const inputEmailRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handleOpen = (e: MouseEvent) => {
@@ -28,11 +33,12 @@ export default function ModalForm() {
       if (target) {
         e.preventDefault();
         setIsOpen(true);
-        // Reseteamos el estado cada vez que se abre
         setCurrentStep(1);
-        setIsSuccess(false);
-        setErrorMsg('');
-        setFormData({ nombre: '', email: '', servicios: [], fecha: '' });
+        setExitingStep(null);
+        setNombre(''); setEmail(''); setServicios([]); setFecha(null);
+        setNombreError(false); setEmailError(false); setServiciosError(false); setFechaError(false);
+        setCalendarDate(new Date());
+        setTimeout(() => inputNombreRef.current?.focus(), 200);
       }
     };
 
@@ -42,292 +48,367 @@ export default function ModalForm() {
 
     document.addEventListener('click', handleOpen);
     document.addEventListener('keydown', handleEsc);
-
     return () => {
       document.removeEventListener('click', handleOpen);
       document.removeEventListener('keydown', handleEsc);
     };
   }, []);
 
-  // Bloqueo de scroll cuando está abierto
+  // Submit to n8n when entering success screen
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => { document.body.style.overflow = 'unset'; };
-  }, [isOpen]);
-
-  const closeModal = () => setIsOpen(false);
-
-  const handleNext = () => {
-    setErrorMsg('');
-    
-    // Validación por paso
-    if (currentStep === 1 && formData.nombre.trim().length < 2) {
-      setErrorMsg('Por favor ingresa un nombre válido.');
-      return;
-    }
-    if (currentStep === 2) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.email)) {
-        setErrorMsg('Por favor ingresa un correo válido.');
-        return;
-      }
-    }
-    if (currentStep === 3 && formData.servicios.length === 0) {
-      setErrorMsg('Por favor selecciona al menos un servicio.');
-      return;
-    }
-
-    if (currentStep === 4) {
-      if (formData.fecha === '') {
-        setErrorMsg('Por favor elige una fecha para la reunión.');
-        return;
-      }
-      submitForm();
-      return;
-    }
-
-    setCurrentStep(currentStep + 1);
-  };
-
-  const submitForm = async () => {
-    const payload = {
-      ...formData,
-      timestamp: new Date().toISOString(),
-      fuente: 'landing-adamgrafica'
-    };
-
-    try {
-      // Reemplazar con la URL real de n8n
-      await fetch('https://TU_WEBHOOK_N8N/webhook/lead-adamgrafica', {
+    if (currentStep === 5) {
+      launchConfetti();
+      const payload = {
+        nombre,
+        email,
+        servicios,
+        fecha: fecha ? fecha.toISOString().split('T')[0] : null,
+        timestamp: new Date().toISOString(),
+        fuente: 'landing-adamgrafica'
+      };
+      
+      fetch('https://TU_WEBHOOK_N8N/webhook/lead-adamgrafica', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
-      });
-      console.log('Lead enviado a n8n:', payload);
-      // Asumimos éxito incluso si n8n no está listo para no quebrar UX
-      setIsSuccess(true);
-    } catch (err) {
-      console.log('Lead capturado (modo offline):', payload);
-      setIsSuccess(true);
+      }).catch(err => console.log('Lead capturado offline:', payload));
+    }
+  }, [currentStep]);
+
+  const closeModal = () => setIsOpen(false);
+
+  const validateStep = (step: number) => {
+    if (step === 1) {
+      if (!nombre.trim()) { setNombreError(true); return false; }
+      setNombreError(false); return true;
+    }
+    if (step === 2) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email.trim() || !re.test(email.trim())) { setEmailError(true); return false; }
+      setEmailError(false); return true;
+    }
+    if (step === 3) {
+      if (servicios.length === 0) { setServiciosError(true); return false; }
+      setServiciosError(false); return true;
+    }
+    if (step === 4) {
+      if (!fecha) { setFechaError(true); return false; }
+      setFechaError(false); return true;
+    }
+    return true;
+  };
+
+  const handleNext = () => {
+    if (!validateStep(currentStep)) return;
+    if (currentStep < totalSteps) {
+      setExitingStep(currentStep);
+      const nextStep = currentStep + 1;
+      setCurrentStep(nextStep);
+      setTimeout(() => setExitingStep(null), 300);
+
+      // Focus
+      setTimeout(() => {
+        if (nextStep === 2) inputEmailRef.current?.focus();
+      }, 200);
     }
   };
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const dateValue = e.target.value;
-    if (!dateValue) return;
-    
-    // Validar fin de semana
-    const selected = new Date(dateValue + 'T00:00:00');
-    const day = selected.getDay();
-    if (day === 0 || day === 6) {
-      setErrorMsg('Por favor elige un día de semana (lunes a viernes)');
-      setFormData(prev => ({ ...prev, fecha: '' }));
-    } else {
-      setErrorMsg('');
-      setFormData(prev => ({ ...prev, fecha: dateValue }));
+  const handleBack = () => {
+    if (currentStep > 1) {
+      setExitingStep(currentStep);
+      setCurrentStep(currentStep - 1);
+      setTimeout(() => setExitingStep(null), 300);
     }
   };
 
-  const toggleService = (service: string) => {
-    setFormData(prev => {
-      if (prev.servicios.includes(service)) {
-        return { ...prev, servicios: prev.servicios.filter(s => s !== service) };
-      }
-      return { ...prev, servicios: [...prev.servicios, service] };
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && currentStep < 5) {
+      e.preventDefault();
+      handleNext();
+    }
+  };
+
+  const toggleService = (val: string) => {
+    setServicios(prev => {
+      if (prev.includes(val)) return prev.filter(s => s !== val);
+      return [...prev, val];
     });
-    setErrorMsg('');
+    setServiciosError(false);
   };
 
-  if (!isOpen) return null;
+  const launchConfetti = () => {
+    const colors = ['#0066FF','#00aaff','#22c55e','#f59e0b','#fff','#a855f7'];
+    for (let i = 0; i < 48; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.cssText = `
+        left: ${Math.random() * 100}%;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        animation-duration: ${1.2 + Math.random() * 1.5}s;
+        animation-delay: ${Math.random() * 0.5}s;
+        width: ${6 + Math.random() * 8}px;
+        height: ${6 + Math.random() * 8}px;
+        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      `;
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }
+  };
 
-  const today = new Date().toISOString().split('T')[0];
+  // Calendar logic
+  const calDays = useMemo(() => {
+    const d = calendarDate;
+    const firstDay = new Date(d.getFullYear(), d.getMonth(), 1);
+    let startDow = firstDay.getDay(); // 0=Dom
+    if (startDow === 0) startDow = 7;
+    startDow--; // 0=Lun
+
+    const daysInMonth = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    const cells = [];
+    for (let i = 0; i < startDow; i++) cells.push({ empty: true });
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const thisDate = new Date(d.getFullYear(), d.getMonth(), day);
+      const isToday = thisDate.getTime() === today.getTime();
+      const isPast  = thisDate < today;
+      const isWeekend = thisDate.getDay() === 0 || thisDate.getDay() === 6;
+      const isSelected = fecha && thisDate.getTime() === fecha.getTime();
+      
+      cells.push({
+        empty: false,
+        day,
+        date: thisDate,
+        isToday,
+        isPast,
+        isWeekend,
+        isSelected
+      });
+    }
+    return cells;
+  }, [calendarDate, fecha]);
+
+  const servicioLabels: Record<string, string> = {
+    branding: '🎨 Branding e Identidad',
+    web: '💻 Sitio Web',
+    contenido: '📱 Contenido RRSS',
+    automatizacion: '🤖 Automatización IA',
+    imperio: '👑 Imperio Digital',
+    nosé: '🤔 Por definir',
+  };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-      {/* Overlay - onClick cierra el modal */}
-      <div 
-        className="absolute inset-0 bg-black/85 backdrop-blur-md"
-        onClick={closeModal}
-      ></div>
-
-      {/* Modal Container */}
-      <div 
-        className="relative w-[90%] max-w-[520px] max-h-[85vh] overflow-y-auto bg-[#111111] border border-[#0066FF33] rounded-2xl shadow-[0_0_60px_rgba(0,102,255,0.15)] flex flex-col"
-      >
-        <button 
-          onClick={closeModal}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-          aria-label="Cerrar"
-        >
-          <X className="w-6 h-6" />
-        </button>
-
-        {!isSuccess ? (
-          <>
-            {/* Progress Bar */}
-            <div className="w-full h-1 bg-[#111111] rounded-t-2xl overflow-hidden absolute top-0 left-0">
-              <div 
-                className="h-full bg-[#0066FF] transition-all duration-300 ease-out"
-                style={{ width: `${((currentStep - 1) / totalSteps) * 100}%` }}
-              ></div>
+    <div className={`modal-form-theme modal-overlay ${isOpen ? 'visible' : ''}`} role="dialog" aria-modal="true" aria-label="Formulario de asesoría" onMouseDown={(e) => {
+      if (e.target === e.currentTarget) closeModal();
+    }}>
+      <div className="modal-card">
+        
+        {/* HEADER */}
+        <div className="modal-header">
+          <div className="modal-brand">
+            <div className="modal-brand-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
             </div>
+            <div>
+              <div className="modal-brand-name">AdamGráfica</div>
+              <div className="modal-brand-tagline">Asesoría Gratuita · 30 min</div>
+            </div>
+          </div>
+          <button className="btn-close" onClick={closeModal} aria-label="Cerrar formulario">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
 
-            <div className="p-8 pb-10 flex flex-col min-h-[360px]">
-              {/* Controles de pasos */}
-              <div className="flex-1 mt-6">
-                
-                {/* Paso 1 */}
-                {currentStep === 1 && (
-                  <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <h2 className="text-2xl md:text-3xl font-display font-bold text-white mb-6">
-                      ¡Excelente decisión! 👋 <br/>
-                      <span className="text-[#0066FF]">¿Cuál es tu nombre?</span>
-                    </h2>
-                    <input
-                      type="text"
-                      placeholder="Tu nombre completo"
-                      className="w-full bg-black border border-[#0066FF44] rounded-lg px-4 py-4 text-white text-lg focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF] transition-all"
-                      value={formData.nombre}
-                      onChange={(e) => setFormData(prev => ({ ...prev, nombre: e.target.value }))}
-                      onKeyDown={(e) => e.key === 'Enter' && handleNext()}
-                      autoFocus
-                    />
+        {/* PROGRESS */}
+        <div className="modal-progress">
+          <div className="progress-track">
+            {Array.from({ length: totalSteps - 1 }).map((_, i) => {
+              const stepNum = i + 1;
+              const isCompleted = stepNum < currentStep;
+              const isActive = stepNum === currentStep;
+              return (
+                <React.Fragment key={stepNum}>
+                  <div className={`progress-step ${isCompleted ? 'completed' : ''} ${isActive ? 'active' : ''}`}>
+                    {isCompleted ? (
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><path d="M20 6L9 17l-5-5"/></svg>
+                    ) : (
+                      stepNum
+                    )}
                   </div>
-                )}
+                  {stepNum < totalSteps - 1 && (
+                    <div className={`progress-line ${isCompleted ? 'filled' : ''}`}></div>
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </div>
+          <div className="progress-label">Paso <strong>{currentStep > 4 ? 4 : currentStep}</strong> de <strong>{totalSteps - 1}</strong></div>
+        </div>
 
-                {/* Paso 2 */}
-                {currentStep === 2 && (
-                  <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <h2 className="text-2xl md:text-3xl font-display font-bold text-white mb-6">
-                      ¡Perfecto, {formData.nombre.split(' ')[0]}! 📧 <br/>
-                      <span className="text-gray-300 text-xl font-normal">¿A qué correo te enviamos los detalles?</span>
-                    </h2>
-                    <input
-                      type="email"
-                      placeholder="tu@email.com"
-                      className="w-full bg-black border border-[#0066FF44] rounded-lg px-4 py-4 text-white text-lg focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF] transition-all"
-                      value={formData.email}
-                      onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                      onKeyDown={(e) => e.key === 'Enter' && handleNext()}
-                      autoFocus
-                    />
-                  </div>
-                )}
+        {/* BODY */}
+        <div className="modal-body">
+          
+          {/* PASO 1 */}
+          <div className={`form-step ${currentStep === 1 ? 'active' : ''} ${exitingStep === 1 ? 'exiting' : ''}`}>
+            <span className="step-emoji">👋</span>
+            <h2 className="step-question">¡Excelente decisión!<br/>¿Cuál es tu nombre?</h2>
+            <p className="step-hint">Queremos saber cómo llamarte para hacer esto más personal.</p>
+            <div className={`input-wrap ${nombreError ? 'show-error' : ''}`}>
+              <input 
+                ref={inputNombreRef}
+                type="text" 
+                className={`form-input ${nombreError ? 'input-error' : ''}`}
+                placeholder="Ej: María González" 
+                autoComplete="given-name" 
+                maxLength={60}
+                value={nombre}
+                onChange={(e) => { setNombre(e.target.value); setNombreError(false); }}
+                onKeyDown={handleKeyDown}
+              />
+              <p className="error-msg">Por favor ingresa tu nombre.</p>
+            </div>
+          </div>
 
-                {/* Paso 3 */}
-                {currentStep === 3 && (
-                  <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <h2 className="text-2xl md:text-3xl font-display font-bold text-white mb-6">
-                      🎯 ¿En qué servicio estás interesado?
-                    </h2>
-                    <div className="flex flex-wrap gap-3">
-                      {[
-                        { id: 'imperio', label: 'Imperio Digital ⭐' },
-                        { id: 'identidad', label: 'Identidad de Marca' },
-                        { id: 'web', label: 'Sitio Web' },
-                        { id: 'automatizaciones', label: 'Automatizaciones' },
-                        { id: 'sistema', label: 'Sistema Completo' },
-                        { id: 'orientacion', label: 'No sé aún, necesito orientación' }
-                      ].map((svc) => (
-                        <button
-                          key={svc.id}
-                          onClick={() => toggleService(svc.label)}
-                          className={`px-4 py-3 rounded-full text-sm md:text-base font-medium transition-all ${
-                            formData.servicios.includes(svc.label)
-                              ? 'bg-[#0066FF22] border-[#0066FF] text-[#0066FF] border'
-                              : 'bg-transparent border border-[#0066FF44] text-gray-300 hover:border-[#0066FF] hover:text-white'
-                          }`}
-                        >
-                          {svc.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
+          {/* PASO 2 */}
+          <div className={`form-step ${currentStep === 2 ? 'active' : ''} ${exitingStep === 2 ? 'exiting' : ''}`}>
+            <span className="step-emoji">📧</span>
+            <h2 className="step-question">Perfecto, {nombre}!<br/>¿Me dejas tu correo?</h2>
+            <p className="step-hint">Te enviaremos la confirmación de tu asesoría directamente aquí.</p>
+            <div className={`input-wrap ${emailError ? 'show-error' : ''}`}>
+              <input 
+                ref={inputEmailRef}
+                type="email" 
+                className={`form-input ${emailError ? 'input-error' : ''}`}
+                placeholder="tu@correo.com" 
+                autoComplete="email" 
+                maxLength={100}
+                value={email}
+                onChange={(e) => { setEmail(e.target.value); setEmailError(false); }}
+                onKeyDown={handleKeyDown}
+              />
+              <p className="error-msg">Por favor ingresa un correo válido.</p>
+            </div>
+          </div>
 
-                {/* Paso 4 */}
-                {currentStep === 4 && (
-                  <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <h2 className="text-2xl md:text-3xl font-display font-bold text-white mb-6">
-                      📅 ¿Qué día te acomoda para la reunión?
-                    </h2>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <Calendar className="h-5 w-5 text-gray-400" />
-                      </div>
-                      <input
-                        id="fecha-input"
-                        type="date"
-                        min={today}
-                        className="w-full bg-black border border-[#0066FF44] rounded-lg pl-12 pr-4 py-4 text-white text-lg focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF] transition-all color-scheme-dark"
-                        style={{ colorScheme: 'dark' }}
-                        value={formData.fecha}
-                        onChange={handleDateChange}
-                      />
-                    </div>
-                    <p className="text-gray-500 text-sm mt-3 flex items-center gap-2">
-                       Horario a coordinar vía email (Días hábiles).
-                    </p>
-                  </div>
-                )}
-
-                {errorMsg && (
-                  <p className="text-red-400 text-sm mt-4 animate-in fade-in">{errorMsg}</p>
-                )}
-              </div>
-
-              {/* Controles Fijos */}
-              <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
-                {currentStep > 1 && (
-                  <button
-                    onClick={() => { setErrorMsg(''); setCurrentStep(prev => prev - 1); }}
-                    className="text-gray-400 hover:text-white font-medium text-sm transition-colors py-2"
-                  >
-                    ← Volver
-                  </button>
-                )}
-                
-                <button
-                  onClick={handleNext}
-                  className="ml-auto bg-[#0066FF] hover:bg-blue-600 shadow-[0_0_24px_rgba(0,102,255,0.5)] text-white font-bold py-3 px-8 rounded-lg flex items-center gap-2 transition-all transform active:scale-95"
+          {/* PASO 3 */}
+          <div className={`form-step ${currentStep === 3 ? 'active' : ''} ${exitingStep === 3 ? 'exiting' : ''}`}>
+            <span className="step-emoji">🎯</span>
+            <h2 className="step-question">¿En qué servicio<br/>estás interesado?</h2>
+            <p className="step-hint">Puedes elegir más de uno — te guiamos en la asesoría.</p>
+            <div className="service-chips">
+              {[
+                { val: 'branding', icon: '🎨', label: 'Branding e Identidad' },
+                { val: 'web', icon: '💻', label: 'Sitio Web' },
+                { val: 'contenido', icon: '📱', label: 'Contenido RRSS' },
+                { val: 'automatizacion', icon: '🤖', label: 'Automatización IA' },
+                { val: 'imperio', icon: '👑', label: 'Imperio Digital (Pack completo)' },
+                { val: 'nosé', icon: '🤔', label: 'No estoy seguro aún' }
+              ].map(opt => (
+                <div 
+                  key={opt.val}
+                  className={`chip ${servicios.includes(opt.val) ? 'selected' : ''}`} 
+                  onClick={() => toggleService(opt.val)}
                 >
-                  {currentStep === 4 ? '¡Confirmar mi reunión! 🚀' : 'Siguiente'}
-                  {currentStep !== 4 && <ChevronRight className="w-5 h-5" />}
-                </button>
+                  <span className="chip-icon">{opt.icon}</span> {opt.label}
+                </div>
+              ))}
+            </div>
+            <p className={`error-msg ${serviciosError ? 'force-error-msg' : ''}`} style={{ marginTop: '0.5rem' }}>Selecciona al menos una opción.</p>
+          </div>
+
+          {/* PASO 4 */}
+          <div className={`form-step ${currentStep === 4 ? 'active' : ''} ${exitingStep === 4 ? 'exiting' : ''}`}>
+            <span className="step-emoji">📅</span>
+            <h2 className="step-question">¿Qué día te acomoda<br/>para la reunión?</h2>
+            <p className="step-hint">Asesoría gratuita de 30 min por videollamada. Elige tu fecha ideal.</p>
+            <div className="calendar-wrap">
+              <div className="cal-header">
+                <button className="cal-nav" onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() - 1, 1))}>‹</button>
+                <span className="cal-month">{MESES[calendarDate.getMonth()]} {calendarDate.getFullYear()}</span>
+                <button className="cal-nav" onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 1))}>›</button>
+              </div>
+              <div className="cal-grid">
+                {DIAS.map(d => <div key={d} className="cal-weekday">{d}</div>)}
+                {calDays.map((cell, idx) => (
+                  <div 
+                    key={idx}
+                    className={`cal-day ${cell.empty ? 'empty' : ''} ${cell.isToday ? 'today' : ''} ${cell.isPast || cell.isWeekend ? 'disabled' : ''} ${cell.isSelected ? 'selected' : ''}`}
+                    onClick={() => {
+                      if (!cell.empty && !cell.isPast && !cell.isWeekend && cell.date) {
+                        setFecha(cell.date);
+                        setFechaError(false);
+                      }
+                    }}
+                  >
+                    {!cell.empty && cell.day}
+                  </div>
+                ))}
               </div>
             </div>
-          </>
-        ) : (
-          /* Pantalla Éxito */
-          <div className="p-8 py-16 flex flex-col items-center justify-center text-center animate-in zoom-in-95 duration-500">
-            <div className="w-20 h-20 bg-[#00FF8822] rounded-full flex items-center justify-center mb-6 text-[#00FF88]">
-              <CheckCircle className="w-10 h-10" />
+            <div className={`selected-date-display ${fecha ? 'visible' : ''}`}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span>{fecha ? fecha.toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).replace(/^\w/, c => c.toUpperCase()) : '—'}</span>
             </div>
-            <h2 className="text-3xl font-display font-bold text-white mb-4">
-              ¡Todo listo, {formData.nombre.split(' ')[0]}!
-            </h2>
-            <p className="text-gray-300 text-lg mb-8 max-w-sm">
-              Hemos registrado tu solicitud. Te contactaremos en menos de 24h ⚡
-            </p>
-            
-            <div className="bg-black/50 border border-white/10 rounded-xl p-5 w-full text-left space-y-3 mb-8">
-              <div className="flex gap-3"><span className="text-gray-500">Email:</span> <span className="text-white truncate">{formData.email}</span></div>
-              <div className="flex gap-3"><span className="text-gray-500">Día:</span> <span className="text-white">{formData.fecha}</span></div>
-              <div className="flex gap-3"><span className="text-gray-500">Interés:</span> <span className="text-white truncate">{formData.servicios[0] || 'Varios'}</span></div>
-            </div>
+            <p className={`error-msg ${fechaError ? 'force-error-msg' : ''}`}>Por favor selecciona una fecha.</p>
+          </div>
 
-            <button
-              onClick={closeModal}
-              className="bg-white/10 hover:bg-white/20 text-white font-bold py-3 px-8 rounded-lg transition-colors w-full"
-            >
-              Cerrar
+          {/* PASO 5 */}
+          <div className={`form-step ${currentStep === 5 ? 'active' : ''}`}>
+            <div className="success-step">
+              <div className="success-animation">✅</div>
+              <h2 className="success-title">¡Todo listo, {nombre.split(' ')[0]}!</h2>
+              <p className="success-sub">Recibimos tu solicitud. En menos de 2 horas te contactamos por correo para confirmar tu asesoría. 🚀</p>
+              <div className="success-summary">
+                <div className="summary-row">
+                  <span className="summary-label">Nombre</span>
+                  <span className="summary-value">{nombre}</span>
+                </div>
+                <div className="summary-row">
+                  <span className="summary-label">Correo</span>
+                  <span className="summary-value">{email}</span>
+                </div>
+                <div className="summary-row">
+                  <span className="summary-label">Servicio</span>
+                  <span className="summary-value">{servicios.map(s => servicioLabels[s] || s).join(', ') || '—'}</span>
+                </div>
+                <div className="summary-row">
+                  <span className="summary-label">Fecha preferida</span>
+                  <span className="summary-value">{fecha ? fecha.toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/^\w/, c => c.toUpperCase()) : '—'}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* FOOTER */}
+        {currentStep < 5 && (
+          <div className="modal-footer">
+            <button className="btn-back" disabled={currentStep === 1} onClick={handleBack} aria-label="Paso anterior">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              Atrás
+            </button>
+            <div className="footer-secure">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              100% seguro
+            </div>
+            <button className="btn-next" onClick={handleNext} aria-label="Siguiente paso">
+              {currentStep === 4 ? 'Confirmar' : 'Siguiente'}
+              {currentStep === 4 ? (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="16" height="16"><path d="M20 6L9 17l-5-5"/></svg>
+              ) : (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="16" height="16"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              )}
             </button>
           </div>
         )}
+        
       </div>
     </div>
   );
