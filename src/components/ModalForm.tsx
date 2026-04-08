@@ -26,6 +26,52 @@ export default function ModalForm() {
 
   const [calendarDate, setCalendarDate] = useState<Date>(new Date());
   
+  const [hora, setHora] = useState<string>('');
+  const [horaError, setHoraError] = useState(false);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [availableSlots, setAvailableSlots] = useState<string[]>([]);
+  const [useFallback, setUseFallback] = useState(false);
+
+  const workingDays = useMemo(() => {
+    const days: Date[] = [];
+    let current = new Date();
+    while (days.length < 5) {
+      current.setDate(current.getDate() + 1);
+      const dow = current.getDay();
+      if (dow !== 0 && dow !== 6) {
+        days.push(new Date(current));
+      }
+    }
+    return days;
+  }, []);
+
+  useEffect(() => {
+    if (!fecha || useFallback) return;
+    const fetchSlots = async () => {
+      setLoadingSlots(true);
+      setAvailableSlots([]);
+      setHora('');
+      try {
+        const url = import.meta.env.VITE_N8N_DISPONIBILIDAD_URL;
+        if (!url || url.includes('PENDIENTE')) {
+          setUseFallback(true);
+          return;
+        }
+        const dateStr = fecha.toISOString().split('T')[0];
+        const res = await fetch(`${url}?fecha=${dateStr}`);
+        if (!res.ok) throw new Error('Failed to fetch from n8n');
+        const data = await res.json();
+        setAvailableSlots(data.slots_disponibles || []);
+      } catch (err) {
+        console.error('Error fetching availability:', err);
+        setUseFallback(true);
+      } finally {
+        setLoadingSlots(false);
+      }
+    };
+    fetchSlots();
+  }, [fecha, useFallback]);
+  
   const totalSteps = 5;
   const inputNombreRef = useRef<HTMLInputElement>(null);
   const inputEmailRef = useRef<HTMLInputElement>(null);
@@ -38,8 +84,8 @@ export default function ModalForm() {
         setIsOpen(true);
         setCurrentStep(1);
         setExitingStep(null);
-        setNombre(''); setEmail(''); setTelefono(''); setServicios([]); setFecha(null);
-        setNombreError(false); setEmailError(false); setTelefonoError(false); setServiciosError(false); setFechaError(false);
+        setNombre(''); setEmail(''); setTelefono(''); setServicios([]); setFecha(null); setHora(''); setUseFallback(false); setAvailableSlots([]);
+        setNombreError(false); setEmailError(false); setTelefonoError(false); setServiciosError(false); setFechaError(false); setHoraError(false);
         setCalendarDate(new Date());
         setTimeout(() => inputNombreRef.current?.focus(), 200);
       }
@@ -61,7 +107,7 @@ export default function ModalForm() {
   useEffect(() => {
     if (currentStep === 5) {
       launchConfetti();
-      const payload = {
+      const payload: any = {
         nombre,
         email,
         telefono,
@@ -71,6 +117,11 @@ export default function ModalForm() {
         timestamp: new Date().toISOString(),
         fuente: 'landing-adamgrafica'
       };
+      
+      if (!useFallback) {
+        payload.hora = hora || null;
+        payload.fechaHoraCompleta = (fecha && hora) ? `${fecha.toISOString().split('T')[0]}T${hora}:00` : null;
+      }
       
       fetch('https://TU_WEBHOOK_N8N/webhook/lead-adamgrafica', {
         method: 'POST',
@@ -103,7 +154,8 @@ export default function ModalForm() {
     }
     if (step === 4) {
       if (!fecha) { setFechaError(true); return false; }
-      setFechaError(false); return true;
+      if (!useFallback && !hora) { setHoraError(true); return false; }
+      setFechaError(false); setHoraError(false); return true;
     }
     return true;
   };
@@ -369,35 +421,94 @@ export default function ModalForm() {
             <span className="step-emoji">📅</span>
             <h2 className="step-question">¿Qué día te acomoda<br/>para la reunión?</h2>
             <p className="step-hint">Asesoría gratuita de 30 min por videollamada. Elige tu fecha ideal.</p>
-            <div className="calendar-wrap">
-              <div className="cal-header">
-                <button className="cal-nav" onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() - 1, 1))}>‹</button>
-                <span className="cal-month">{MESES[calendarDate.getMonth()]} {calendarDate.getFullYear()}</span>
-                <button className="cal-nav" onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 1))}>›</button>
+            
+            {useFallback ? (
+              <div className="calendar-wrap">
+                <div className="cal-header">
+                  <button className="cal-nav" onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() - 1, 1))}>‹</button>
+                  <span className="cal-month">{MESES[calendarDate.getMonth()]} {calendarDate.getFullYear()}</span>
+                  <button className="cal-nav" onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 1))}>›</button>
+                </div>
+                <div className="cal-grid">
+                  {DIAS.map(d => <div key={d} className="cal-weekday">{d}</div>)}
+                  {calDays.map((cell, idx) => (
+                    <div 
+                      key={idx}
+                      className={`cal-day ${cell.empty ? 'empty' : ''} ${cell.isToday ? 'today' : ''} ${cell.isPast || cell.isWeekend ? 'disabled' : ''} ${cell.isSelected ? 'selected' : ''}`}
+                      onClick={() => {
+                        if (!cell.empty && !cell.isPast && !cell.isWeekend && cell.date) {
+                          setFecha(cell.date);
+                          setFechaError(false);
+                        }
+                      }}
+                    >
+                      {!cell.empty && cell.day}
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="cal-grid">
-                {DIAS.map(d => <div key={d} className="cal-weekday">{d}</div>)}
-                {calDays.map((cell, idx) => (
-                  <div 
-                    key={idx}
-                    className={`cal-day ${cell.empty ? 'empty' : ''} ${cell.isToday ? 'today' : ''} ${cell.isPast || cell.isWeekend ? 'disabled' : ''} ${cell.isSelected ? 'selected' : ''}`}
-                    onClick={() => {
-                      if (!cell.empty && !cell.isPast && !cell.isWeekend && cell.date) {
-                        setFecha(cell.date);
-                        setFechaError(false);
-                      }
-                    }}
-                  >
-                    {!cell.empty && cell.day}
+            ) : (
+              <div className="availability-container">
+                <div className="days-scroll">
+                  {workingDays.map((d, i) => {
+                    const isSelected = fecha && d.getTime() === fecha.getTime();
+                    const dayLabel = d.toLocaleDateString('es-CL', { weekday: 'short', day: 'numeric', month: 'short' }).replace(/^\w/, c => c.toUpperCase());
+                    return (
+                      <button 
+                        key={i} 
+                        className={`slot-btn ${isSelected ? 'selected' : ''}`}
+                        onClick={() => {
+                          setFecha(d); setFechaError(false); setHora(''); setHoraError(false);
+                        }}
+                      >
+                        {dayLabel}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {fecha && (
+                  <div style={{ marginTop: '8px' }}>
+                    <label style={{ display: 'block', color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)', marginBottom: '12px', fontWeight: 600 }}>
+                      Horas disponibles:
+                    </label>
+                    
+                    {loadingSlots ? (
+                      <div className="availability-spinner-wrap">
+                        <div className="availability-spinner"></div>
+                        <div className="availability-loading-text">Verificando disponibilidad...</div>
+                      </div>
+                    ) : availableSlots.length === 0 ? (
+                      <div className="no-slots-text">Sin disponibilidad este día. Elige otro.</div>
+                    ) : (
+                      <div className="slots-grid">
+                        {availableSlots.map((slotTime, idx) => (
+                          <button 
+                            key={idx}
+                            className={`slot-btn ${hora === slotTime ? 'selected' : ''}`}
+                            onClick={() => {
+                              setHora(slotTime); setHoraError(false);
+                            }}
+                          >
+                            {slotTime}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    <p className={`error-msg ${horaError ? 'force-error-msg' : ''}`} style={{ marginTop: '8px' }}>Por favor selecciona una hora.</p>
                   </div>
-                ))}
+                )}
               </div>
-            </div>
-            <div className={`selected-date-display ${fecha ? 'visible' : ''}`}>
+            )}
+
+            <div className={`selected-date-display ${fecha && (useFallback || hora) ? 'visible' : ''}`}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              <span>{fecha ? fecha.toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).replace(/^\w/, c => c.toUpperCase()) : '—'}</span>
+              <span>
+                {fecha ? fecha.toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).replace(/^\w/, c => c.toUpperCase()) : '—'}
+                {!useFallback && hora ? ` a las ${hora}` : ''}
+              </span>
             </div>
-            <p className={`error-msg ${fechaError ? 'force-error-msg' : ''}`}>Por favor selecciona una fecha.</p>
+            {useFallback && <p className={`error-msg ${fechaError ? 'force-error-msg' : ''}`}>Por favor selecciona una fecha.</p>}
           </div>
 
           {/* PASO 5 */}
@@ -421,7 +532,10 @@ export default function ModalForm() {
                 </div>
                 <div className="summary-row">
                   <span className="summary-label">Fecha preferida</span>
-                  <span className="summary-value">{fecha ? fecha.toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/^\w/, c => c.toUpperCase()) : '—'}</span>
+                  <span className="summary-value">
+                    {fecha ? fecha.toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/^\w/, c => c.toUpperCase()) : '—'}
+                    {!useFallback && hora ? `, ${hora}` : ''}
+                  </span>
                 </div>
               </div>
             </div>
