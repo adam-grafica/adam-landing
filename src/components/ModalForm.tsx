@@ -32,19 +32,6 @@ export default function ModalForm() {
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
   const [useFallback, setUseFallback] = useState(false);
 
-  const workingDays = useMemo(() => {
-    const days: Date[] = [];
-    let current = new Date();
-    while (days.length < 5) {
-      current.setDate(current.getDate() + 1);
-      const dow = current.getDay();
-      if (dow !== 0 && dow !== 6) {
-        days.push(new Date(current));
-      }
-    }
-    return days;
-  }, []);
-
   useEffect(() => {
     if (!fecha || useFallback) return;
     const fetchSlots = async () => {
