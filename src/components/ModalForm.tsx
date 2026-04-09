@@ -422,93 +422,70 @@ export default function ModalForm() {
             <h2 className="step-question">¿Qué día te acomoda<br/>para la reunión?</h2>
             <p className="step-hint">Asesoría gratuita de 30 min por videollamada. Elige tu fecha ideal.</p>
             
-            {useFallback ? (
-              <div className="calendar-wrap">
-                <div className="cal-header">
-                  <button className="cal-nav" onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() - 1, 1))}>‹</button>
-                  <span className="cal-month">{MESES[calendarDate.getMonth()]} {calendarDate.getFullYear()}</span>
-                  <button className="cal-nav" onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 1))}>›</button>
-                </div>
-                <div className="cal-grid">
-                  {DIAS.map(d => <div key={d} className="cal-weekday">{d}</div>)}
-                  {calDays.map((cell, idx) => (
-                    <div 
-                      key={idx}
-                      className={`cal-day ${cell.empty ? 'empty' : ''} ${cell.isToday ? 'today' : ''} ${cell.isPast || cell.isWeekend ? 'disabled' : ''} ${cell.isSelected ? 'selected' : ''}`}
-                      onClick={() => {
-                        if (!cell.empty && !cell.isPast && !cell.isWeekend && cell.date) {
-                          setFecha(cell.date);
-                          setFechaError(false);
-                        }
-                      }}
-                    >
-                      {!cell.empty && cell.day}
-                    </div>
-                  ))}
-                </div>
+            <div className="calendar-wrap">
+              <div className="cal-header">
+                <button className="cal-nav" onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() - 1, 1))}>‹</button>
+                <span className="cal-month">{MESES[calendarDate.getMonth()]} {calendarDate.getFullYear()}</span>
+                <button className="cal-nav" onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 1))}>›</button>
               </div>
-            ) : (
-              <div className="availability-container">
-                <div className="days-scroll">
-                  {workingDays.map((d, i) => {
-                    const isSelected = fecha && d.getTime() === fecha.getTime();
-                    const dayLabel = d.toLocaleDateString('es-CL', { weekday: 'short', day: 'numeric', month: 'short' }).replace(/^\w/, c => c.toUpperCase());
-                    return (
+              <div className="cal-grid">
+                {DIAS.map(d => <div key={d} className="cal-weekday">{d}</div>)}
+                {calDays.map((cell, idx) => (
+                  <div 
+                    key={idx}
+                    className={`cal-day ${cell.empty ? 'empty' : ''} ${cell.isToday ? 'today' : ''} ${cell.isPast || cell.isWeekend ? 'disabled' : ''} ${cell.isSelected ? 'selected' : ''}`}
+                    onClick={() => {
+                      if (!cell.empty && !cell.isPast && !cell.isWeekend && cell.date) {
+                        setFecha(cell.date);
+                        setFechaError(false);
+                      }
+                    }}
+                  >
+                    {!cell.empty && cell.day}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* SLOTS DINÁMICOS (Solo si no es fallback y hay una fecha seleccionada) */}
+            {fecha && !useFallback && (
+              <div className="slots-container-inline">
+                <label className="slots-label">
+                  Horas disponibles el {fecha.toLocaleDateString('es-CL', { day: 'numeric', month: 'short' })}:
+                </label>
+                
+                {loadingSlots ? (
+                  <div className="slots-loading">
+                    <div className="availability-spinner"></div>
+                    <span>Verificando...</span>
+                  </div>
+                ) : availableSlots.length === 0 ? (
+                  <p className="no-slots-text">Sin disponibilidad este día. Prueba otro.</p>
+                ) : (
+                  <div className="slots-grid-refined">
+                    {availableSlots.map((slot, i) => (
                       <button 
                         key={i} 
-                        className={`slot-btn ${isSelected ? 'selected' : ''}`}
-                        onClick={() => {
-                          setFecha(d); setFechaError(false); setHora(''); setHoraError(false);
-                        }}
+                        className={`slot-chip ${hora === slot ? 'active' : ''}`}
+                        onClick={() => { setHora(slot); setHoraError(false); }}
                       >
-                        {dayLabel}
+                        {slot}
                       </button>
-                    );
-                  })}
-                </div>
-
-                {fecha && (
-                  <div style={{ marginTop: '8px' }}>
-                    <label style={{ display: 'block', color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)', marginBottom: '12px', fontWeight: 600 }}>
-                      Horas disponibles:
-                    </label>
-                    
-                    {loadingSlots ? (
-                      <div className="availability-spinner-wrap">
-                        <div className="availability-spinner"></div>
-                        <div className="availability-loading-text">Verificando disponibilidad...</div>
-                      </div>
-                    ) : availableSlots.length === 0 ? (
-                      <div className="no-slots-text">Sin disponibilidad este día. Elige otro.</div>
-                    ) : (
-                      <div className="slots-grid">
-                        {availableSlots.map((slotTime, idx) => (
-                          <button 
-                            key={idx}
-                            className={`slot-btn ${hora === slotTime ? 'selected' : ''}`}
-                            onClick={() => {
-                              setHora(slotTime); setHoraError(false);
-                            }}
-                          >
-                            {slotTime}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                    <p className={`error-msg ${horaError ? 'force-error-msg' : ''}`} style={{ marginTop: '8px' }}>Por favor selecciona una hora.</p>
+                    ))}
                   </div>
                 )}
+                {horaError && <p className="error-msg force-error-msg">Selecciona una hora.</p>}
               </div>
             )}
 
-            <div className={`selected-date-display ${fecha && (useFallback || hora) ? 'visible' : ''}`}>
+            <div className={`selected-date-display ${fecha && (useFallback || hora) ? 'visible' : ''}`} style={{ marginTop: '16px' }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
               <span>
-                {fecha ? fecha.toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).replace(/^\w/, c => c.toUpperCase()) : '—'}
-                {!useFallback && hora ? ` a las ${hora}` : ''}
+                {fecha ? fecha.toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/^\w/, c => c.toUpperCase()) : '—'}
+                {!useFallback && hora ? ` · ${hora}` : ''}
               </span>
             </div>
-            {useFallback && <p className={`error-msg ${fechaError ? 'force-error-msg' : ''}`}>Por favor selecciona una fecha.</p>}
+            {useFallback && fechaError && <p className="error-msg force-error-msg">Selecciona una fecha.</p>}
           </div>
 
           {/* PASO 5 */}
