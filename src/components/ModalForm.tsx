@@ -46,31 +46,47 @@ export default function ModalForm() {
 
   /** Fetch de slots dinámicos desde n8n */
   useEffect(() => {
-    if (!fecha || useFallback) return;
+    if (!fecha) return;
+    
     const fetchSlots = async () => {
       setLoadingSlots(true);
       setAvailableSlots([]);
       setHora('');
+      
       try {
         const url = import.meta.env.VITE_N8N_DISPONIBILIDAD_URL;
+        
+        // Si no hay URL o es el placeholder, activar fallback
         if (!url || url.includes('PENDIENTE')) {
           setUseFallback(true);
+          setLoadingSlots(false);
           return;
         }
+
         const dateStr = fecha.toISOString().split('T')[0];
         const res = await fetch(`${url}?fecha=${dateStr}`);
-        if (!res.ok) throw new Error('Endpoint error');
+        
+        if (!res.ok) throw new Error('Network error');
+        
         const data = await res.json();
-        setAvailableSlots(data.slots_disponibles || []);
+        
+        if (data.slots_disponibles && data.slots_disponibles.length > 0) {
+          setAvailableSlots(data.slots_disponibles);
+          setUseFallback(false);
+        } else {
+          // Si el endpoint responde pero no hay slots, tratamos de dar opción de fallback o mostrar vacío
+          setAvailableSlots([]);
+        }
       } catch (err) {
-        console.error('Error fetching availability:', err);
+        console.warn('Cargando modo fallback por error de conexión:', err);
         setUseFallback(true);
       } finally {
         setLoadingSlots(false);
       }
     };
+
     fetchSlots();
-  }, [fecha, useFallback]);
+  }, [fecha]);
 
   /** Abrir/cerrar modal */
   useEffect(() => {
@@ -489,7 +505,7 @@ export default function ModalForm() {
                   <span className="summary-label">Fecha</span>
                   <span className="summary-value">
                     {fecha ? fecha.toLocaleDateString('es-CL', { day:'numeric', month:'short' }) : '—'}
-                    {!useFallback && hora ? ` · ${hora}` : ''}
+                    {!useFallback && hora ? ` · ${hora}` : useFallback ? ' · Hora por confirmar' : ''}
                   </span>
                 </div>
               </div>
