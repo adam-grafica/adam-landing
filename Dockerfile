@@ -10,7 +10,11 @@ RUN npm install --legacy-peer-deps
 # Copiamos el resto de los archivos
 COPY . .
 
-# Corregimos si hay una subcarpeta anidada app accidental (para que Vite no genere dist/app/index.html)
+# Argumentos de construcción para Vite (CapRover inyecta ENVs, pero necesitamos declararlas para el build)
+ARG VITE_N8N_DISPONIBILIDAD_URL
+ENV VITE_N8N_DISPONIBILIDAD_URL=$VITE_N8N_DISPONIBILIDAD_URL
+
+# Corregimos si hay una subcarpeta anidada app accidental
 RUN rm -rf app
 
 RUN npm run build
