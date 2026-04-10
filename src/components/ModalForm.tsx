@@ -56,7 +56,15 @@ export default function ModalForm() {
       try {
         const url = import.meta.env.VITE_N8N_DISPONIBILIDAD_URL;
         
-        // Si no hay URL o es el placeholder, activar fallback
+        // Log para depuración en producción (podrás verlo en F12 -> Console)
+        if (!url) {
+          console.warn('Configuración: VITE_N8N_DISPONIBILIDAD_URL no detectada.');
+        } else if (url.includes('PENDIENTE')) {
+          console.warn('Configuración: URL detectada como PENDIENTE. Usando fallback.');
+        } else {
+          console.log('Conectando con sistema de agendamiento...');
+        }
+
         if (!url || url.includes('PENDIENTE')) {
           setUseFallback(true);
           setLoadingSlots(false);
@@ -279,7 +287,7 @@ export default function ModalForm() {
         <div className="modal-header">
           <div className="modal-brand">
             <div className="modal-brand-icon">
-              <img src="/favicon.svg" alt="AdamGráfica" />
+              <img src="/icon-blue-d.svg" alt="AdamGráfica" />
             </div>
             <div>
               <div className="modal-brand-name">AdamGráfica</div>
