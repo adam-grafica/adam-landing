@@ -146,7 +146,10 @@ export default function ModalForm() {
           ? `${fecha.toISOString().split('T')[0]}T${hora}:00`
           : null;
       }
-      fetch('https://TU_WEBHOOK_N8N/webhook/lead-adamgrafica', {
+      // 2026-06-09 AXON: usa variable de entorno VITE_N8N_LEAD_URL
+      // Si no está configurada, fallback a la URL por defecto
+      const leadUrl = import.meta.env.VITE_N8N_LEAD_URL || 'https://automation.app.adamcloud.me/webhook/lead-adamgrafica';
+      fetch(leadUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

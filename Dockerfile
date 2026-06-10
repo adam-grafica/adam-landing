@@ -14,6 +14,10 @@ COPY . .
 ARG VITE_N8N_DISPONIBILIDAD_URL
 ENV VITE_N8N_DISPONIBILIDAD_URL=$VITE_N8N_DISPONIBILIDAD_URL
 
+# 2026-06-09 AXON: URL del webhook de leads (POST desde ModalForm)
+ARG VITE_N8N_LEAD_URL
+ENV VITE_N8N_LEAD_URL=$VITE_N8N_LEAD_URL
+
 # Corregimos si hay una subcarpeta anidada app accidental
 RUN rm -rf app
 

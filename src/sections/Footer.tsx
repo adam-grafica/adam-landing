@@ -10,10 +10,12 @@ import Facebook from 'lucide-react/dist/esm/icons/facebook';
 
 const footerLinks = {
   services: [
-    { label: 'Génesis — Identidad Visual', href: '#services' },
-    { label: 'Imperio Digital — Sistema Completo', href: '#services' },
-    { label: 'Sistema Avanzado — Enterprise', href: '#services' },
-    { label: 'Portfolio', href: '#portfolio' },
+    { label: 'Branding + Identidad', href: '#services' },
+    { label: 'SmartWeb', href: '#services' },
+    { label: 'Contenido Redes', href: '#services' },
+    { label: 'Agente Atención + Ventas', href: '#services' },
+    { label: 'Empleado IA', href: '#services' },
+    { label: 'Combos Recomendados', href: '#combos' },
   ],
   company: [
     { label: 'Nosotros', href: '#about' },
@@ -27,7 +29,7 @@ const socialLinks = [
   { icon: Instagram, href: 'https://instagram.com/adamgrafica', label: 'Instagram' },
   { icon: Facebook, href: 'https://facebook.com/adamgraficaCL', label: 'Facebook' },
   { icon: Linkedin, href: 'https://linkedin.com/company/adamgrafica', label: 'LinkedIn' },
-  { icon: MessageCircle, href: 'https://wa.me/569XXXXXXXX', label: 'WhatsApp' },
+  { icon: MessageCircle, href: 'https://wa.me/56953909057', label: 'WhatsApp' },
 ];
 
 export default function Footer() {
@@ -132,7 +134,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://wa.me/"
+                  href="https://wa.me/56953909057"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-ag-text-gray text-sm hover:text-white transition-colors duration-200"
