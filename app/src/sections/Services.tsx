@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useReveal } from '../hooks/useReveal';
 import { useRevealGroup } from '../hooks/useRevealGroup';
 import Check from 'lucide-react/dist/esm/icons/check'
