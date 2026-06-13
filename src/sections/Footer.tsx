@@ -22,7 +22,7 @@ const footerLinks = {
   // Brazos por rubro — links dinámicos desde el registro central
   brazos: brazosList.map((b) => ({
     label: `${b.emoji} ${b.nombre}`,
-    href: `/brazo/${b.slug}`,
+    href: `/rubro/${b.slug}`,
   })),
   company: [
     { label: 'Nosotros', href: '#about' },
@@ -125,7 +125,7 @@ export default function Footer() {
               ))}
               <li>
                 <Link
-                  to="/brazos"
+                  to="/rubros"
                   className="text-ag-blue text-sm hover:text-white inline-flex items-center gap-1 font-mono"
                 >
                   Ver todos →

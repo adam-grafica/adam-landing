@@ -35,7 +35,7 @@ export default function BrazoIndex() {
             {brazosList.map((brazo) => (
               <Link
                 key={brazo.slug}
-                to={`/brazo/${brazo.slug}`}
+                to={`/rubro/${brazo.slug}`}
                 className="group block p-8 rounded-2xl bg-ag-bg-secondary border border-white/10 hover:border-white/30 transition-all hover:-translate-y-1"
               >
                 <div className="text-5xl mb-4">{brazo.emoji}</div>

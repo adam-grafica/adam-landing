@@ -60,8 +60,8 @@ function App() {
       <div className="relative min-h-screen overflow-x-hidden bg-ag-bg-primary">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/brazos" element={<BrazoIndex />} />
-          <Route path="/brazo/:slug" element={<Rubro />} />
+          <Route path="/rubros" element={<BrazoIndex />} />
+          <Route path="/rubro/:slug" element={<Rubro />} />
           <Route path="*" element={<Rubro />} />
         </Routes>
       </div>
