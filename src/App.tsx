@@ -1,7 +1,10 @@
 import React, { Suspense } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './sections/Navbar';
 import Hero from './sections/Hero';
 import Footer from './sections/Footer';
+import Rubro from './pages/Rubro';
+import BrazoIndex from './pages/BrazoIndex';
 
 // Secciones "below the fold" con carga aplazada para no bloquear el LCP inicial
 const PainAgitation = React.lazy(() => import('./sections/PainAgitation'));
@@ -20,9 +23,9 @@ const FAQ = React.lazy(() => import('./sections/FAQ'));
 const CTAFinal = React.lazy(() => import('./sections/CTAFinal'));
 const ModalForm = React.lazy(() => import('./components/ModalForm'));
 
-function App() {
+function HomePage() {
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-ag-bg-primary">
+    <>
       <Navbar />
       <main>
         <Hero />
@@ -47,7 +50,22 @@ function App() {
       <Suspense fallback={null}>
         <ModalForm />
       </Suspense>
-    </div>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <div className="relative min-h-screen overflow-x-hidden bg-ag-bg-primary">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/brazos" element={<BrazoIndex />} />
+          <Route path="/brazo/:slug" element={<Rubro />} />
+          <Route path="*" element={<Rubro />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 

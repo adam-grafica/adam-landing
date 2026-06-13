@@ -1,4 +1,5 @@
 import { useReveal } from '../hooks/useReveal';
+import { Link } from 'react-router-dom';
 import Instagram from 'lucide-react/dist/esm/icons/instagram'
 import Linkedin from 'lucide-react/dist/esm/icons/linkedin'
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle'
@@ -7,6 +8,7 @@ import Phone from 'lucide-react/dist/esm/icons/phone'
 import MapPin from 'lucide-react/dist/esm/icons/map-pin'
 import Heart from 'lucide-react/dist/esm/icons/heart'
 import Facebook from 'lucide-react/dist/esm/icons/facebook';
+import { brazosList } from '../pages/brazos';
 
 const footerLinks = {
   services: [
@@ -17,6 +19,11 @@ const footerLinks = {
     { label: 'Empleado IA', href: '#services' },
     { label: 'Combos Recomendados', href: '#combos' },
   ],
+  // Brazos por rubro — links dinámicos desde el registro central
+  brazos: brazosList.map((b) => ({
+    label: `${b.emoji} ${b.nombre}`,
+    href: `/brazo/${b.slug}`,
+  })),
   company: [
     { label: 'Nosotros', href: '#about' },
     { label: 'Proceso', href: '#process' },
@@ -43,7 +50,7 @@ export default function Footer() {
       </div>
       
       <div className="footer-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 reveal-up">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
           {/* Column 1 - Logo & Tagline */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-4 group cursor-pointer">
@@ -102,7 +109,32 @@ export default function Footer() {
             </ul>
           </div>
           
-          {/* Column 3 - Company */}
+          {/* Column 3 - Brazos por rubro */}
+          <div>
+            <h4 className="font-display text-white mb-4">Por Rubro</h4>
+            <ul className="space-y-3">
+              {footerLinks.brazos.map((link, index) => (
+                <li key={index}>
+                  <Link
+                    to={link.href}
+                    className="text-ag-text-gray text-sm hover:text-white hover:translate-x-1 inline-block transition-all duration-200"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link
+                  to="/brazos"
+                  className="text-ag-blue text-sm hover:text-white inline-flex items-center gap-1 font-mono"
+                >
+                  Ver todos →
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4 - Company */}
           <div>
             <h4 className="font-display text-white mb-4">Empresa</h4>
             <ul className="space-y-3">
