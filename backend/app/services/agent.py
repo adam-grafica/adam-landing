@@ -48,11 +48,42 @@ DEGRADED_MARKERS = (
     "I cannot",
 )
 
+# El único agente del gateway con LLM real para este widget es agent-lead, cuyo
+# system prompt es "head-of-engineering" y sobrescribe cualquier persona que
+# mandemos en el mensaje (verificado: ni framing de rol ni de transcripción lo mueve).
+# Si la respuesta vuelve con esa voz, el prospecto está leyendo soporte técnico
+# en una landing comercial: se marca degradado y cae al copy curado.
+OUT_OF_PERSONA_MARKERS = (
+    "head-of-engineering",
+    "head of engineering",
+    "agente técnico",
+    "tarea de ingeniería",
+    "tarea técnica",
+    "decisión técnica",
+    "revisión de código",
+    "revision de codigo",
+    "arquitectura",
+    "incident response",
+    "post-mortem",
+    "roadmap",
+    "depencias",
+    "sprint",
+    "estoy listo para actuar como",
+    "estoy listo para recibir instrucciones",
+    "estoy operativo como",
+)
+
 
 def _is_degraded(reply: str) -> bool:
     """True si el agente respondió, pero con un error del LLM en vez de contenido real."""
     low = reply.lower()
     return any(m.lower() in low for m in DEGRADED_MARKERS)
+
+
+def _is_out_of_persona(reply: str) -> bool:
+    """True si agent-lead respondió con voz de ingeniero en vez de vendedor."""
+    low = reply.lower()
+    return any(m.lower() in low for m in OUT_OF_PERSONA_MARKERS)
 
 
 def _extract_reply(data: dict) -> str | None:
@@ -101,7 +132,7 @@ async def call_agent(
                 f"{settings.a2a_gateway_url}/a2a/message/send",
                 json={
                     "agent_id": settings.a2a_agent_id,
-                    "message": message,
+                    "message": f"{settings.a2a_context}\n\nMensaje del visitante: {message}",
                     "from": "adamgrafica-landing-v2",
                 },
                 params={"session_id": session_id, "visitor_id": visitor_id} if session_id else None,
@@ -115,6 +146,10 @@ async def call_agent(
                 # Agent reached the gateway but its LLM is down (429/quota/fallback
                 # string). Treat as a gateway failure so the user gets the curated copy.
                 raise RuntimeError(f"A2A agent degraded: {reply[:120]}")
+            if _is_out_of_persona(reply):
+                # El visitante escribió a una landing comercial y recibió voz de
+                # ingeniero. Copy curado > respuesta fuera de rol.
+                raise RuntimeError(f"A2A agent out of persona: {reply[:120]}")
             latency = int((time.perf_counter() - start) * 1000)
             return {
                 "reply": reply,

@@ -112,6 +112,43 @@ def main():
         got, conf = agent_mod.classify_intent(msg)
         check(f"classify '{msg}' -> {want}", got == want and 0 < conf <= 1, f"{got}/{conf}")
 
+    # 6) persona de ventas: el contexto se antepone al mensaje del visitante.
+    # Regresión: el widget de ventas respondía como ingeniero porque el gateway
+    # A2A no acepta system prompt y el mensaje iba crudo.
+    rec2 = []
+    _patch_client(FAKE_NESTED, record=rec2)
+    asyncio.run(agent_mod.call_agent("¿cuánto cuesta un sitio?", session_id="s", visitor_id="v"))
+    sent = rec2[0][1]["message"]
+    check("inyecta contexto de ventas", "AdamGráfica" in sent, sent[:80])
+    check("conserva mensaje del visitante", "¿cuánto cuesta un sitio?" in sent, sent[-80:])
+    check("prohibe responder como ingeniero", "NUNCA respondas como asistente técnico" in sent, sent[:80])
+
+    # 7) el fallback NO debe llevar el contexto (el clasificador local ya responde en rol)
+    _patch_client(None, status=503)
+    r5 = asyncio.run(agent_mod.call_agent("quiero precio"))
+    check("fallback local sin contexto inyectado", r5["agent_id"] == "local-fallback", r5["agent_id"])
+
+    # 8) respuesta fuera de persona (agent-lead con voz de ingeniero) -> copy curado.
+    # Es el bug real en producción: la landing comercial respondía como head-of-engineering.
+    _patch_client({
+        "status": "ok", "agent": "agent-lead",
+        "response": {"status": "ok", "agent": "agent-lead",
+                     "response": "Entendido. Estoy listo para actuar como agent-lead (head-of-engineering) en ADAM OS. ¿En qué tarea de ingeniería trabajamos?"},
+    })
+    r6 = asyncio.run(agent_mod.call_agent("¿cuánto cuesta un sitio?"))
+    check("voz de ingeniero cae a copy curado", r6["agent_id"] == "local-fallback", r6["agent_id"])
+    check("copy curado responde en rol comercial", "$" in r6["reply"] or "AdamGráfica" in r6["reply"] or "agende" in r6["reply"], r6["reply"])
+    check("no filtra voz de ingeniero al visitante", "head-of-engineering" not in r6["reply"], r6["reply"])
+
+    # 9) una respuesta realmente en rol NO debe descartarse
+    _patch_client({
+        "status": "ok", "agent": "agent-lead",
+        "response": {"status": "ok", "agent": "agent-lead",
+                     "response": "¡Hola! Somos AdamGráfica. El sitio web parte en $1.490.000 CLP con entrega en 4 semanas. ¿Te agendo una reunión?"},
+    })
+    r7 = asyncio.run(agent_mod.call_agent("¿cuánto cuesta un sitio?"))
+    check("respuesta comercial se conserva", r7["agent_id"] == "agent-lead" and "AdamGráfica" in r7["reply"], r7["agent_id"])
+
     print(f"\n{len(PASS)} passed, {len(FAIL)} failed")
     if FAIL:
         print("FALLAS: " + ", ".join(FAIL))
