@@ -1,9 +1,25 @@
 import path from "path"
 import react from "@vitejs/plugin-react"
-import { defineConfig } from "vite"
+import { defineConfig } from 'vite'
 import { compression } from 'vite-plugin-compression2'
 
-export default defineConfig({
+/**
+ * Backend FastAPI propio. El bundle habla same-origin (`/api/...`), así que
+ * dev y `vite preview` tienen que reverse-proxyear /api hacia el uvicorn:
+ * sin esto el mismo-origin funciona en nginx (prod) y revienta en local, que
+ * es el peor asymmetric bug que existe. Override con VITE_API_PROXY_TARGET.
+ */
+const API_PROXY_TARGET = process.env.VITE_API_PROXY_TARGET || 'http://127.0.0.1:3001'
+
+export default defineConfig(() => {
+  const apiProxy = {
+    '/api': {
+      target: API_PROXY_TARGET,
+      changeOrigin: true,
+    },
+  }
+
+  return {
   base: '/',
   plugins: [
     react(),
@@ -12,6 +28,8 @@ export default defineConfig({
       algorithms: ['gzip'],
     }),
   ],
+  server: { proxy: apiProxy },
+  preview: { proxy: apiProxy },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -47,4 +65,5 @@ export default defineConfig({
     cssCodeSplit: true,
     sourcemap: false,
   },
+  }
 })

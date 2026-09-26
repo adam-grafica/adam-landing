@@ -5,7 +5,8 @@
  * Consume POST /api/chat del backend FastAPI propio (:3001), que persiste
  * la sesión en SQLite y responde vía A2A gateway o fallback local.
  *
- * Env: VITE_API_BASE_URL (mismo patrón que ModalForm.tsx)
+ * Env: VITE_API_BASE_URL (mismo patrón que ModalForm.tsx); vacío = same-origin
+ * vía proxy /api, que es el default correcto para un bundle servido por nginx.
  */
 import { useEffect, useRef, useState, useCallback } from 'react';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
@@ -14,6 +15,7 @@ import Send from 'lucide-react/dist/esm/icons/send';
 import Minimize2 from 'lucide-react/dist/esm/icons/minimize-2';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { trackCTAClick } from '../utils/analytics';
+import { apiUrl } from '../config/api';
 
 type Role = 'user' | 'agent';
 
@@ -23,8 +25,6 @@ interface Msg {
   text: string;
   meta?: { intent?: string | null; agent_id?: string | null; latency_ms?: number | null };
 }
-
-const API = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
 /** visitor_id estable por navegador: el backend lo usa para agrupar sesiones. */
 function getVisitorId(): string {
@@ -82,7 +82,7 @@ export default function ChatAgentBubble() {
     setSending(true);
 
     try {
-      const res = await fetch(`${API}/api/chat`, {
+      const res = await fetch(apiUrl('/api/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

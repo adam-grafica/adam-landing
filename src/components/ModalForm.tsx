@@ -9,6 +9,7 @@
  */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import './ModalForm.css';
+import { apiUrl } from '../config/api';
 
 const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const DIAS = ['Lu','Ma','Mi','Ju','Vi','Sá','Do'];
@@ -72,13 +73,12 @@ export default function ModalForm() {
       // (UTC-3/-4) devuelve el día anterior entre 20:00 y 24:00 hora local.
       const d = fecha;
       const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-      const localApi = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
       const n8nUrl = import.meta.env.VITE_N8N_DISPONIBILIDAD_URL;
       const n8nConfigured = Boolean(n8nUrl) && !n8nUrl.includes('PENDIENTE');
 
       // (1) Backend propio
       try {
-        const res = await fetch(`${localApi}/api/calendar/availability?date=${dateStr}`);
+        const res = await fetch(apiUrl(`/api/calendar/availability?date=${dateStr}`));
         if (!res.ok) throw new Error(`local api ${res.status}`);
         const data = await res.json();
         const slots: string[] = (data.slots || [])
@@ -169,14 +169,15 @@ export default function ModalForm() {
           ? `${fecha.toISOString().split('T')[0]}T${hora}:00`
           : null;
       }
-      // 2026-09-26 MS-MANAGER: dual endpoint — local FastAPI + n8n webhook fallback.
-      // Prioriza el backend propio (3001) que es la fuente de verdad en ADAM OS;
-      // n8n queda como espejo para automatizaciones externas.
-      const localApi = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+      // 2026-09-26 MS-MANAGER: dual endpoint — backend propio (same-origin vía
+      // proxy /api) + n8n webhook fallback. El backend propio es la fuente de
+      // verdad en ADAM OS; n8n queda como espejo para automatizaciones externas.
+      // 2026-09-26 (2do pase): ya no se hornea `http://localhost:3001`; sin
+      // VITE_API_BASE_URL el bundle pega a /api del mismo origen que lo sirvió.
       const leadUrl = import.meta.env.VITE_N8N_LEAD_URL || 'https://automation.app.adamcloud.me/webhook/lead-adamgrafica';
 
       // (1) Backend propio FastAPI
-      fetch(`${localApi}/api/leads/`, {
+      fetch(apiUrl('/api/leads/'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
