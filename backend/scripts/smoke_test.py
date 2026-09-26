@@ -19,7 +19,7 @@ import httpx
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--base-url", default="http://localhost:9850")
+    ap.add_argument("--base-url", default="http://localhost:3001")
     args = ap.parse_args()
 
     base = args.base_url.rstrip("/")
