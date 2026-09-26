@@ -22,6 +22,7 @@ const Founder = React.lazy(() => import('./sections/Founder'));
 const FAQ = React.lazy(() => import('./sections/FAQ'));
 const CTAFinal = React.lazy(() => import('./sections/CTAFinal'));
 const ModalForm = React.lazy(() => import('./components/ModalForm'));
+const ChatAgentBubble = React.lazy(() => import('./components/ChatAgentBubble'));
 
 function HomePage() {
   return (
@@ -64,6 +65,10 @@ function App() {
           <Route path="/rubro/:slug" element={<Rubro />} />
           <Route path="*" element={<Rubro />} />
         </Routes>
+        {/* Chat del agente disponible en todas las rutas del sitio */}
+        <Suspense fallback={null}>
+          <ChatAgentBubble />
+        </Suspense>
       </div>
     </BrowserRouter>
   );
