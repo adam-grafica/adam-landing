@@ -34,6 +34,16 @@ CASES = [
     # Default honesto
     ("hola", "default"),
     ("tengo una tienda de ropa", "default"),
+    # Agenda: intención comercial real que antes caía en default y recibía
+    # "¿buscas branding, web o IA?" — el lead que pide hora nunca avanzaba.
+    ("quiero agendar una reunion", "agenda"),
+    ("necesito una cita con el equipo", "agenda"),
+    ("quiero reservar hora para una demostracion", "agenda"),
+    ("me puedes dar un horario para hablar", "agenda"),
+    # "cita" es palabra completa, no raíz: "citación" es Default, no un pedido de hora.
+    ("necesito una citacion formal", "default"),
+    # Precedencia: pedir IA para agendar sigue siendo venta de IA, no agenda.
+    ("necesito automatizar el whatsapp para agendar citas", "ia"),
 ]
 
 

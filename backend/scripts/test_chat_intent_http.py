@@ -38,6 +38,13 @@ CASES = [
     ("quiero un sitio web con catálogo", "web", "web con catálogo"),
     ("necesito una página de precios", "precio", "precio gana sobre web por precedencia"),
     ("¿cuánto cuesta el sitio web?", "precio", "precio del sitio web → precio"),
+    # Agenda: intención que antes caía en default (medido 3/3 en HTTP). El lead
+    # que pide hora recibía "¿buscas branding, web o IA?" y se iba.
+    ("quiero agendar una reunión", "agenda", "agendar reunión"),
+    ("necesito una cita con el equipo", "agenda", "pedir cita"),
+    ("quiero reservar hora", "agenda", "reservar hora"),
+    # Precedencia: agenda no puede robarle el caso a ia.
+    ("necesito automatizar el whatsapp para agendar citas", "ia", "IA gana sobre agenda"),
 ]
 
 

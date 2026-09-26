@@ -20,6 +20,7 @@ FALLBACK_RESPONSES = {
     "branding": "Para branding arrancamos con un diagnóstico de 30 min. ¿Quieres que te agende con el equipo creativo?",
     "web": "Sitios web arrancan en $1.490.000 CLP, entregamos en 4 semanas. ¿Te paso un case de tu industria?",
     "ia": "Hacemos agentes que responden WhatsApp, agendan citas, califican leads. ¿Tu caso es conversacional o interno?",
+    "agenda": "Reunión de diagnóstico sin costo, 30 min. Dime qué día te acomoda y te paso los horarios libres para agendar.",
     "precio": "Branding desde $890K, sitio web desde $1.49M, automatizaciones desde $2.4M. ¿Cuál te interesa?",
     "default": "Cuéntame más. ¿Buscas mejorar imagen (branding), presencia online (web), o automatizar algo (IA)?",
 }
@@ -74,6 +75,17 @@ def classify_intent(message: str) -> tuple[str, float]:
         return "web", 0.85
     if _stem(["ia", "agente", "automat", "whatsapp"]).search(q):
         return "ia", 0.85
+    # Agenda va DESPUÉS de ia a propósito: "automatizar el WhatsApp para agendar
+    # citas" es una venta de automatización, no un pedido de hora. Y después de
+    # precio/branding/web, para no robarle el caso a intenciones más específicas.
+    # Antes no existía: un lead que escribía "quiero agendar una reunión" caía en
+    # default y recibía "¿buscas branding, web o IA?" — medido 3/3 frases de
+    # agenda en default. "cita" usa _kw (palabra completa) y no _stem, porque el
+    # prefijo arrastra "citación"/"citadino" a un pedido de hora.
+    if _stem(["agend", "reunion", "reunión", "horario", "reserv"]).search(q):
+        return "agenda", 0.80
+    if _kw(["cita", "citas"]).search(q):
+        return "agenda", 0.80
     return "default", 0.50
 
 
