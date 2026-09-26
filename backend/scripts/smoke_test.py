@@ -77,15 +77,24 @@ def main():
             failed += 1
 
         # 4. Calendar availability
+        #
+        # Ojo: consultar "mañana" sin más producía 0/18 slots los fines de semana
+        # (el service bloquea sáb/dom), y el assert viejo sólo miraba len(slots)>0,
+        # así que el smoke pasaba en verde con una agenda que nadie puede reservar.
+        # Ahora se busca el próximo día hábil y se exige que haya horario libre.
         try:
             from datetime import date, timedelta
-            tomorrow = (date.today() + timedelta(days=1)).isoformat()
-            r = c.get(f"{base}/api/calendar/availability", params={"date": tomorrow})
+            probe = date.today() + timedelta(days=1)
+            while probe.weekday() >= 5:  # salta sáb/dom
+                probe += timedelta(days=1)
+            probe_iso = probe.isoformat()
+            r = c.get(f"{base}/api/calendar/availability", params={"date": probe_iso})
             assert r.status_code == 200
             data = r.json()
             assert "slots" in data and len(data["slots"]) > 0
             avail = sum(1 for s in data["slots"] if s["available"])
-            print(f"  ✓ /api/calendar/availability → {r.status_code} ({avail}/{len(data['slots'])} slots available)")
+            assert avail > 0, f"{probe_iso} es día hábil pero 0 slots disponibles"
+            print(f"  ✓ /api/calendar/availability → {r.status_code} ({avail}/{len(data['slots'])} slots available, {probe_iso} hábil)")
             passed += 1
         except Exception as e:
             print(f"  ✗ /api/calendar/availability → {e}")
