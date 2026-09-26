@@ -231,6 +231,53 @@ def _extract_tokens(data: dict) -> int | None:
     return None
 
 
+# Circuit breaker para la ruta A2A. Medido en producción: el 71/71 de las
+# llamadas de la última ventana devolvieron voz de head-of-engineering y
+# cayó al copy curado, o sea que el gateway no aporta NADA al widget y cada
+# mensaje de prospecto paga 2-3.5s de espera (timeout efectivo) para recibir
+# el mismo texto que le daría el clasificador local al instante.
+#
+# El bug de negocio es la latencia, no sólo el copy: un prospecto que escribe
+# "quiero precios" y tarda 3 segundos en ver la respuesta se va. Con el breaker
+# abierto el primer mensaje tras el cooldown decide, y mientras esté abierto
+# el clasificador local responde en <5ms.
+_A2A_FAIL_STREAK = 0
+_A2A_OPEN_UNTIL = 0.0
+A2A_FAIL_THRESHOLD = 5
+A2A_COOLDOWN_SECONDS = 300.0
+
+
+def _a2a_circuit_state() -> tuple[bool, int, float]:
+    """(abierto, streak, segundos restantes de cooldown)."""
+    remaining = _A2A_OPEN_UNTIL - time.time()
+    return remaining > 0, _A2A_FAIL_STREAK, max(0.0, remaining)
+
+
+def _a2a_record_success() -> None:
+    global _A2A_FAIL_STREAK, _A2A_OPEN_UNTIL
+    _A2A_FAIL_STREAK = 0
+    _A2A_OPEN_UNTIL = 0.0
+
+
+def _a2a_record_failure() -> None:
+    global _A2A_FAIL_STREAK, _A2A_OPEN_UNTIL
+    _A2A_FAIL_STREAK += 1
+    if _A2A_FAIL_STREAK >= A2A_FAIL_THRESHOLD:
+        _A2A_OPEN_UNTIL = time.time() + A2A_COOLDOWN_SECONDS
+        log.warning(
+            "A2A circuit OPEN for %.0fs after %d consecutive failures "
+            "(landing chat will answer locally)",
+            A2A_COOLDOWN_SECONDS, _A2A_FAIL_STREAK,
+        )
+
+
+def _reset_a2a_circuit() -> None:
+    """Solo para tests."""
+    global _A2A_FAIL_STREAK, _A2A_OPEN_UNTIL
+    _A2A_FAIL_STREAK = 0
+    _A2A_OPEN_UNTIL = 0.0
+
+
 async def call_agent(
     message: str,
     session_id: str | None = None,
@@ -242,6 +289,20 @@ async def call_agent(
     Returns dict with keys: reply, intent, confidence, latency_ms, agent_id.
     """
     start = time.perf_counter()
+
+    is_open, streak, remaining = _a2a_circuit_state()
+    if is_open:
+        log.info("A2A circuit open (%.0fs left), answering locally", remaining)
+        intent, confidence = classify_intent(message)
+        return {
+            "reply": FALLBACK_RESPONSES[intent],
+            "intent": intent,
+            "confidence": confidence,
+            "tokens": None,
+            "latency_ms": int((time.perf_counter() - start) * 1000),
+            "agent_id": "local-fallback",
+            "tools_invoked": [],
+        }
 
     # Try the gateway.
     # Canonical A2A endpoint is POST /a2a/message/send (not /agents/{id}/invoke,
@@ -271,6 +332,7 @@ async def call_agent(
                 # ingeniero. Copy curado > respuesta fuera de rol.
                 raise RuntimeError(f"A2A agent out of persona: {reply[:120]}")
             latency = int((time.perf_counter() - start) * 1000)
+            _a2a_record_success()
             return {
                 "reply": reply,
                 "intent": "a2a",
@@ -281,6 +343,7 @@ async def call_agent(
                 "tools_invoked": [],
             }
     except Exception as e:
+        _a2a_record_failure()
         log.warning(f"A2A gateway unavailable ({type(e).__name__}: {e}), using fallback")
 
     # Fallback: local classifier

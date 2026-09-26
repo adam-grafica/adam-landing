@@ -203,6 +203,55 @@ def main():
         check(f"NO bloquea copy comercial: {ok[:44]}...",
               not agent_mod._is_out_of_persona(ok), "falso positivo, copy bueno descartado")
 
+    # 14) circuit breaker: medido en producción el 71/71 de las llamadas al
+    # gateway (la ventana de journalctl del 3001) terminó en fallback, así que
+    # cada mensaje de prospecto pagaba 2-3.5s de espera para recibir el mismo
+    # copy curado que el clasificador local devuelve en <5ms. Tras 5 fallos
+    # consecutivos el breaker abre y el gateway deja de tocar el hot path.
+    agent_mod._reset_a2a_circuit()
+    rec3 = []
+    _patch_client(None, status=503, record=rec3)
+    for i in range(agent_mod.A2A_FAIL_THRESHOLD):
+        asyncio.run(agent_mod.call_agent("quiero precio", session_id="s", visitor_id="v"))
+    is_open, streak, remaining = agent_mod._a2a_circuit_state()
+    check("abre el circuito tras 5 fallos seguidos", is_open, f"streak={streak}")
+    check("el streak cuenta los 5 fallos", streak == agent_mod.A2A_FAIL_THRESHOLD, f"streak={streak}")
+    calls_before = len(rec3)
+    r8 = asyncio.run(agent_mod.call_agent("quiero precio", session_id="s", visitor_id="v"))
+    check("con el circuito abierto NO toca el gateway", len(rec3) == calls_before,
+          f"hizo {len(rec3) - calls_before} llamadas extra al gateway")
+    check("responde igual pero al instante", r8["agent_id"] == "local-fallback"
+          and r8["intent"] == "precio" and r8["reply"] == agent_mod.FALLBACK_RESPONSES["precio"],
+          str(r8))
+    check("latency del fallback abierto es ~0ms", r8["latency_ms"] < 50, f"{r8['latency_ms']}ms")
+
+    # 15) el cooldown expira solo: pasado el tiempo vuelve a intentarlo, y si el
+    # gateway se recuperó el streak se limpia. Un breaker que nunca se abre
+    # otra vez deja la landing muda para siempre.
+    agent_mod._A2A_OPEN_UNTIL = agent_mod.time.time() - 1.0
+    rec4 = []
+    _patch_client(FAKE_NESTED, record=rec4)
+    r9 = asyncio.run(agent_mod.call_agent("¿cuánto cuesta un sitio?", session_id="s", visitor_id="v"))
+    check("tras el cooldown vuelve a llamar al gateway", len(rec4) == 1, f"{len(rec4)} llamadas")
+    check("y si responde bien, usa la respuesta real", r9["agent_id"] == "agent-lead", r9["agent_id"])
+    check("el éxito limpia el streak", agent_mod._a2a_circuit_state()[1] == 0,
+          f"streak={agent_mod._a2a_circuit_state()[1]}")
+    check("y el circuito queda cerrado", not agent_mod._a2a_circuit_state()[0])
+
+    # 16) un éxito intermedio NO debe abrir el circuito: 4 fallos y un acierto
+    # es ruido, no una caída del gateway.
+    agent_mod._reset_a2a_circuit()
+    _patch_client(None, status=503)
+    for _ in range(agent_mod.A2A_FAIL_THRESHOLD - 1):
+        asyncio.run(agent_mod.call_agent("quiero precio"))
+    _patch_client(FAKE_NESTED)
+    asyncio.run(agent_mod.call_agent("¿cuánto cuesta un sitio?"))
+    _patch_client(None, status=503)
+    asyncio.run(agent_mod.call_agent("quiero precio"))
+    check("no abre con 4 fallos + acierto + 1 fallo",
+          not agent_mod._a2a_circuit_state()[0], "ruido de red abriendo el circuito")
+    agent_mod._reset_a2a_circuit()
+
     print(f"\n{len(PASS)} passed, {len(FAIL)} failed")
     if FAIL:
         print("FALLAS: " + ", ".join(FAIL))
