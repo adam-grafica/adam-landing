@@ -184,6 +184,25 @@ def main():
         check(f"NO bloquea copy comercial: {ok[:44]}...",
               not agent_mod._is_out_of_persona(ok), "falso positivo, copy bueno descartado")
 
+    # 12) regresión del leak de producción: voz de operador SIN nombrar la
+    # identidad. Ninguna de las dos capas anteriores lo frenaba (no dice
+    # "ADAM OS" ni "ingeniería") y llegó crudo al prospecto por HTTP 200.
+    framings = [
+        "Entendido. Estoy listo para asistir en lo que necesites. ¿Cuál es el primer tema o tarea que abordamos?",
+        "Claro. Dime en qué tema o tarea quieres que trabajemos.",
+        "Entendido. ¿Cuál es el primer proyecto en que trabajamos juntos?",
+    ]
+    for leak in framings:
+        check(f"bloquea encuadre interno: {leak[:44]}...",
+              agent_mod._is_out_of_persona(leak), "se escapó el filtro de framing")
+
+    # 13) y el filtro de framing NO puede comerse "trabajamos/construimos" en
+    # copy comercial: esas palabras son legitimas vendiendo diseño.
+    for ok in ["Trabajamos con marcas como Starbucks en identidad visual.",
+               "¿Qué construimos juntos? Cuéntame de tu negocio."]:
+        check(f"NO bloquea copy comercial: {ok[:44]}...",
+              not agent_mod._is_out_of_persona(ok), "falso positivo, copy bueno descartado")
+
     print(f"\n{len(PASS)} passed, {len(FAIL)} failed")
     if FAIL:
         print("FALLAS: " + ", ".join(FAIL))

@@ -122,6 +122,31 @@ OUT_OF_PERSONA_MARKERS = (
     "estoy operativo como",
 )
 
+# Tercera capa: la voz head-of-engineering también existe SIN nombrar la
+# identidad. Medido en producción: "Entendido. Estoy listo para asistir en lo
+# que necesites. ¿Cuál es el primer tema o tarea que abordamos?" pasó las dos
+# capas anteriores (no dice "ADAM OS" ni "ingeniería") y llegó al prospecto.
+# Lo que delata el origen no es la identidad sino la oferta de asistencia
+# genérica en clave de "nosotros trabajamos/construimos/abordamos": en copy de
+# venta AdamGráfica la segunda persona siempre es el cliente ("te", "tu"), nunca
+# un "primer tema o tarea" compartido con un ingeniero.
+INTERNAL_FRAMING_MARKERS = (
+    "tema o tarea",
+    "tarea o tema",
+    "que abordamos",
+)
+
+# El bug de producción se delata por el par "asistente que ofrece asistencia" +
+# "primer tema/tarea" (una cola de trabajo compartida), no por la identidad.
+# Deliberadamente NO se listan "trabajamos"/"construimos": son legitimos en copy
+# comercial ("Trabajamos con marcas como X") y darian falsos positivos.
+INTERNAL_FRAMING_RE = re.compile(
+    r"\b(?:cual|qué)\s+es\s+el\s+(?:primer|primer\s+)\s*(?:tema|tarea|proyecto)\b"
+    r"|\b(?:el\s+)?primer\s+(?:tema|tarea|proyecto)\s+en\s+(?:que|el\s+que)\s+trabajamos\b"
+    r"|\btema\s+o\s+tarea\b",
+    re.IGNORECASE,
+)
+
 # Segunda capa, estructural: el gateway devuelve texto libre del LLM de un
 # agente interno, y las variantes de saludo cambian por temperatura
 # ("cabeza de ingeniería", "head of engineering", "soy agent-lead, ..."). Una
@@ -173,6 +198,10 @@ def _is_out_of_persona(reply: str) -> bool:
     if any(m.lower() in low for m in OUT_OF_PERSONA_MARKERS):
         return True
     if any(m in low for m in INTERNAL_IDENTITY_MARKERS):
+        return True
+    if any(m in low for m in INTERNAL_FRAMING_MARKERS):
+        return True
+    if INTERNAL_FRAMING_RE.search(reply):
         return True
     return bool(SELF_INTRO_RE.search(reply))
 
