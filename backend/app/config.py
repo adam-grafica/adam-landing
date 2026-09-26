@@ -12,6 +12,19 @@ class Settings(BaseSettings):
     a2a_gateway_url: str = "http://127.0.0.1:9900"
     a2a_agent_id: str = "agent-lead"  # lead agent del gateway
 
+    # Interruptor de la ruta A2A. Por defecto OFF: el widget es local-first.
+    # Motivo (medido 2026-09-26): el gateway :9900 no aporta valor al widget
+    # y tiene un coste real. (a) Su único agente vendible, agent-lead, responde
+    # con voz de head-of-engineering => 71/73 llamadas caían al copy curado.
+    # (b) El proceso corre desde un directorio borrado (cwd "(deleted)"), su
+    # unidad systemd es LoadState=not-found y Restart=no: si la caja reinicia,
+    # :9900 no vuelve y no hay forma de relanzarlo (no queda fuente en disco ni
+    # en git). Con el breaker, un gateway muerto sólo se descubre tras 5
+    # mensajes de prospecto pagando 1-3.7s cada uno. OFF hace que la caída del
+    # gateway sea un no-evento en vez de una degradación silenciosa.
+    # Para reactivarlo: A2A_ENABLED=1 (y un gateway agent-lead de voz comercial).
+    a2a_enabled: bool = False
+
     # Contexto de negocio que se antepone al mensaje del visitante.
     # El gateway A2A no acepta system prompt (contrato: {agent_id, message, from}),
     # así que el rol de venta se inyecta aquí del lado del cliente.

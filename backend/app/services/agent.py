@@ -290,6 +290,20 @@ async def call_agent(
     """
     start = time.perf_counter()
 
+    # Ruta A2A apagada por config (local-first, ver config.a2a_enabled): no se
+    # toca la red. El breaker sigue protegiendo el caso en que se reactive.
+    if not settings.a2a_enabled:
+        intent, confidence = classify_intent(message)
+        return {
+            "reply": FALLBACK_RESPONSES[intent],
+            "intent": intent,
+            "confidence": confidence,
+            "tokens": None,
+            "latency_ms": int((time.perf_counter() - start) * 1000),
+            "agent_id": "local-fallback",
+            "tools_invoked": [],
+        }
+
     is_open, streak, remaining = _a2a_circuit_state()
     if is_open:
         log.info("A2A circuit open (%.0fs left), answering locally", remaining)

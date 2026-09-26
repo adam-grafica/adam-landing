@@ -75,6 +75,15 @@ def check(name, cond, detail=""):
 
 
 def main():
+    # Este runner exercita la ruta A2A, que en produccion esta apagada por
+    # config (A2A_ENABLED=0, ver app/config.py a2a_enabled). Se reactiva solo
+    # dentro del test para no perder cobertura del camino que sigue vivo si
+    # alguien vuelve a encender el interruptor. El default OFF lo fijan los
+    # tests de scripts/test_a2a_disabled.py.
+    from app.config import settings as _s
+    _prev = _s.a2a_enabled
+    _s.a2a_enabled = True
+
     # 1) respuesta anidada (contrato real del gateway)
     rec = []
     _patch_client(FAKE_NESTED, record=rec)
@@ -251,6 +260,7 @@ def main():
     check("no abre con 4 fallos + acierto + 1 fallo",
           not agent_mod._a2a_circuit_state()[0], "ruido de red abriendo el circuito")
     agent_mod._reset_a2a_circuit()
+    _s.a2a_enabled = _prev  # no dejar el interruptor encendido para otros runners
 
     print(f"\n{len(PASS)} passed, {len(FAIL)} failed")
     if FAIL:
