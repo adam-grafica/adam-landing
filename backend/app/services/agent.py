@@ -7,6 +7,7 @@ Fallback chain:
 3. WhatsApp handoff si user frustrated
 """
 import logging
+import re
 import time
 import httpx
 from app.config import settings
@@ -73,6 +74,44 @@ OUT_OF_PERSONA_MARKERS = (
     "estoy operativo como",
 )
 
+# Segunda capa, estructural: el gateway devuelve texto libre del LLM de un
+# agente interno, y las variantes de saludo cambian por temperatura
+# ("cabeza de ingeniería", "head of engineering", "soy agent-lead, ..."). Una
+# lista de frases exactas se escapaba por delante: se midió 12/12 respuestas
+# coladas con el filtro viejo. Estas son palabras que NUNCA aparecen en copy
+# de venta de AdamGráfica y que delatan al agente interno.
+# NO incluir "agente"/"IA" sueltos: los agentes de IA son un servicio que
+# vendemos, y "agentes de IA" es una respuesta legítima.
+INTERNAL_IDENTITY_MARKERS = (
+    "adam os",
+    "agent-lead",
+    "agent lead",
+    "midisoft-manager",
+    "backend-engineer",
+    "frontend-engineer",
+    "devops-engineer",
+    "qa-engineer",
+    "ml-engineer",
+    "cabeza de ingenier",
+    "jefe de ingenier",
+    "director de ingenier",
+    "líder de ingenier",
+    "lider de ingenier",
+    "ingeniería de software",
+    "ingenieria de software",
+)
+
+# Saludos de auto-presentación: el visitante no preguntó quién eres, así que
+# cualquier "soy <identidad>" al arrancar es un agente, no un vendedor.
+SELF_INTRO_RE = re.compile(
+    r"\b(?:soy|habla|te habla|aquí\s+(?:habla|es))\s+"
+    r"(?:el\s+|la\s+|un\s+|una\s+)?"
+    r"[\w*\-]+(?:\s*\([^)]*\))?\s*[,.]?\s*"
+    r"(?:el\s+|la\s+|de\s+)?[\w\- ]*"
+    r"(?:ingenier|ingenierí|ADAM OS|agent)",
+    re.IGNORECASE,
+)
+
 
 def _is_degraded(reply: str) -> bool:
     """True si el agente respondió, pero con un error del LLM en vez de contenido real."""
@@ -83,7 +122,11 @@ def _is_degraded(reply: str) -> bool:
 def _is_out_of_persona(reply: str) -> bool:
     """True si agent-lead respondió con voz de ingeniero en vez de vendedor."""
     low = reply.lower()
-    return any(m.lower() in low for m in OUT_OF_PERSONA_MARKERS)
+    if any(m.lower() in low for m in OUT_OF_PERSONA_MARKERS):
+        return True
+    if any(m in low for m in INTERNAL_IDENTITY_MARKERS):
+        return True
+    return bool(SELF_INTRO_RE.search(reply))
 
 
 def _extract_reply(data: dict) -> str | None:

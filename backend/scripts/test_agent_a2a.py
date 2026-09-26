@@ -149,6 +149,41 @@ def main():
     r7 = asyncio.run(agent_mod.call_agent("¿cuánto cuesta un sitio?"))
     check("respuesta comercial se conserva", r7["agent_id"] == "agent-lead" and "AdamGráfica" in r7["reply"], r7["agent_id"])
 
+    # 10) REGRESIÓN REAL de producción (medida el 2026-09-26): el filtro viejo
+    # dejaba pasar la variante "cabeza de ingeniería" y el visitante de la
+    # landing recibió voz interna. Estos 12 son las respuestas crudas que el
+    # gateway devolvió en vivo; si alguna vuelve a colarse, el bug regresa.
+    leaked = [
+        "Hola. Soy agent-lead, cabeza de ingeniería de ADAM OS. ¿En qué puedo ayudarte?",
+        "Hola. Soy el head-of-engineering de ADAM OS. ¿En qué puedo ayudarte?",
+        "Hola. Soy agent-lead, head of engineering de ADAM OS. ¿En qué puedo ayudarte hoy?",
+        "Entendido. Soy agent-lead, head-of-engineering de ADAM OS. ¿En qué puedo ayudarte?",
+        "Entendido. Soy **agent-lead** del sistema ADAM OS, con rol de **head-of-engineering**.",
+        "Entendido. Estoy operativo como agent-lead en el sistema ADAM OS.",
+        "Entendido. Estoy operativo como agent-lead dentro de ADAM OS, con rol de head-of-engineering.",
+        "Entendido. Estoy operativo como agent-lead de ADAM OS, rol head-of-engineering.",
+        "Entendido. Estoy listo para actuar como agent-lead (head-of-engineering) en ADAM OS.",
+        "Hola, soy el asistente de engineering de ADAM OS. ¿Cuál es la tarea?",
+        "Entendido. Soy el jefe de ingeniería de ADAM OS. ¿Qué construimos hoy?",
+        "Aquí habla el director de ingeniería de ADAM OS, ¿en qué te ayudo?",
+    ]
+    for leak in leaked:
+        check(f"bloquea voz interna: {leak[:44]}...",
+              agent_mod._is_out_of_persona(leak), "se escapó el filtro")
+
+    # 11) el filtro NO puede comerse copy de venta legítimo: "agentes de IA" es
+    # un servicio que vendemos, y AdamGráfica/ADAM OS solo es voz interna.
+    clean = [
+        "¡Hola! Somos AdamGráfica. El sitio web parte en $1.490.000 CLP.",
+        "Hacemos agentes de IA que responden WhatsApp y agendan citas. ¿Tu caso es conversacional?",
+        "Branding desde $890K, sitio web desde $1.49M, automatizaciones desde $2.4M. ¿Cuál te interesa?",
+        "Cuéntame más. ¿Buscas mejorar imagen (branding), presencia online (web), o automatizar algo (IA)?",
+        "Podemos conectar tu web con un agente de IA que atienda a tus clientes las 24 horas.",
+    ]
+    for ok in clean:
+        check(f"NO bloquea copy comercial: {ok[:44]}...",
+              not agent_mod._is_out_of_persona(ok), "falso positivo, copy bueno descartado")
+
     print(f"\n{len(PASS)} passed, {len(FAIL)} failed")
     if FAIL:
         print("FALLAS: " + ", ".join(FAIL))
