@@ -26,7 +26,9 @@ def main():
     passed = 0
     failed = 0
 
-    with httpx.Client(timeout=10.0) as c:
+    import uuid
+
+    with httpx.Client(timeout=20.0) as c:
         # 1. Health
         try:
             r = c.get(f"{base}/health")
@@ -39,11 +41,12 @@ def main():
             print(f"  ✗ /health → {e}")
             failed += 1
 
-        # 2. Chat
+        # 2. Chat (UUID válido — el endpoint exige formato UUID)
         try:
             r = c.post(f"{base}/api/chat/", json={
                 "message": "Necesito un sitio web para mi pyme",
-                "visitor_id": "smoke-test-visitor",
+                "visitor_id": str(uuid.uuid4()),
+                "session_id": str(uuid.uuid4()),
             })
             assert r.status_code == 200, f"expected 200, got {r.status_code}"
             data = r.json()
