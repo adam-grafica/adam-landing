@@ -27,15 +27,57 @@ FALLBACK_RESPONSES = {
 def classify_intent(message: str) -> tuple[str, float]:
     """Tiny keyword classifier — fallback si A2A no responde."""
     q = message.lower()
+    # Precio va primero: "precio del sitio web" debe clasificar como precio,
+    # no dejarse ganar por "sitio" de la regla web.
+    if any(k in q for k in ["precio", "cuánto", "cuanto", "cuesta", "valor", "costo", "tarifa"]):
+        return "precio", 0.80
     if any(k in q for k in ["branding", "marca", "logo"]):
         return "branding", 0.85
-    if any(k in q for k in ["web", "sitio", "página", "landing"]):
+    if any(k in q for k in ["web", "sitio", "página", "pagina", "landing"]):
         return "web", 0.85
     if any(k in q for k in ["ia", "agente", "automat", "whatsapp bot"]):
         return "ia", 0.85
-    if any(k in q for k in ["precio", "cuánto", "cuesta", "valor", "costo"]):
-        return "precio", 0.80
     return "default", 0.50
+
+
+DEGRADED_MARKERS = (
+    "LLM error",
+    "Token Plan usage limit",
+    "rate_limit",
+    "Traceback (most recent call last)",
+    "I cannot",
+)
+
+
+def _is_degraded(reply: str) -> bool:
+    """True si el agente respondió, pero con un error del LLM en vez de contenido real."""
+    low = reply.lower()
+    return any(m.lower() in low for m in DEGRADED_MARKERS)
+
+
+def _extract_reply(data: dict) -> str | None:
+    """
+    El gateway anida la respuesta del agente: {"response": {"response": "..."}}.
+    Acepta también plano por si el contrato cambia.
+    """
+    node = data.get("response", data)
+    if isinstance(node, dict):
+        for key in ("response", "reply", "text", "content", "message"):
+            val = node.get(key)
+            if isinstance(val, str) and val.strip():
+                return val
+    elif isinstance(node, str) and node.strip():
+        return node
+    return None
+
+
+def _extract_tokens(data: dict) -> int | None:
+    node = data.get("response", data)
+    usage = node.get("usage", {}) if isinstance(node, dict) else {}
+    for key in ("total_tokens", "totalTokens"):
+        if isinstance(usage, dict) and isinstance(usage.get(key), int):
+            return usage[key]
+    return None
 
 
 async def call_agent(
@@ -50,23 +92,39 @@ async def call_agent(
     """
     start = time.perf_counter()
 
-    # Try the gateway
+    # Try the gateway.
+    # Canonical A2A endpoint is POST /a2a/message/send (not /agents/{id}/invoke,
+    # which does not exist on ms-a2a-gateway and returned a silent 404).
     try:
-        async with httpx.AsyncClient(timeout=8.0) as client:
+        async with httpx.AsyncClient(timeout=20.0) as client:
             resp = await client.post(
-                f"{settings.a2a_gateway_url}/agents/{settings.a2a_agent_id}/invoke",
+                f"{settings.a2a_gateway_url}/a2a/message/send",
                 json={
+                    "agent_id": settings.a2a_agent_id,
                     "message": message,
-                    "session_id": session_id,
-                    "visitor_id": visitor_id,
-                    "agent_context": "adamgrafica-landing-v2",
+                    "from": "adamgrafica-landing-v2",
                 },
+                params={"session_id": session_id, "visitor_id": visitor_id} if session_id else None,
             )
             resp.raise_for_status()
             data = resp.json()
-            data["latency_ms"] = int((time.perf_counter() - start) * 1000)
-            data["agent_id"] = settings.a2a_agent_id
-            return data
+            reply = _extract_reply(data)
+            if reply is None:
+                raise ValueError(f"A2A response missing reply field: {list(data)}")
+            if _is_degraded(reply):
+                # Agent reached the gateway but its LLM is down (429/quota/fallback
+                # string). Treat as a gateway failure so the user gets the curated copy.
+                raise RuntimeError(f"A2A agent degraded: {reply[:120]}")
+            latency = int((time.perf_counter() - start) * 1000)
+            return {
+                "reply": reply,
+                "intent": "a2a",
+                "confidence": None,
+                "tokens": _extract_tokens(data),
+                "latency_ms": latency,
+                "agent_id": data.get("agent", settings.a2a_agent_id),
+                "tools_invoked": [],
+            }
     except Exception as e:
         log.warning(f"A2A gateway unavailable ({type(e).__name__}: {e}), using fallback")
 
