@@ -32,6 +32,7 @@ def _score_lead(payload: LeadCreate) -> int:
     return min(100, score)
 
 
+@router.post("", response_model=LeadResponse, status_code=201)
 @router.post("/", response_model=LeadResponse, status_code=201)
 async def create_lead(payload: LeadCreate, session: AsyncSession = Depends(get_session)):
     """Persiste el lead y devuelve confirmación."""

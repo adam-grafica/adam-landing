@@ -18,6 +18,7 @@ router = APIRouter()
 log = logging.getLogger(__name__)
 
 
+@router.post("", response_model=ChatResponse)
 @router.post("/", response_model=ChatResponse)
 async def chat(request: ChatRequest, session: AsyncSession = Depends(get_session)):
     """Procesa un mensaje del usuario y devuelve la del agente."""
