@@ -86,7 +86,7 @@ export default function Stats() {
         </div>
 
         {/* Stats Grid */}
-        <div ref={(el) => { (gridRef as any).current = el; (observerTargetRef as any).current = el; }} className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-20 reveal-group">
+        <div ref={(el) => { gridRef.current = el; observerTargetRef.current = el; }} className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-20 reveal-group">
           {mainStats.map((stat) => (
             <div key={stat.label} className="main-stat text-center reveal-child">
               <div className="font-display text-5xl md:text-6xl lg:text-7xl text-white mb-3 py-4">

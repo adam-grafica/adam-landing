@@ -106,7 +106,7 @@ export default function ChatAgentBubble() {
         text: data.reply,
         meta: { intent: data.intent, agent_id: data.agent_id, latency_ms: data.latency_ms },
       }]);
-    } catch (err) {
+    } catch {
       setError('No pude conectar con el agente. Intenta de nuevo en un momento.');
     } finally {
       setSending(false);

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useReveal } from '../hooks/useReveal';
 import { useRevealGroup } from '../hooks/useRevealGroup';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right'
@@ -8,7 +8,39 @@ import X from 'lucide-react/dist/esm/icons/x'
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import { trackCTAClick, trackServiceView } from '../utils/analytics';
 
-const projects = [
+interface CaseStudy {
+  desafio: string;
+  loQueHicimos: string;
+  resultado: string;
+}
+
+interface Project {
+  id: string;
+  name: string;
+  tag: string;
+  gradient: string;
+  status: 'completed' | 'coming';
+  industry?: string;
+  services?: string;
+  techStack?: string;
+  image?: string;
+  caseStudy?: CaseStudy;
+}
+
+/** Un proyecto con case study es la única clase que abre el modal. */
+type CompletedProject = Project & {
+  status: 'completed';
+  industry: string;
+  services: string;
+  techStack: string;
+  image: string;
+  caseStudy: CaseStudy;
+};
+
+const isCompleted = (p: Project): p is CompletedProject =>
+  p.status === 'completed' && !!p.image && !!p.caseStudy;
+
+const projects: Project[] = [
   {
     id: 'casademoda',
     name: 'CASA DE MODA SANTIAGO',
@@ -74,18 +106,25 @@ const projects = [
 export default function Portfolio() {
   const [sectionRef] = useReveal<HTMLDivElement>();
   const gridRef = useRevealGroup<HTMLDivElement>();
-  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [selectedProject, setSelectedProject] = useState<CompletedProject | null>(null);
 
-  const openModal = (project: any) => {
-    if (project.status === 'completed') {
+  // El scroll lock vive en un efecto: mutar document.body durante el render
+  // rompe el renderizado concurrente de React.
+  useEffect(() => {
+    document.body.style.overflow = selectedProject ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedProject]);
+
+  const openModal = (project: Project) => {
+    if (isCompleted(project)) {
       setSelectedProject(project);
-      document.body.style.overflow = 'hidden';
     }
   };
 
   const closeModal = () => {
     setSelectedProject(null);
-    document.body.style.overflow = 'unset';
   };
 
   return (

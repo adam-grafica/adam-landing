@@ -5,14 +5,14 @@
 
 declare global {
   interface Window {
-    dataLayer: any[];
+    dataLayer: unknown[];
   }
 }
 
 /**
  * Función base para enviar eventos al DataLayer de GTM
  */
-export const trackEvent = (eventName: string, eventData: Record<string, any> = {}) => {
+export const trackEvent = (eventName: string, eventData: Record<string, unknown> = {}) => {
   if (typeof window !== 'undefined') {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({

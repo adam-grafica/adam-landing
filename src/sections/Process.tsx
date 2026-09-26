@@ -56,9 +56,8 @@ export default function Process() {
               start: 'top 60%',
               end: 'bottom 80%',
               scrub: 1,
-              // @ts-ignore
-              lazy: false,
-            }
+            },
+            lazy: false,
           }
         );
       }
@@ -91,9 +90,8 @@ export default function Process() {
               start: 'top 70%',
               end: 'bottom 90%',
               scrub: 1,
-              // @ts-ignore
-              lazy: false,
-            }
+            },
+            lazy: false,
           }
         );
       }

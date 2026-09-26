@@ -44,12 +44,11 @@ export default function News() {
     const ctx = gsap.context(() => {
       // Headline
       gsap.from('.news-headline', {
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 80%',
           toggleActions: 'play none none reverse',
-          // @ts-ignore
-          lazy: false,
         },
         x: -50,
         opacity: 0,
@@ -59,12 +58,11 @@ export default function News() {
 
       // Subheadline
       gsap.from('.news-subheadline', {
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 75%',
           toggleActions: 'play none none reverse',
-          // @ts-ignore
-          lazy: false,
         },
         y: 20,
         opacity: 0,
@@ -74,12 +72,11 @@ export default function News() {
 
       // Navigation
       gsap.from('.news-nav', {
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 70%',
           toggleActions: 'play none none reverse',
-          // @ts-ignore
-          lazy: false,
         },
         scale: 0,
         opacity: 0,
@@ -89,12 +86,11 @@ export default function News() {
 
       // Cards
       gsap.from('.news-card', {
+        lazy: false,
         scrollTrigger: {
           trigger: '.news-container',
           start: 'top 80%',
           toggleActions: 'play none none reverse',
-          // @ts-ignore
-          lazy: false,
         },
         rotateY: -45,
         opacity: 0,

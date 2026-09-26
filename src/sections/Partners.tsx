@@ -27,12 +27,11 @@ export default function Partners() {
     const ctx = gsap.context(() => {
       // Headline
       gsap.from('.partners-headline', {
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 80%',
           toggleActions: 'play none none reverse',
-          // @ts-ignore
-          lazy: false,
         },
         x: -50,
         opacity: 0,
@@ -42,12 +41,11 @@ export default function Partners() {
 
       // Description
       gsap.from('.partners-desc', {
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 75%',
           toggleActions: 'play none none reverse',
-          // @ts-ignore
-          lazy: false,
         },
         y: 30,
         opacity: 0,
@@ -57,12 +55,11 @@ export default function Partners() {
 
       // CTA
       gsap.from('.partners-cta', {
+        lazy: false,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 70%',
           toggleActions: 'play none none reverse',
-          // @ts-ignore
-          lazy: false,
         },
         scale: 0.8,
         opacity: 0,
@@ -72,12 +69,11 @@ export default function Partners() {
 
       // Partner logos
       gsap.from('.partner-logo', {
+        lazy: false,
         scrollTrigger: {
           trigger: '.partners-grid',
           start: 'top 80%',
           toggleActions: 'play none none reverse',
-          // @ts-ignore
-          lazy: false,
         },
         scale: 0,
         opacity: 0,

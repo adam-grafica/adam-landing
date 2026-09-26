@@ -19,16 +19,22 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
 ): [RefObject<T | null>, boolean] {
   const { threshold = 0.08, rootMargin = '0px 0px 0px 0px', once = true } = options;
   const ref = useRef<T>(null);
-  const [isRevealed, setIsRevealed] = useState(false);
+  // El estado inicial ya refleja prefers-reduced-motion: si el usuario pide
+  // menos movimiento, el reveal nace activo y el efecto no necesita setState.
+  const [isRevealed, setIsRevealed] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    // Respetar prefers-reduced-motion
+    // Respetar prefers-reduced-motion (ya inicializado en useState)
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) {
-      setIsRevealed(true);
+      el.classList.add('revealed');
       return;
     }
 
