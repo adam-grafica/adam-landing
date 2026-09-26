@@ -55,7 +55,12 @@ def main() -> int:
     base = args.base_url.rstrip("/")
 
     failed = []
-    with httpx.Client(timeout=15.0) as c:
+    # 15s quedaba por debajo del timeout del gateway en el server (20s,
+    # app/services/agent.py:221): cuando :9900 se cuelga, el cliente abandonaba
+    # antes de que el fallback terminara y el caso se reportaba como "error",
+    # no como el intent que sí sale. Medido: 3.0-5.9s con gateway sano, hasta
+    # 20s con gateway colgado. Tiene que ser holgadamente mayor que 20s.
+    with httpx.Client(timeout=45.0) as c:
         # El mismo visitor para toda la corrida, con un session_id nuevo por caso:
         # el endpoint valida session_id como uuid, y mandar texto plano rompe el 422.
         visitor = f"intent-http-{uuid.uuid4().hex[:12]}"
