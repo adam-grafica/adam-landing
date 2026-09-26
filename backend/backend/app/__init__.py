@@ -1,1 +1,0 @@
-"""Empty marker — app is a Python package."""
