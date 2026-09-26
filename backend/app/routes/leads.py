@@ -51,6 +51,7 @@ async def create_lead(payload: LeadCreate, session: AsyncSession = Depends(get_s
         chat_session = await session.get(ChatSession, payload.session_id)
         if chat_session:
             # we'll set lead_id after creating lead
+            pass
 
     lead = Lead(
         source=payload.source or "adamgrafica-v2",
