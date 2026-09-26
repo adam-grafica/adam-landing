@@ -25,18 +25,54 @@ FALLBACK_RESPONSES = {
 }
 
 
+# Los keywords se buscan como PALABRAS completas, no como substring. Con
+# `k in q` bastaba "ia" para capturar "panadería", "policía", "historia",
+# "galería", "farmacia" — el 90% del Leads entraba con intent equivocado y
+# recibía copy de automatizaciones. Medido: 8/8 falsos positivos.
+#
+# Dos familias, porque no es lo mismo:
+#   _kw()    — palabra exacta: "ia", "agente", "web", "logo"
+#   _stem()  — raíz/prefixo: "automat" cubre automatizar/automatización/
+#              automatizaciones. Sin_boundary, "automat" matchea "panaderia" otra vez.
+_KEYWORD_CACHE: dict[str, re.Pattern[str]] = {}
+
+
+def _compile(kind: str, keywords: list[str]) -> re.Pattern[str]:
+    key = f"{kind}\x00" + "\x00".join(keywords)
+    pat = _KEYWORD_CACHE.get(key)
+    if pat is None:
+        body = "|".join(re.escape(k) for k in keywords)
+        if kind == "word":
+            pat = re.compile(rf"(?<!\w)(?:{body})(?!\w)", re.IGNORECASE | re.UNICODE)
+        else:
+            # raíz: debe empezar palabra, pero el resto puede seguir
+            pat = re.compile(rf"(?<!\w)(?:{body})\w*", re.IGNORECASE | re.UNICODE)
+        _KEYWORD_CACHE[key] = pat
+    return pat
+
+
+def _kw(keywords: list[str]) -> re.Pattern[str]:
+    """Regex de palabra completa para un set de keywords (cacheado)."""
+    return _compile("word", keywords)
+
+
+def _stem(keywords: list[str]) -> re.Pattern[str]:
+    """Regex de raíz (prefijo de palabra) para un set de keywords (cacheado)."""
+    return _compile("stem", keywords)
+
+
 def classify_intent(message: str) -> tuple[str, float]:
     """Tiny keyword classifier — fallback si A2A no responde."""
     q = message.lower()
     # Precio va primero: "precio del sitio web" debe clasificar como precio,
     # no dejarse ganar por "sitio" de la regla web.
-    if any(k in q for k in ["precio", "cuánto", "cuanto", "cuesta", "valor", "costo", "tarifa"]):
+    if _stem(["precio", "cuanto", "cuánto", "cuesta", "valor", "costo", "tarifa"]).search(q):
         return "precio", 0.80
-    if any(k in q for k in ["branding", "marca", "logo"]):
+    if _stem(["branding", "marca", "logo"]).search(q):
         return "branding", 0.85
-    if any(k in q for k in ["web", "sitio", "página", "pagina", "landing"]):
+    if _stem(["web", "sitio", "pagina", "página", "landing"]).search(q):
         return "web", 0.85
-    if any(k in q for k in ["ia", "agente", "automat", "whatsapp bot"]):
+    if _stem(["ia", "agente", "automat", "whatsapp"]).search(q):
         return "ia", 0.85
     return "default", 0.50
 
