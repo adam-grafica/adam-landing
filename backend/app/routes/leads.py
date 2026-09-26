@@ -26,6 +26,13 @@ def _score_lead(payload: LeadCreate) -> int:
     if payload.phone: score += 25  # phone = high intent
     if payload.company: score += 15
     if payload.industry: score += 10
+    # Elegir día y hora es la señal más fuerte que puede dejar un lead: ya
+    # resolvió su propia agenda. Antes el formulario mandaba fecha/hora y el
+    # schema las descartaba, así que un lead con hora confirmada y WhatsApp
+    # quedaba en 50 → nurture_sequence_7_days, igual que uno que sólo escribió
+    # su nombre. Agendado no es "interesado", es "listo para hablar".
+    if payload.appointment_date and payload.appointment_time: score += 20
+    elif payload.appointment_date: score += 10
     if payload.message:
         # Longer message = more engaged
         score += min(25, len(payload.message) // 20)
@@ -67,6 +74,16 @@ async def create_lead(payload: LeadCreate, session: AsyncSession = Depends(get_s
         referrer=payload.referrer,
         score=score,
         status="new",
+        # El agendamiento y los servicios no tienen columna propia: viven en
+        # metadata. Sin esto, la hora que eligió el lead se guardaba en el
+        # request y se perdía antes de llegar a la base.
+        metadata_={
+            "appointment_date": payload.appointment_date.isoformat() if payload.appointment_date else None,
+            "appointment_time": payload.appointment_time,
+            "appointment_at": payload.appointment_at,
+            "services": payload.services,
+            "submitted_at": payload.submitted_at.isoformat() if payload.submitted_at else None,
+        },
     )
     session.add(lead)
     await session.flush()
@@ -78,6 +95,19 @@ async def create_lead(payload: LeadCreate, session: AsyncSession = Depends(get_s
 
     # Notificar al WhatsApp Bridge (fire-and-forget)
     if payload.phone:
+        # El bridge recibe un resumen, no un volcado de campos. Armarlo desde
+        # los datos normalizados (no desde el request crudo) para que diga
+        # "agendó el martes 10:30" y no "sin info".
+        partes: list[str] = []
+        if payload.name:
+            partes.append(payload.name)
+        if payload.services:
+            partes.append(", ".join(payload.services))
+        if payload.appointment_date and payload.appointment_time:
+            partes.append(f"agendó {payload.appointment_date.isoformat()} {payload.appointment_time}")
+        elif payload.appointment_date:
+            partes.append(f"pidió {payload.appointment_date.isoformat()} (hora por confirmar)")
+        resumen = " · ".join(partes) or "Lead sin detalles"
         try:
             async with httpx.AsyncClient(timeout=5.0) as client:
                 await client.post(
@@ -87,8 +117,9 @@ async def create_lead(payload: LeadCreate, session: AsyncSession = Depends(get_s
                         "name": payload.name,
                         "phone": payload.phone,
                         "company": payload.company,
-                        "message": payload.message,
+                        "message": resumen,
                         "score": score,
+                        "appointment_at": payload.appointment_at,
                     },
                 )
         except Exception as e:

@@ -44,56 +44,79 @@ export default function ModalForm() {
   const inputNombreRef = useRef<HTMLInputElement>(null);
   const inputEmailRef = useRef<HTMLInputElement>(null);
 
-  /** Fetch de slots dinámicos desde n8n */
+  /**
+   * Fetch de slots de disponibilidad.
+   *
+   * Orden de fuentes (2026-09-26, MS-MANAGER):
+   *   1. Backend propio  GET /api/calendar/availability?date=YYYY-MM-DD
+   *      → { slots: [{ time, available, reason, duration_min }] }
+   *   2. n8n (VITE_N8N_DISPONIBILIDAD_URL) → { slots_disponibles: ["09:00", ...] }
+   *   3. Fallback: el visitante elige sólo la fecha, la hora se confirma a mano.
+   *
+   * Antes el paso 4 sólo consultaba n8n, y VITE_N8N_DISPONIBILIDAD_URL no está
+   * definida en ningún entorno: el 100% de las visitas caía al fallback y
+   * jamás ofrecía hora, aunque /api/calendar/availability servía slots. El
+   * backend propio es la fuente de verdad en ADAM OS; n8n queda como espejo.
+   */
   useEffect(() => {
     if (!fecha) return;
-    
+
+    let cancelled = false;
+
     const fetchSlots = async () => {
       setLoadingSlots(true);
       setAvailableSlots([]);
       setHora('');
-      
-      try {
-        const url = import.meta.env.VITE_N8N_DISPONIBILIDAD_URL;
-        
-        // Log para depuración en producción (podrás verlo en F12 -> Console)
-        if (!url) {
-          console.warn('Configuración: VITE_N8N_DISPONIBILIDAD_URL no detectada.');
-        } else if (url.includes('PENDIENTE')) {
-          console.warn('Configuración: URL detectada como PENDIENTE. Usando fallback.');
-        } else {
-          console.log('Conectando con sistema de agendamiento...');
-        }
 
-        if (!url || url.includes('PENDIENTE')) {
-          setUseFallback(true);
+      // `getFullYear` y no `toISOString`: el último hace shift de UTC y en Chile
+      // (UTC-3/-4) devuelve el día anterior entre 20:00 y 24:00 hora local.
+      const d = fecha;
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const localApi = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+      const n8nUrl = import.meta.env.VITE_N8N_DISPONIBILIDAD_URL;
+      const n8nConfigured = Boolean(n8nUrl) && !n8nUrl.includes('PENDIENTE');
+
+      // (1) Backend propio
+      try {
+        const res = await fetch(`${localApi}/api/calendar/availability?date=${dateStr}`);
+        if (!res.ok) throw new Error(`local api ${res.status}`);
+        const data = await res.json();
+        const slots: string[] = (data.slots || [])
+          .filter((s: { available?: boolean }) => s.available)
+          .map((s: { time: string }) => s.time);
+        if (cancelled) return;
+        setAvailableSlots(slots);
+        setUseFallback(false);
+        setLoadingSlots(false);
+        return;
+      } catch (err) {
+        console.warn('Disponibilidad local no disponible, pruebo n8n:', err);
+      }
+
+      // (2) n8n como espejo
+      if (n8nConfigured) {
+        try {
+          const res = await fetch(`${n8nUrl}?fecha=${dateStr}`);
+          if (!res.ok) throw new Error(`n8n ${res.status}`);
+          const data = await res.json();
+          if (cancelled) return;
+          setAvailableSlots(data.slots_disponibles || []);
+          setUseFallback(false);
           setLoadingSlots(false);
           return;
+        } catch (err) {
+          console.warn('Disponibilidad n8n no disponible, uso fallback:', err);
         }
-
-        const dateStr = fecha.toISOString().split('T')[0];
-        const res = await fetch(`${url}?fecha=${dateStr}`);
-        
-        if (!res.ok) throw new Error('Network error');
-        
-        const data = await res.json();
-        
-        if (data.slots_disponibles && data.slots_disponibles.length > 0) {
-          setAvailableSlots(data.slots_disponibles);
-          setUseFallback(false);
-        } else {
-          // Si el endpoint responde pero no hay slots, tratamos de dar opción de fallback o mostrar vacío
-          setAvailableSlots([]);
-        }
-      } catch (err) {
-        console.warn('Cargando modo fallback por error de conexión:', err);
-        setUseFallback(true);
-      } finally {
-        setLoadingSlots(false);
       }
+
+      if (cancelled) return;
+      setAvailableSlots([]);
+      setUseFallback(true);
+      setLoadingSlots(false);
     };
 
     fetchSlots();
+    return () => { cancelled = true; };
   }, [fecha]);
 
   /** Abrir/cerrar modal */
