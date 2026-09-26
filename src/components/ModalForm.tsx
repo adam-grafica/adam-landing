@@ -146,14 +146,29 @@ export default function ModalForm() {
           ? `${fecha.toISOString().split('T')[0]}T${hora}:00`
           : null;
       }
-      // 2026-06-09 AXON: usa variable de entorno VITE_N8N_LEAD_URL
-      // Si no está configurada, fallback a la URL por defecto
+      // 2026-09-26 MS-MANAGER: dual endpoint — local FastAPI + n8n webhook fallback.
+      // Prioriza el backend propio (3001) que es la fuente de verdad en ADAM OS;
+      // n8n queda como espejo para automatizaciones externas.
+      const localApi = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
       const leadUrl = import.meta.env.VITE_N8N_LEAD_URL || 'https://automation.app.adamcloud.me/webhook/lead-adamgrafica';
-      fetch(leadUrl, {
+
+      // (1) Backend propio FastAPI
+      fetch(`${localApi}/api/leads/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
-      }).catch(() => console.log('Lead capturado offline:', payload));
+      }).then(async (r) => {
+        if (!r.ok) throw new Error(`local api ${r.status}`);
+        console.log('Lead OK local:', await r.text());
+      }).catch((err) => {
+        console.warn('Lead local fail, fallback n8n:', err);
+        // (2) Fallback webhook n8n
+        return fetch(leadUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(() => console.log('Lead capturado offline:', payload));
+      });
     }
   }, [currentStep]);
 

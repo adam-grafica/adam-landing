@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Venv
+.venv/
+venv/
+ENV/
+env/
+
+# SQLite DB (runtime)
+*.db
+*.sqlite
+*.sqlite3
+
+# Secrets — nunca commitear
+.env
+.env.local
+.env.*.local
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tests / cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/

@@ -31,7 +31,6 @@ app = FastAPI(
     description="Backend para el sitio agente de ADAM GRÁFICA",
     version="2.0.0",
     lifespan=lifespan,
-    redirect_slashes=False,  # 2026-09-26: el frontend usa /api/leads sin trailing slash
 )
 
 # CORS — allow v1 (prod) + v2 (staging) + dev

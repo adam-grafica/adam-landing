@@ -1,5 +1,7 @@
 """SQLAlchemy async engine + session factory."""
+import uuid as _uuid
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.types import TypeDecorator, CHAR
 from sqlalchemy.orm import DeclarativeBase
 
 from app.config import settings
@@ -20,9 +22,68 @@ async_session_factory = async_sessionmaker(
 )
 
 
+class GUID(TypeDecorator):
+    """Portable UUID: Postgres native UUID, SQLite CHAR(36) como string."""
+
+    impl = CHAR
+    cache_ok = True
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == "postgresql":
+            from sqlalchemy.dialects.postgresql import UUID as PGUUID
+            return dialect.type_descriptor(PGUUID())
+        return dialect.type_descriptor(CHAR(36))
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return None
+        if not isinstance(value, _uuid.UUID):
+            value = _uuid.UUID(str(value))
+        if dialect.name == "postgresql":
+            return value
+        return str(value)
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return None
+        if isinstance(value, _uuid.UUID):
+            return value
+        return _uuid.UUID(str(value))
+
+
 class Base(DeclarativeBase):
     """Declarative base for ORM models."""
     pass
+
+
+# SQLite shim: SQLite no soporta JSONB ni UUID nativo.
+import sqlalchemy as _sa  # noqa: E501
+from sqlalchemy import event  # noqa: E501
+from sqlalchemy.dialects.postgresql import JSONB  # noqa: E501
+
+
+@event.listens_for(Base.metadata, "before_create", propagate=True)
+def _sqlite_compat(metadata, connection, **kw):  # noqa: ARG001
+    """Si el engine es SQLite, sustituye JSONB -> JSON y UUID -> GUID(String)."""
+    if engine.dialect.name != "sqlite":
+        return
+    for table in metadata.tables.values():
+        for col in table.columns:
+            col.type = _coerce_type_for_sqlite(col.type)
+
+
+def _coerce_type_for_sqlite(t):
+    # JSONB -> JSON
+    if isinstance(t, JSONB):
+        return _sa.JSON()
+    # UUID nativo -> GUID portable (CHAR(36) en SQLite, UUID en Postgres)
+    try:
+        from sqlalchemy.dialects.postgresql import UUID as _PGUUID
+        if isinstance(t, _PGUUID):
+            return GUID()
+    except Exception:
+        pass
+    return t
 
 
 async def init_db():
