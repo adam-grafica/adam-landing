@@ -4,3 +4,10 @@ chat-smoke-*.done
 landing-smoke-*.out
 landing-smoke-*.ids
 landing-smoke-*.done
+
+# runtime/build output (never track)
+node_modules/
+dist/
+*.tsbuildinfo
+.env
+.env.local
